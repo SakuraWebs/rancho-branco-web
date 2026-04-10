@@ -1,0 +1,39 @@
+{
+  "entities": {
+    "user": {
+      "title": "User",
+      "description": "User profile and role information",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "email": { "type": "string", "format": "email", "description": "User email address" },
+        "role": { "type": "string", "enum": ["admin", "user"], "description": "User access level" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Account creation timestamp" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "galleryItem": {
+      "title": "Gallery Item",
+      "description": "A photo or video in the gallery",
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["foto", "video"], "description": "Type of media" },
+        "url": { "type": "string", "description": "URL of the image or YouTube ID for video" },
+        "category": { "type": "string", "enum": ["casamentos", "eventos", "espacos"], "description": "Gallery category" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Upload timestamp" },
+        "createdBy": { "type": "string", "description": "UID of the admin who uploaded" }
+      },
+      "required": ["type", "url", "category", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "user",
+      "description": "User profile documents"
+    },
+    "/gallery": {
+      "schema": "galleryItem",
+      "description": "Collection of gallery photos and videos"
+    }
+  }
+}
