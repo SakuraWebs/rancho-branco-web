@@ -1,5 +1,5 @@
 {
-  "name": "Remix: Rancho Branco - web",
-  "description": "",
+  "name": "Rancho Branco - Manutenção",
+  "description": "Site do Rancho Branco em modo de manutenção com acesso restrito.",
   "requestFramePermissions": []
 }
