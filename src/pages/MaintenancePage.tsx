@@ -2,6 +2,8 @@ import { motion } from 'motion/react';
 import { Lock, LogIn, Mail } from 'lucide-react';
 import { auth, googleProvider, signInWithPopup } from '../firebase';
 import { useAuth } from '../contexts/AuthContext';
+import bgImage from '../assets/gramado-eventos-campo-livramento.webp';
+import logoImage from '../assets/logo.webp';
 
 export default function MaintenancePage() {
   const { user, loading } = useAuth();
@@ -20,7 +22,7 @@ export default function MaintenancePage() {
         <img
           className="w-full h-full object-cover"
           alt="Rancho Branco Background"
-          src="/gramado-eventos-campo-livramento.webp"
+          src={bgImage}
         />
         <div className="absolute inset-0 bg-primary/80"></div>
       </div>
@@ -32,7 +34,7 @@ export default function MaintenancePage() {
         className="relative z-10 max-w-2xl w-full bg-surface/10 backdrop-blur-xl p-12 rounded-[2rem] border border-white/10 shadow-2xl"
       >
         <img 
-          src="/logo.webp" 
+          src={logoImage} 
           alt="Rancho Branco" 
           className="h-24 md:h-32 w-auto mx-auto mb-12 invert opacity-90"
         />
