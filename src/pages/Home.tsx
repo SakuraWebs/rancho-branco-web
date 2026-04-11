@@ -2,6 +2,7 @@ import { ArrowRight, LayoutGrid, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
 import EssenceSection from '../components/EssenceSection';
+import bgImage from '../assets/gramado-eventos-campo-livramento.webp';
 
 export default function Home() {
   const structuredData = {
@@ -61,7 +62,7 @@ export default function Home() {
           <img
             className="w-full h-full object-cover object-[20%_30%] md:object-[center_30%] brightness-[0.65] contrast-[1.15]"
             alt="lush green landscape of a luxury brazilian countryside estate with rolling hills and elegant white colonial architecture at sunrise"
-            src="/gramado-eventos-campo-livramento.webp"
+            src={bgImage}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/40"></div>
         </div>

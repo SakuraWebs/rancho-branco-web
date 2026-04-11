@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { Menu, X, Instagram, Facebook, Youtube, Mail, ArrowUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import logoImage from '../assets/logo.webp';
 
 export default function Layout() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -68,7 +69,7 @@ export default function Layout() {
             {/* Subtle tight white glow acting as a text-shadow/outline for the logo */}
             <div className={`absolute inset-0 bg-white/70 blur-md rounded-full scale-110 transition-opacity duration-300 ${!isSolidNav ? 'opacity-100' : 'opacity-0'}`}></div>
             <img 
-              src="/logo.webp" 
+              src={logoImage} 
               alt="Rancho Branco" 
               className="relative h-16 md:h-24 w-auto object-contain mix-blend-multiply"
             />
@@ -170,7 +171,7 @@ export default function Layout() {
             <div className="lg:col-span-4 flex flex-col items-start">
               <Link to="/" className="inline-block mb-6" aria-label="Página inicial do Rancho Branco">
                 <img 
-                  src="/logo.webp" 
+                  src={logoImage} 
                   alt="Rancho Branco" 
                   className="h-24 md:h-32 w-auto object-contain mix-blend-screen invert opacity-90"
                 />
