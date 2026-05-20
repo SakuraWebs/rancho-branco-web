@@ -16,26 +16,19 @@ import Orcamento from './pages/Orcamento';
 import PoliticasPrivacidade from './pages/PoliticasPrivacidade';
 import TermosUso from './pages/TermosUso';
 import MaintenancePage from './pages/MaintenancePage';
+import NotFound from './pages/NotFound';
+import Agenda from './pages/Agenda';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import AdminPanel from './components/AdminPanel';
 
 function AppRoutes() {
   const { user, loading } = useAuth();
-  const isAuthorized = user?.email === 'enrique.rfm@gmail.com';
 
   if (loading) {
     return (
       <div className="min-h-screen bg-primary flex items-center justify-center">
         <div className="w-12 h-12 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
       </div>
-    );
-  }
-
-  if (!isAuthorized) {
-    return (
-      <Routes>
-        <Route path="*" element={<MaintenancePage />} />
-      </Routes>
     );
   }
 
@@ -50,9 +43,10 @@ function AppRoutes() {
           <Route path="galeria" element={<Galeria />} />
           <Route path="contato" element={<Contato />} />
           <Route path="orcamento" element={<Orcamento />} />
+          <Route path="agenda" element={<Agenda />} />
           <Route path="politicas-de-privacidade" element={<PoliticasPrivacidade />} />
           <Route path="termos-de-uso" element={<TermosUso />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
       <AdminPanel />

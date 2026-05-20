@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Share2, X, Facebook, Twitter, Link as LinkIcon, MessageCircle, ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import SEO from '../components/SEO';
+import PhotoSubmissionForm from '../components/PhotoSubmissionForm';
 
 export default function Eventos() {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
@@ -66,8 +67,8 @@ export default function Eventos() {
   return (
     <>
       <SEO 
-        title="Espaço para Casamentos e Eventos em Santana do Livramento | Rancho Branco" 
-        description="O Rancho Branco é o cenário perfeito para casamentos, festas de aniversário e eventos corporativos em Santana do Livramento. Sofisticação e natureza para sua celebração."
+        title="Eventos Sociais e Corporativos | Rancho Branco - Santana do Livramento" 
+        description="O Rancho Branco é o local ideal para eventos em Santana do Livramento. Celebrações sociais, aniversários e eventos corporativos em um cenário inesquecível."
         canonical="https://ranchobranco.com.br/eventos"
       />
       {/* Hero Section */}
@@ -121,6 +122,8 @@ export default function Eventos() {
                   src={photo}
                   alt={`Event moment ${index + 1}`}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover/item:scale-110"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/item:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                   <div className="bg-white/20 backdrop-blur-md p-4 rounded-full text-white scale-90 group-hover/item:scale-100 transition-transform">
@@ -134,20 +137,23 @@ export default function Eventos() {
           {/* Carousel Controls */}
           <button 
             onClick={() => scrollCarousel('left')}
-            className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 backdrop-blur-md text-primary shadow-lg flex items-center justify-center hover:bg-white transition-all z-10 opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0"
+            className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 backdrop-blur-md text-primary shadow-lg flex items-center justify-center hover:bg-white transition-all z-10 opacity-100 md:opacity-0 md:group-hover:opacity-100 translate-x-0 md:-translate-x-4 md:group-hover:translate-x-0"
             aria-label="Anterior"
           >
             <ChevronLeft size={24} />
           </button>
           <button 
             onClick={() => scrollCarousel('right')}
-            className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 backdrop-blur-md text-primary shadow-lg flex items-center justify-center hover:bg-white transition-all z-10 opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0"
+            className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 backdrop-blur-md text-primary shadow-lg flex items-center justify-center hover:bg-white transition-all z-10 opacity-100 md:opacity-0 md:group-hover:opacity-100 translate-x-0 md:translate-x-4 md:group-hover:translate-x-0"
             aria-label="Próximo"
           >
             <ChevronRight size={24} />
           </button>
         </div>
       </section>
+
+      {/* Photo Submission Form */}
+      <PhotoSubmissionForm source="Eventos" />
 
       {/* Video Gallery Section */}
       <section className="py-24 md:py-32 px-6 md:px-12 lg:px-24 bg-surface">
@@ -184,13 +190,13 @@ export default function Eventos() {
           <h2 className="text-3xl md:text-4xl font-serif text-primary mb-12 text-center">Explore Mais</h2>
           <div className="grid md:grid-cols-2 gap-8">
             <Link to="/casamentos" className="relative group overflow-hidden rounded-2xl aspect-video block">
-              <img src="/casamento-nara-leco-1.jpg" alt="Casamentos" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              <img src="/casamento-nara-leco-1.jpg" alt="Casamentos" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" />
               <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors flex items-center justify-center">
                 <h3 className="text-3xl font-serif text-white">Casamentos</h3>
               </div>
             </Link>
             <Link to="/sobre-nos" className="relative group overflow-hidden rounded-2xl aspect-video block">
-              <img src="/sobre-nos-olga-enzo.webp" alt="Sobre Nós" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              <img src="/sobre-nos-olga-enzo.webp" alt="Sobre Nós" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" />
               <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors flex items-center justify-center">
                 <h3 className="text-3xl font-serif text-white">Nossa História</h3>
               </div>

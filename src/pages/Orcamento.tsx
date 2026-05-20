@@ -48,7 +48,7 @@ export default function Orcamento() {
     if (validate()) {
       setIsSubmitting(true);
       try {
-        await fetch("https://formsubmit.co/ajax/contato@ranchobranco.com.br", {
+        await fetch("https://formsubmit.co/ajax/9a6186a4eead5a8d5f8228a0d81fa8ef", {
           method: "POST",
           headers: { 
             'Content-Type': 'application/json',

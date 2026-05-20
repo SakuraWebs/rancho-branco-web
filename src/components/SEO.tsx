@@ -4,9 +4,11 @@ interface SEOProps {
   title: string;
   description: string;
   canonical?: string;
+  image?: string;
+  noindex?: boolean;
 }
 
-export default function SEO({ title, description, canonical }: SEOProps) {
+export default function SEO({ title, description, canonical, image = "https://ranchobranco.com.br/1.1.jpeg", noindex = false }: SEOProps) {
   useEffect(() => {
     document.title = title;
     
@@ -17,6 +19,18 @@ export default function SEO({ title, description, canonical }: SEOProps) {
       document.head.appendChild(metaDescription);
     }
     metaDescription.setAttribute('content', description);
+
+    let metaRobots = document.querySelector('meta[name="robots"]');
+    if (noindex) {
+      if (!metaRobots) {
+        metaRobots = document.createElement('meta');
+        metaRobots.setAttribute('name', 'robots');
+        document.head.appendChild(metaRobots);
+      }
+      metaRobots.setAttribute('content', 'noindex, nofollow');
+    } else if (metaRobots) {
+      metaRobots.setAttribute('content', 'index, follow');
+    }
 
     let ogTitle = document.querySelector('meta[property="og:title"]');
     if (!ogTitle) {
@@ -33,6 +47,22 @@ export default function SEO({ title, description, canonical }: SEOProps) {
       document.head.appendChild(ogDescription);
     }
     ogDescription.setAttribute('content', description);
+
+    let ogImage = document.querySelector('meta[property="og:image"]');
+    if (!ogImage) {
+      ogImage = document.createElement('meta');
+      ogImage.setAttribute('property', 'og:image');
+      document.head.appendChild(ogImage);
+    }
+    ogImage.setAttribute('content', image);
+
+    let twitterImage = document.querySelector('meta[name="twitter:image"]');
+    if (!twitterImage) {
+      twitterImage = document.createElement('meta');
+      twitterImage.setAttribute('name', 'twitter:image');
+      document.head.appendChild(twitterImage);
+    }
+    twitterImage.setAttribute('content', image);
 
     // Canonical link
     let canonicalLink = document.querySelector('link[rel="canonical"]');

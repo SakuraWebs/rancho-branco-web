@@ -90,7 +90,7 @@ export default function Contato() {
     if (validate()) {
       setIsSubmitting(true);
       try {
-        await fetch("https://formsubmit.co/ajax/contato@ranchobranco.com.br", {
+        await fetch("https://formsubmit.co/ajax/9a6186a4eead5a8d5f8228a0d81fa8ef", {
           method: "POST",
           headers: { 
             'Content-Type': 'application/json',
@@ -301,10 +301,9 @@ export default function Contato() {
             <h2 className="text-3xl font-serif text-primary mb-4">Conheça Nossa Atmosfera</h2>
             <p className="text-on-surface-variant font-light">Um vislumbre dos momentos inesquecíveis que aguardam por você.</p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {[
               "/deck-celebracao-rancho-branco.webp",
-              "/gramado-eventos-campo-livramento.webp",
               "/1.1.jpeg",
               "/1.2.jpeg"
             ].map((photo, index) => (
@@ -313,6 +312,8 @@ export default function Contato() {
                   src={photo}
                   alt={`Atmosfera Rancho Branco ${index + 1}`}
                   className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               </div>

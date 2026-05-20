@@ -2,6 +2,7 @@ import { ArrowRight, LayoutGrid, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
 import EssenceSection from '../components/EssenceSection';
+import PhotoSubmissionForm from '../components/PhotoSubmissionForm';
 import bgImage from '../assets/gramado-eventos-campo-livramento.webp';
 
 export default function Home() {
@@ -159,6 +160,7 @@ export default function Home() {
                     alt="portrait of a smiling elegant woman in her 30s with soft natural lighting"
                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuDL9-Zt-Lb9iDveg9tRIVQeqveGAmwiDv6QacZ_ldO8LQzWWKeGC0rIlSVyw4SVAduvTZzxbbFdnqfq85PM_EbXVqt6S3ETGFpD6jfQ4gyffursWKDr6nbChZ0SBqbS0v2LOHtNO3o_i8_QaO1QGlwDlfc5ZkHrEXu4fTX-ZzSGYi8g2KCU_udF5hn3t2BAflwjRQm3bn8yYE_rVBHb4opX71zWmkA52aMo_D_IoWlJHprpvZOoeuSn-EWuuW7cKQEY1foZ3IJz5iNQ"
                     loading="lazy"
+                    decoding="async"
                   />
                 </div>
                 <div>
@@ -189,6 +191,7 @@ export default function Home() {
                     alt="professional middle-aged man in a linen shirt looking confident"
                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuD89cgkTD1QlBlq1-Y3vLry9g_da-s76f4E6arAFvioBT6os7QSDeSQrobXCWL_IKpQ3RLAo-BMZiHJy6hSfdwuzEd1pnWlECBIx3DEibPdThg6lEbzoAIaFM6MigFb4Jn2hl-AsPWknynE6V-ffFYIIEENsRE1FbswU-WyaDfacwxefcmfOzv4eAsdgNCFm5mOaU-9F97nwPUHzccnKCGocG3rTeRHmhxkKVluZ3BUW7B3QkdoKujnZ399P3FRT1msI_mbKu4H5m11"
                     loading="lazy"
+                    decoding="async"
                   />
                 </div>
                 <div>
@@ -219,6 +222,7 @@ export default function Home() {
                     alt="relaxed portrait of a young man with a slight smile in soft lighting"
                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuC522brxPEY3rKBxgTdp8aOg0P4dKFTtIDw_C3oksPVmVzf7iO5TXW2l5M2_9t5zpUMdm0_oekQhe5jgCReFd0lMkzSxKwl1GaGKs091n6ynht_uQp1LHkqUiJV-fzdnhs92uZN7EsmTcZkdjKIB3aFEpBYs4o9YFxxlWLrsRvEm831zpDuKTpvyBoiDgmOdnoLvFxZvyk9IZvjP0M2gLdAhfgvWdShId8Xwd-wSW2BKKr8j_JYkmGgEGijLekEq96X71Bb4O_JIsdM"
                     loading="lazy"
+                    decoding="async"
                   />
                 </div>
                 <div>

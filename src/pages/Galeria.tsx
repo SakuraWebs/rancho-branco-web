@@ -3,6 +3,7 @@ import { Share2, X, Facebook, Twitter, Link as LinkIcon, MessageCircle, Play } f
 import { motion, AnimatePresence } from 'motion/react';
 import SEO from '../components/SEO';
 import { db, collection, onSnapshot, query, orderBy, OperationType, handleFirestoreError } from '../firebase';
+import gramadoImg from '../assets/gramado-eventos-campo-livramento.webp';
 
 export default function Galeria() {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
@@ -43,22 +44,10 @@ export default function Galeria() {
   };
 
   const staticPhotos = [
-    { url: "/casamento-nara-leco-1.jpg", alt: "Decoração de cerimônia de casamento ao ar livre com altar de madeira sob árvores centenárias", category: "casamentos" },
-    { url: "/casamento-nara-leco-2.jpg", alt: "Noivos Nara e Leco celebrando após a cerimônia no gramado do Rancho Branco", category: "casamentos" },
-    { url: "/casamento-nara-leco-3.jpg", alt: "Detalhe da mesa de doces em casamento rústico-chique", category: "casamentos" },
-    { url: "/casamento-nara-leco-4.jpg", alt: "Vista panorâmica da recepção de casamento ao entardecer", category: "casamentos" },
-    { url: "/casamento-nara-leco-5.jpg", alt: "Noivos Nara e Leco em momento romântico nos jardins do Rancho", category: "casamentos" },
-    { url: "/casamento-yuri-eduarda-1.png", alt: "Cerimônia de casamento de Yuri e Eduarda com vista para o campo", category: "casamentos" },
-    { url: "/casamento-yuri-eduarda-2.png", alt: "Decoração elegante de recepção de casamento em salão clássico", category: "casamentos" },
-    { url: "/casamento-yuri-eduarda-3.jpeg", alt: "Noivos Yuri e Eduarda brindando com convidados", category: "casamentos" },
-    { url: "/casamento-yuri-eduarda-4.jpeg", alt: "Detalhes da decoração floral em tons pastéis", category: "casamentos" },
-    { url: "/eventos-carlos-eduardo-4.jpeg", alt: "Configuração de mesas para evento corporativo no Rancho Branco", category: "eventos" },
-    { url: "/eventos-carlos-eduardo-5.jpeg", alt: "Área de lazer com piscina iluminada durante evento noturno", category: "eventos" },
-    { url: "/eventos-carlos-eduardo-6.jpeg", alt: "Buffet sofisticado servido em evento social", category: "eventos" },
-    { url: "/deck-celebracao-rancho-branco.webp", alt: "Deck de madeira para celebrações com vista para a natureza exuberante", category: "espacos" },
-    { url: "/gramado-eventos-campo-livramento.webp", alt: "Amplo gramado verde ideal para eventos ao ar livre em Santana do Livramento", category: "espacos" },
-    { url: "/1.1.jpeg", alt: "Caminho de pedras iluminado levando à entrada principal do Rancho", category: "espacos" },
-    { url: "/1.2.jpeg", alt: "Pórtico de entrada rústico com telhado de palha e cercas brancas", category: "espacos" }
+    { url: "/deck-celebracao-rancho-branco.webp", alt: "Deck de madeira para celebrações com vista para a natureza exuberante e perfume dos eucaliptos", category: "espacos" },
+    { url: gramadoImg, alt: "Amplo gramado verde ideal para reconexão com a natureza em Santana do Livramento", category: "espacos" },
+    { url: "/1.1.jpeg", alt: "Caminho de pedras iluminado levando às paredes de pedra que abraçam o Rancho", category: "espacos" },
+    { url: "/1.2.jpeg", alt: "Alameda de entrada rústica com telhado de palha e cercas brancas", category: "espacos" }
   ];
 
   const staticVideos = [
@@ -118,17 +107,17 @@ export default function Galeria() {
   return (
     <>
       <SEO 
-        title="Fotos de Casamento em Santana do Livramento e Vídeos de Eventos | Rancho Branco" 
-        description="Confira nossa galeria de espaços para eventos. Veja fotos de casamento em Santana do Livramento e vídeos de eventos no Rancho Branco, capturando momentos únicos."
+        title="Galeria Rancho Branco | Espaço de Memórias em Livramento" 
+        description="Confira os cenários de reconexão com a natureza do Rancho Branco. Fotos e vídeos da nossa estrutura, alameda de entrada e paredes de pedra que abraçam."
         canonical="https://ranchobranco.com.br/galeria"
       />
       
       <div className="pt-32 pb-24 px-6 md:px-12 lg:px-24 bg-surface min-h-screen">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-6xl font-serif text-primary mb-6">Galeria Completa</h1>
+            <h1 className="text-4xl md:text-6xl font-serif text-primary mb-6">Nosso Olhar</h1>
             <p className="text-lg text-on-surface-variant font-light max-w-2xl mx-auto">
-              Cada detalhe, cada sorriso e cada celebração capturados em nosso refúgio.
+              A estrutura e a natureza que formam o cenário dos seus momentos mais importantes.
             </p>
           </div>
 

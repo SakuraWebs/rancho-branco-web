@@ -5,8 +5,8 @@ export default function SobreNos() {
   return (
     <>
       <SEO 
-        title="Nossa História | Rancho Branco - Tradição e Elegância no Campo" 
-        description="Conheça a trajetória do Rancho Branco em Santana do Livramento. Uma propriedade centenária transformada no espaço de eventos mais charmoso da Campanha Gaúcha."
+        title="Nossa História | Rancho Branco - Espaço de Memórias em Livramento" 
+        description="O Rancho Branco une a solidez histórica de Sant'Ana do Livramento ao acolhimento de um refúgio exclusivo. Uma propriedade particular aberta para celebrações."
         canonical="https://ranchobranco.com.br/sobre-nos"
       />
       {/* Hero Section */}
@@ -35,52 +35,58 @@ export default function SobreNos() {
           {/* Text Column */}
           <div className="lg:col-span-7">
             <h2 className="text-3xl md:text-5xl font-serif text-primary mb-6 leading-tight">
-              A História do Rancho Branco: Onde o tempo desacelera.
+              O Rancho Branco une a solidez histórica ao acolhimento de um refúgio exclusivo.
             </h2>
             <h3 className="text-xl md:text-2xl text-primary/80 font-serif italic mb-8">
-              "De nossa família para a sua: o espaço para eventos mais charmoso da Campanha Gaúcha abre suas portas."
+              "Uma propriedade particular aberta ao público para usufruto de momentos felizes."
             </h3>
 
             <div className="space-y-8 text-lg text-on-surface-variant font-light leading-relaxed">
               <p>
-                O Rancho Branco não é apenas um espaço para eventos; é um refúgio idealizado para celebrar a vida em sua forma mais pura. Nascido do amor pela terra e pela arquitetura clássica, nossa propriedade foi cuidadosamente desenhada para integrar a sofisticação ao ambiente natural. Cada árvore plantada, cada pedra colocada e cada salão erguido carrega a nossa missão: oferecer um cenário impecável onde as suas histórias mais importantes possam ser vividas e lembradas para sempre.
+                O Rancho Branco não é apenas um espaço para eventos; é um refúgio idealizado para celebrar a vida em sua forma mais pura. Nascido do alicerce da tradição familiar, nossa propriedade foi cuidadosamente desenhada para integrar a engenharia visionária ao ambiente natural. Cada árvore plantada, cada parede de pedra que abraça e cada salão erguido carrega a nossa missão: oferecer um cenário impecável onde as suas histórias mais importantes possam ser vividas e lembradas para sempre.
               </p>
 
               <div>
                 <h4 className="text-primary font-serif text-2xl mb-3">Raízes Profundas em Santana do Livramento</h4>
                 <p>
-                  O Rancho Branco não nasceu como um local de eventos; ele nasceu e permanece sendo um lar. Localizado no histórico Cerro do Armour, em Santana do Livramento, esta propriedade centenária carrega em suas paredes de pedra e em seu madeiramento original as memórias vivas de gerações. Para Olga, este solo é sagrado: foi aqui, na casa de seus pais, que ela cresceu, vendo a vida florescer sob as mesmas árvores que hoje adornam os jardins.
+                  O Rancho Branco nasceu e permanece sendo um lar. Localizado no histórico Cerro do Armour, em Santana do Livramento, esta propriedade centenária carrega em suas paredes de pedra e em seu madeiramento original as memórias vivas de gerações. Este solo é sagrado: foi aqui que a família proprietária cresceu, vendo a vida florescer sob as mesmas árvores que hoje adornam os jardins.
                 </p>
               </div>
 
               <div>
                 <h4 className="text-primary font-serif text-2xl mb-3">Arquitetura Clássica e Preservação Histórica</h4>
                 <p>
-                  A arquitetura da nossa sede remonta ao período colonial, evocando a estética atemporal das estâncias europeias. Cada detalhe foi preservado com cuidado meticuloso: das paredes brancas texturizadas abraçadas pela hera madura até o nosso icônico brasão em azulejaria. Não somos um espaço comercial padronizado; somos uma propriedade rural autêntica que mantém o charme rústico inconfundível.
+                  A arquitetura da nossa sede remonta ao período colonial, evocando a estética atemporal das estâncias europeias. Cada detalhe foi preservado com cuidado meticuloso: das paredes brancas texturizadas abraçadas pela hera madura até o nosso icônico brasão em azulejaria. Somos uma propriedade particular autêntica que mantém o charme rústico inconfundível, unindo fornecedores e clientes que formam a história do Rancho.
                 </p>
               </div>
 
               <div>
-                <h4 className="text-primary font-serif text-2xl mb-3">Um Convite para o seu Casamento ou Evento</h4>
+                <h4 className="text-primary font-serif text-2xl mb-3">Um Convite para o seu Cenário de Memórias</h4>
                 <p>
-                  Recentemente, decidimos que uma energia tão única — uma energia que acolhe e abraça cada visitante — merecia ser compartilhada. Abrimos as portas do Rancho Branco para que ele se torne o cenário dos seus novos inícios. Seja em uma cerimônia grandiosa no campo aberto ou em um jantar íntimo sob a copa das árvores do nosso bosque, o Rancho Branco é a "tela em branco" sofisticada para quem busca celebrar o amor com privacidade e alma.
+                  Decidimos que uma energia tão única — uma energia que acolhe e abraça cada visitante — merecia ser compartilhada. Abrimos as portas do Rancho Branco para que ele se torne o cenário dos seus novos inícios. Seja em uma cerimônia grandiosa no campo aberto ou em um jantar íntimo sob a copa das árvores do nosso bosque, o Rancho Branco é a "tela em branco" sofisticada para quem busca celebrar a vida com privacidade e alma.
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Image Column */}
+          {/* Video Column */}
           <div className="lg:col-span-5 lg:sticky lg:top-32">
-            <div className="relative rounded-2xl overflow-hidden shadow-ambient">
-              <img
+            <div className="relative rounded-2xl overflow-hidden shadow-ambient bg-black">
+              <video
                 className="w-full h-auto object-cover"
-                alt="Olga e seu filho Enzo, responsáveis pelo Rancho Branco"
-                src="/sobre-nos-olga-enzo.webp"
-              />
+                autoPlay
+                muted
+                loop
+                playsInline
+                controls
+              >
+                <source src="/sobre-nos-rancho-branco.mp4" type="video/mp4" />
+                Seu navegador não suporta a tag de vídeo.
+              </video>
             </div>
             <div className="mt-6 bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/20 shadow-sm">
               <p className="font-serif text-primary text-lg italic text-center">
-                "Na foto, Olga e seu filho, Enzo, representam a alma deste lugar."
+                "O alicerce da tradição familiar sustenta celebrações que olham para o futuro."
               </p>
             </div>
           </div>

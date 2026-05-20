@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Share2, X, Facebook, Twitter, Link as LinkIcon, MessageCircle, ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import SEO from '../components/SEO';
+import PhotoSubmissionForm from '../components/PhotoSubmissionForm';
 
 export default function Casamentos() {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
@@ -18,9 +19,7 @@ export default function Casamentos() {
     "/casamento-nara-leco-4.jpg",
     "/casamento-nara-leco-5.jpg",
     "/casamento-yuri-eduarda-1.png",
-    "/casamento-yuri-eduarda-2.png",
-    "/casamento-yuri-eduarda-3.jpeg",
-    "/casamento-yuri-eduarda-4.jpeg"
+    "/casamento-yuri-eduarda-2.png"
   ];
 
   const handleShareClick = (e: React.MouseEvent, photo: string) => {
@@ -127,6 +126,8 @@ export default function Casamentos() {
                   src={photo}
                   alt={`Wedding moment ${index + 1}`}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover/item:scale-110"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/item:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                   <div className="bg-white/20 backdrop-blur-md p-4 rounded-full text-white scale-90 group-hover/item:scale-100 transition-transform">
@@ -140,14 +141,14 @@ export default function Casamentos() {
           {/* Carousel Controls */}
           <button 
             onClick={() => scrollCarousel('left')}
-            className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 backdrop-blur-md text-primary shadow-lg flex items-center justify-center hover:bg-white transition-all z-10 opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0"
+            className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 backdrop-blur-md text-primary shadow-lg flex items-center justify-center hover:bg-white transition-all z-10 opacity-100 md:opacity-0 md:group-hover:opacity-100 translate-x-0 md:-translate-x-4 md:group-hover:translate-x-0"
             aria-label="Anterior"
           >
             <ChevronLeft size={24} />
           </button>
           <button 
             onClick={() => scrollCarousel('right')}
-            className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 backdrop-blur-md text-primary shadow-lg flex items-center justify-center hover:bg-white transition-all z-10 opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0"
+            className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 backdrop-blur-md text-primary shadow-lg flex items-center justify-center hover:bg-white transition-all z-10 opacity-100 md:opacity-0 md:group-hover:opacity-100 translate-x-0 md:translate-x-4 md:group-hover:translate-x-0"
             aria-label="Próximo"
           >
             <ChevronRight size={24} />
@@ -160,6 +161,9 @@ export default function Casamentos() {
           </Link>
         </div>
       </section>
+
+      {/* Photo Submission Form */}
+      <PhotoSubmissionForm source="Casamentos" />
 
       {/* Full Screen Image Viewer */}
       <AnimatePresence>

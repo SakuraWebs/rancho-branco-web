@@ -1,5 +1,6 @@
 {
-  "name": "Rancho Branco - Manutenção",
-  "description": "Site do Rancho Branco em modo de manutenção com acesso restrito.",
-  "requestFramePermissions": []
+  "name": "Rancho Branco - Casa de Eventos e Casamentos",
+  "description": "Site do Rancho Branco dedicado a difundir este local dedicado a realização de Eventos e Casamentos na Cidade de Santna do Livramento - Rio Grande do Sul.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
 }

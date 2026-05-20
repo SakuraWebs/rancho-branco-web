@@ -3,13 +3,14 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { MapPin } from 'lucide-react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import logoUrl from '../assets/logo.webp';
 
 const customIcon = new L.Icon({
-  iconUrl: '/logo.webp',
+  iconUrl: logoUrl,
   iconSize: [60, 60],
   iconAnchor: [30, 60],
   popupAnchor: [0, -60],
-  className: 'rounded-full border-2 border-white shadow-lg bg-white object-contain p-1'
+  className: 'object-contain drop-shadow-lg'
 });
 
 const position: [number, number] = [-30.892359, -55.474898];
