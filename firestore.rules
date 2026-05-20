@@ -73,5 +73,10 @@ service cloud.firestore {
       allow read: if true; // Public gallery
       allow write: if isAdmin() && isValidGalleryItem(request.resource.data);
     }
+
+    match /agenda/{agendaId} {
+      allow read: if true; // Publicly visible agenda
+      allow write: if isAdmin();
+    }
   }
 }
