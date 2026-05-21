@@ -212,23 +212,26 @@ export default function Agenda() {
                     const isPast = isBefore(day, today) && !isSameDay(day, today);
                     
                     let bgClass = "hover:bg-surface-container-high transition-colors cursor-pointer group";
-                    let title = "Data livre! Clique para reservar pelo WhatsApp.";
+                    let title = "Data Livre";
                     let hasGradient = false;
+                    let borderClass = "border border-[#13214D]/40"; // Subtle border in logo color for available days
 
                     // Apply status styles
                     if (event) {
                       if (event.status === 'confirmed') {
                         bgClass = "bg-[#1A2D6C]/50 text-white cursor-not-allowed";
+                        borderClass = "border border-outline-variant/10"; // Remove special border for occupied
                         title = "Data Ocupada";
                       } else if (event.status === 'reserved') {
                         hasGradient = true;
-                        title = "reservada não confirmada pode escolher em lista de espera";
+                        title = "Reservada (Não confirmada)";
                       }
                     }
 
                     // Soften past days
                     if (isPast && (!event || event.status !== 'confirmed')) {
                         bgClass = "opacity-30 cursor-not-allowed bg-transparent";
+                        borderClass = "border border-outline-variant/10"; // Remove special border for past days
                         title = "Data passada";
                     }
 
@@ -238,7 +241,7 @@ export default function Agenda() {
                     return (
                       <div 
                         key={i} 
-                        className={`aspect-square relative rounded-xl border border-outline-variant/10 overflow-hidden flex items-center justify-center ${!isCurrentMonth ? 'opacity-30' : ''} ${bgClass}`}
+                        className={`aspect-square relative rounded-xl ${borderClass} overflow-hidden flex items-center justify-center ${!isCurrentMonth ? 'opacity-30' : ''} ${bgClass}`}
                         onClick={() => isClickable ? handleDateClick(day) : undefined}
                         title={title}
                       >
@@ -259,15 +262,15 @@ export default function Agenda() {
 
                 <div className="mt-8 flex flex-wrap gap-4 items-center justify-center text-sm md:text-base border-t border-outline-variant/10 pt-6">
                   <div className="flex items-center gap-2">
-                    <div className="w-5 h-5 rounded-md border border-outline-variant/10"></div>
+                    <div className="w-5 h-5 rounded-md border border-[#13214D]/40"></div>
                     <span className="text-on-surface-variant font-medium">Livre</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-5 h-5 rounded-md bg-[#1A2D6C]/50"></div>
+                    <div className="w-5 h-5 rounded-md bg-[#1A2D6C]/50 border border-outline-variant/10"></div>
                     <span className="text-on-surface-variant font-medium">Ocupada</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-5 h-5 rounded-md bg-gradient-to-r from-transparent to-[#1A2D6C]/50 border border-outline-variant/10"></div>
+                    <div className="w-5 h-5 rounded-md bg-gradient-to-r from-transparent to-[#1A2D6C]/50 border border-[#13214D]/40"></div>
                     <span className="text-on-surface-variant font-medium">Reservada (Não confirmada)</span>
                   </div>
                 </div>
