@@ -82,9 +82,10 @@ export default function Agenda() {
   return (
     <>
       <SEO 
-        title="Agenda e Reservas | Espaço para Casamentos e Eventos | Rancho Branco" 
-        description="Verifique nosso calendário de reservas. Confira as datas disponíveis e programe seu casamento ou evento social no Rancho Branco. Faça sua reserva!"
+        title="Agenda e Reservas | Reserve a sua data | Rancho Branco" 
+        description="Verifique nosso calendário de reservas. Confira as datas disponíveis e reserve a sua data para o seu casamento ou evento social no Rancho Branco!"
         canonical="https://ranchobranco.com.br/agenda"
+        image="https://ranchobranco.com.br/1.1.jpeg"
       />
       
       <div className="pt-40 md:pt-48 pb-24 px-4 md:px-12 lg:px-24 bg-surface min-h-screen">

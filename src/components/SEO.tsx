@@ -77,7 +77,7 @@ export default function SEO({ title, description, canonical, image = "https://ra
       canonicalLink.remove();
     }
 
-  }, [title, description, canonical]);
+  }, [title, description, canonical, image, noindex]);
 
   return null;
 }
