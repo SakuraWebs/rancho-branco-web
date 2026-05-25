@@ -57,7 +57,7 @@ export default function Layout() {
   ];
 
   // Pages that don't have a hero image at the top need a solid nav immediately
-  const needsSolidNav = ['/contato', '/orcamento', '/galeria', '/politicas-de-privacidade', '/termos-de-uso'].includes(location.pathname);
+  const needsSolidNav = ['/contato', '/orcamento', '/galeria', '/politicas-de-privacidade', '/termos-de-uso', '/agenda'].includes(location.pathname);
   const isSolidNav = isScrolled || needsSolidNav;
 
   return (

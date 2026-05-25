@@ -82,16 +82,17 @@ export default function Agenda() {
   return (
     <>
       <SEO 
-        title="Reservas | Rancho Branco" 
-        description="Confirme a disponibilidade do Rancho Branco para o seu evento. Veja nosso calendário de reservas."
+        title="Agenda e Reservas | Espaço para Casamentos e Eventos | Rancho Branco" 
+        description="Verifique nosso calendário de reservas. Confira as datas disponíveis e programe seu casamento ou evento social no Rancho Branco. Faça sua reserva!"
+        canonical="https://ranchobranco.com.br/agenda"
       />
       
-      <div className="pt-32 pb-24 px-4 md:px-12 lg:px-24 bg-surface min-h-screen">
+      <div className="pt-40 md:pt-48 pb-24 px-4 md:px-12 lg:px-24 bg-surface min-h-screen">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16 relative">
-            <h1 className="text-4xl md:text-6xl font-serif text-primary mb-6">Agenda de Eventos</h1>
+            <h1 className="text-4xl md:text-6xl font-serif text-primary mb-6">Agenda de Eventos e Reservas</h1>
             <p className="text-lg text-on-surface-variant font-light max-w-2xl mx-auto">
-              Verifique nosso calendário atualizado e garanta sua data. As reservas para 2026 e 2027 já estão ativas.
+              Verifique nosso calendário atualizado e garanta a data para o seu casamento ou evento no Rancho Branco. As reservas para 2026 e 2027 já estão ativas.
             </p>
           </div>
 

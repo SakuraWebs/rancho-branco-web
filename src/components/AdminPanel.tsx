@@ -73,8 +73,13 @@ export default function AdminPanel() {
   const handleLogin = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Login failed', error);
+      if (error.code === 'auth/unauthorized-domain') {
+        alert('O domínio atual não está autorizado no Firebase. Por favor, acesse o painel do Firebase > Authentication > Settings > Authorized domains e adicione este domínio: ' + window.location.hostname);
+      } else {
+        alert('Erro ao tentar fazer login: ' + (error.message || error.code || 'Erro desconhecido'));
+      }
     }
   };
 
