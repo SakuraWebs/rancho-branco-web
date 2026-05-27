@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isBefore, startOfToday, parseISO, isSameDay, addMonths, subMonths, getDay } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { ChevronLeft, ChevronRight, Save, Printer, Edit2, LogIn, X, Clock, User, Phone, Mail, DollarSign, FileText } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Save, Printer, Edit2, LogIn, X, Clock, User, Phone, Mail, DollarSign, FileText, Share2, Download, MessageCircle } from 'lucide-react';
 import { db, collection, onSnapshot, query, orderBy, setDoc, doc, deleteDoc, serverTimestamp } from '../firebase';
 import { useAuth } from '../contexts/AuthContext';
 import { auth, googleProvider, signInWithPopup } from '../firebase';
 import SEO from '../components/SEO';
+import html2canvas from 'html2canvas';
 
 interface InternaEvent {
   id: string; // usually same as date string
@@ -31,6 +32,8 @@ export default function AgendaInterna() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [formData, setFormData] = useState<InternaEvent | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [isGeneratingImage, setIsGeneratingImage] = useState(false);
+  const receiptRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!isAdmin) return;
@@ -174,6 +177,67 @@ export default function AgendaInterna() {
     window.print();
   };
 
+  const handleWhatsAppShare = async () => {
+    if (!receiptRef.current || !formData || !selectedDate) return;
+    
+    // Fallback: Send text message to WhatsApp
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    
+    setIsGeneratingImage(true);
+    try {
+      // Small delay to ensure rendering
+      await new Promise(r => setTimeout(r, 100));
+      
+      const canvas = await html2canvas(receiptRef.current, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#ffffff'
+      });
+      
+      canvas.toBlob(async (blob) => {
+        if (!blob) return;
+        
+        try {
+          const file = new File([blob], `reserva-${formData.dateString}.png`, { type: 'image/png' });
+          
+          if (navigator.canShare && navigator.canShare({ files: [file] })) {
+             await navigator.share({
+               title: 'Reserva Rancho Branco',
+               text: 'Aqui está o comprovante/orçamento da sua reserva.',
+               files: [file]
+             });
+          } else {
+             // Fallback: download the image and prompt text
+             const url = URL.createObjectURL(blob);
+             const a = document.createElement('a');
+             a.href = url;
+             a.download = `reserva-${formData.dateString}.png`;
+             a.click();
+             URL.revokeObjectURL(url);
+             
+             // Open whatsapp with text
+             const textMsg = `Olá! Segue o resumo do evento:\nData: ${format(selectedDate, "dd/MM/yyyy")}\nEvento: ${formData.title}\nValor: R$ ${formData.agreedValue || 'A combinar'}`;
+             const waUrl = isMobile 
+               ? `whatsapp://send?text=${encodeURIComponent(textMsg)}` 
+               : `https://web.whatsapp.com/send?text=${encodeURIComponent(textMsg)}`;
+             
+             if (!isMobile) {
+               alert("A imagem foi baixada. Você pode anexá-la no WhatsApp Web.");
+             }
+             window.open(waUrl, '_blank');
+          }
+        } catch (shareErr) {
+          console.error("Erro ao compartilhar", shareErr);
+        } finally {
+          setIsGeneratingImage(false);
+        }
+      }, 'image/png');
+    } catch (err) {
+      console.error(err);
+      setIsGeneratingImage(false);
+    }
+  };
+
   return (
     <>
       <SEO title="Agenda Interna | Rancho Branco" description="Gestão interna de datas" />
@@ -272,6 +336,9 @@ export default function AgendaInterna() {
                 {format(selectedDate, "dd 'de' MMMM, yyyy", { locale: ptBR })}
               </h2>
               <div className="flex gap-2">
+                  <button onClick={handleWhatsAppShare} disabled={isGeneratingImage} className="p-2 text-green-600 hover:text-green-700 hover:bg-green-50 rounded-full transition-colors hidden sm:block disabled:opacity-50" title="Compartilhar WhatsApp">
+                      <MessageCircle size={20} />
+                  </button>
                   <button onClick={handlePrintPDF} className="p-2 text-gray-500 hover:text-primary hover:bg-primary/10 rounded-full transition-colors hidden sm:block" title="Imprimir Orçamento">
                       <Printer size={20} />
                   </button>
@@ -390,12 +457,21 @@ export default function AgendaInterna() {
             </div>
 
             <div className="p-4 border-t flex flex-col sm:flex-row gap-3 bg-surface-container-lowest sm:items-center">
-              <button 
-                  onClick={handlePrintPDF} 
-                  className="sm:hidden flex items-center justify-center gap-2 w-full bg-white border border-gray-200 text-gray-700 p-3 rounded-xl font-medium"
-              >
-                  <Printer size={18} /> Imprimir Orçamento PDF
-              </button>
+              <div className="flex gap-2 sm:hidden w-full">
+                <button 
+                    onClick={handleWhatsAppShare} 
+                    disabled={isGeneratingImage}
+                    className="flex-1 flex items-center justify-center gap-2 bg-green-50 border border-green-200 text-green-700 p-3 rounded-xl font-medium disabled:opacity-50"
+                >
+                    <MessageCircle size={18} /> {isGeneratingImage ? 'Gerando...' : 'WhatsApp'}
+                </button>
+                <button 
+                    onClick={handlePrintPDF} 
+                    className="flex-1 flex items-center justify-center gap-2 bg-white border border-gray-200 text-gray-700 p-3 rounded-xl font-medium"
+                >
+                    <Printer size={18} /> Imprimir
+                </button>
+              </div>
               
               <div className="flex-1 hidden sm:block">
                   {/* Space for layout */}
@@ -477,6 +553,68 @@ export default function AgendaInterna() {
            <div className="mt-24 pt-8 text-center text-sm text-gray-500">
              <p>Este documento é apenas um resumo de orçamento e não garante a reserva sem a assinatura do contrato.</p>
              <p className="mt-2">Rancho Branco Eventos</p>
+           </div>
+         </div>
+      )}
+
+      {/* Hidden Receipt Layout for Canvas Generation */}
+      {selectedDate && formData && (
+         <div style={{ position: 'absolute', top: '-9999px', left: '-9999px', width: '800px' }}>
+           <div ref={receiptRef} className="bg-white p-12 text-black font-serif border border-gray-200 shadow-md">
+             <div className="text-center mb-10 border-b pb-8">
+               <h1 className="text-4xl font-bold tracking-tight mb-2 uppercase" style={{ fontFamily: '"Cinzel", serif', color: '#13214D' }}>Rancho Branco</h1>
+               <p className="text-xl italic text-gray-600" style={{ fontFamily: '"Great Vibes", cursive' }}>Casa de Eventos</p>
+             </div>
+             
+             <h2 className="text-2xl font-bold mb-8 text-center" style={{ color: '#13214D' }}>Resumo de Orçamento / Reserva</h2>
+             
+             <div className="space-y-6 text-lg">
+               <div className="flex justify-between border-b border-gray-200 pb-2">
+                 <span className="font-bold text-gray-600">Data do Evento:</span>
+                 <span>{format(selectedDate, "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}</span>
+               </div>
+               
+               {formData.title && (
+                 <div className="flex justify-between border-b border-gray-200 pb-2">
+                   <span className="font-bold text-gray-600">Evento:</span>
+                   <span>{formData.title}</span>
+                 </div>
+               )}
+
+               <div className="flex justify-between border-b border-gray-200 pb-2">
+                 <span className="font-bold text-gray-600">Cliente:</span>
+                 <span>{formData.clientName || 'Não informado'}</span>
+               </div>
+
+               <div className="flex justify-between border-b border-gray-200 pb-2">
+                 <span className="font-bold text-gray-600">Telefone / WhatsApp:</span>
+                 <span>{formData.clientPhone || 'Não informado'}</span>
+               </div>
+
+               <div className="flex justify-between border-b border-gray-200 pb-2">
+                 <span className="font-bold text-gray-600">E-mail:</span>
+                 <span>{formData.clientEmail || 'Não informado'}</span>
+               </div>
+
+               <div className="mt-12 pt-10 border-t-2 border-[#13214D]">
+                 <div className="flex justify-between text-2xl font-bold">
+                   <span style={{ color: '#13214D' }}>Valor Combinado:</span>
+                   <span style={{ color: '#13214D' }}>R$ {formData.agreedValue || 'A combinar'}</span>
+                 </div>
+               </div>
+
+               {formData.observations && (
+                 <div className="mt-10 pt-6">
+                   <h3 className="font-bold text-[#13214D] mb-4 uppercase text-sm tracking-wider">Observações / Detalhes:</h3>
+                   <p className="whitespace-pre-wrap text-gray-800 bg-gray-50 p-6 border border-gray-200 rounded-lg">{formData.observations}</p>
+                 </div>
+               )}
+             </div>
+
+             <div className="mt-16 pt-8 text-center text-sm text-gray-500 border-t border-gray-100">
+               <p>Este documento é apenas um resumo de orçamento e não garante a reserva sem a assinatura do contrato.</p>
+               <p className="mt-2 font-bold uppercase text-xs tracking-widest text-[#13214D]">Rancho Branco Eventos</p>
+             </div>
            </div>
          </div>
       )}
