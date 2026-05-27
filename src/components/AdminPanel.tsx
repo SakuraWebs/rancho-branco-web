@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { auth, googleProvider, signInWithPopup, signOut } from '../firebase';
 import { useAuth } from '../contexts/AuthContext';
 import { LogIn, LogOut, Shield, Plus, Trash2, Image as ImageIcon, Video, X, LayoutGrid, CalendarDays } from 'lucide-react';
@@ -387,12 +388,13 @@ export default function AdminPanel() {
                       <p className="text-gray-600 text-sm mb-6">
                         A gestão de datas, orçamentos e contratos agora possui um painel exclusivo mais avançado e completo.
                       </p>
-                      <a 
-                        href="/agenda-interna"
+                      <Link 
+                        to="/agenda-interna"
+                        onClick={() => setShowPanel(false)}
                         className="inline-flex items-center justify-center gap-2 bg-primary text-white py-3 px-6 rounded-xl font-medium hover:bg-primary/90 transition-all shadow-md"
                       >
                         Acessar Nova Agenda Interna
-                      </a>
+                      </Link>
                     </section>
 
                     {/* Items List (Agenda) */}
