@@ -17,7 +17,7 @@ import PoliticasPrivacidade from './pages/PoliticasPrivacidade';
 import TermosUso from './pages/TermosUso';
 import MaintenancePage from './pages/MaintenancePage';
 import NotFound from './pages/NotFound';
-import Agenda from './pages/Agenda';
+// import Agenda from './pages/Agenda'; // Rota suspensa temporariamente a pedido da cliente
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import AdminPanel from './components/AdminPanel';
 
@@ -43,7 +43,7 @@ function AppRoutes() {
           <Route path="galeria" element={<Galeria />} />
           <Route path="contato" element={<Contato />} />
           <Route path="orcamento" element={<Orcamento />} />
-          <Route path="agenda" element={<Agenda />} />
+          {/* <Route path="agenda" element={<Agenda />} /> */} {/* Rota suspensa temporariamente */}
           <Route path="politicas-de-privacidade" element={<PoliticasPrivacidade />} />
           <Route path="termos-de-uso" element={<TermosUso />} />
           <Route path="*" element={<NotFound />} />

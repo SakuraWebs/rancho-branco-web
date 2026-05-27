@@ -50,7 +50,6 @@ export default function Layout() {
   const navLinks = [
     { name: 'O Espaço', path: '/' },
     { name: 'Sobre Nós', path: '/sobre-nos' },
-    { name: 'Agenda', path: '/agenda' },
     { name: 'Casamentos', path: '/casamentos' },
     { name: 'Eventos', path: '/eventos' },
     { name: 'Contato', path: '/contato' },
