@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, User } from 'firebase/auth';
-import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp, getDocFromServer } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, setDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp, getDocFromServer } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 // Firebase configuration provided directly
 const firebaseConfig = {
@@ -91,6 +91,7 @@ export {
   onAuthStateChanged, 
   collection, 
   addDoc, 
+  setDoc,
   deleteDoc, 
   doc, 
   onSnapshot, 
