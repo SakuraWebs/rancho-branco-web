@@ -380,50 +380,19 @@ export default function AdminPanel() {
                 ) : (
                   <>
                     {/* Upload Form (Agenda) */}
-                    <section className="bg-surface-container-low p-6 rounded-2xl border border-surface-container-high">
-                      <h3 className="text-sm font-bold uppercase tracking-wider text-gray-400 mb-4 flex items-center gap-2">
-                        <Plus size={16} /> Nova Data
+                    <section className="bg-surface-container-low p-6 rounded-2xl border border-surface-container-high text-center">
+                      <h3 className="text-sm font-bold uppercase tracking-wider text-gray-400 mb-4 flex items-center justify-center gap-2">
+                        <CalendarDays size={16} /> Nova Agenda Interna
                       </h3>
-                      <form onSubmit={handleAddAgenda} className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <div className="md:col-span-1">
-                          <label className="block text-xs font-medium text-gray-500 mb-1">Data</label>
-                          <input 
-                            type="date"
-                            value={newAgendaItem.dateString}
-                            onChange={e => setNewAgendaItem({...newAgendaItem, dateString: e.target.value})}
-                            className="w-full p-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                          />
-                        </div>
-                        <div className="md:col-span-1">
-                          <label className="block text-xs font-medium text-gray-500 mb-1">Status</label>
-                          <select 
-                            value={newAgendaItem.status}
-                            onChange={e => setNewAgendaItem({...newAgendaItem, status: e.target.value})}
-                            className="w-full p-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                          >
-                            <option value="confirmed">Ocupada / Confirmada</option>
-                            <option value="reserved">Reservada (Sem Confirmação)</option>
-                          </select>
-                        </div>
-                        <div className="md:col-span-1">
-                          <label className="block text-xs font-medium text-gray-500 mb-1">Título/Nome</label>
-                          <input 
-                            type="text"
-                            placeholder="Ex: Casamento João e Maria"
-                            value={newAgendaItem.title}
-                            onChange={e => setNewAgendaItem({...newAgendaItem, title: e.target.value})}
-                            className="w-full p-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                          />
-                        </div>
-                        <div className="flex items-end">
-                          <button 
-                            disabled={isAddingAgenda || !newAgendaItem.dateString || !newAgendaItem.title}
-                            className="w-full bg-primary text-white p-2.5 rounded-xl font-medium hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
-                          >
-                            {isAddingAgenda ? 'Enviando...' : 'Adicionar Data'}
-                          </button>
-                        </div>
-                      </form>
+                      <p className="text-gray-600 text-sm mb-6">
+                        A gestão de datas, orçamentos e contratos agora possui um painel exclusivo mais avançado e completo.
+                      </p>
+                      <a 
+                        href="/agenda-interna"
+                        className="inline-flex items-center justify-center gap-2 bg-primary text-white py-3 px-6 rounded-xl font-medium hover:bg-primary/90 transition-all shadow-md"
+                      >
+                        Acessar Nova Agenda Interna
+                      </a>
                     </section>
 
                     {/* Items List (Agenda) */}
