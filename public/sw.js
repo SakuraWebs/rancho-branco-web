@@ -6,9 +6,20 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('activate', (event) => {
-  event.waitUntil(self.clients.claim());
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cacheName) => {
+          return caches.delete(cacheName);
+        })
+      );
+    }).then(() => {
+      return self.clients.claim();
+    })
+  );
 });
 
 self.addEventListener('fetch', (event) => {
   // Pass-through fetch for regular online execution while keeping the PWA installable
+  // We do not cache anything to ensure updates propagate immediately.
 });
