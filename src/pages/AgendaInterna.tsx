@@ -34,6 +34,7 @@ export default function AgendaInterna() {
   const [isSaving, setIsSaving] = useState(false);
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
   const receiptRef = useRef<HTMLDivElement>(null);
+  const [previewData, setPreviewData] = useState<{ blobUrl: string, imgData: string, clientName: string } | null>(null);
 
   useEffect(() => {
     if (!isAdmin) return;
@@ -123,6 +124,7 @@ export default function AgendaInterna() {
   const closeModal = () => {
     setSelectedDate(null);
     setFormData(null);
+    setPreviewData(null);
   };
 
   const handleSave = async () => {
@@ -164,7 +166,7 @@ export default function AgendaInterna() {
     }
   };
 
-  const generatePDFBlob = async () => {
+  const generatePDFBlobAndImage = async () => {
     if (!receiptRef.current) return null;
     setIsGeneratingImage(true);
     try {
@@ -186,9 +188,9 @@ export default function AgendaInterna() {
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
       
-      // If height is greater than A4 page height (approx 297mm), we can scale it down or let it overflow (usually fits)
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      return pdf.output("blob");
+      const blob = pdf.output("blob");
+      return { blob, imgData };
     } catch (err) {
       console.error(err);
       return null;
@@ -197,10 +199,21 @@ export default function AgendaInterna() {
     }
   };
 
+  const handlePreviewBudget = async () => {
+    const data = await generatePDFBlobAndImage();
+    if (!data) return;
+    const url = URL.createObjectURL(data.blob);
+    setPreviewData({
+      blobUrl: url,
+      imgData: data.imgData,
+      clientName: formData?.clientName || 'Cliente'
+    });
+  };
+
   const handlePrintPDF = async () => {
-    const blob = await generatePDFBlob();
-    if (!blob) return;
-    const url = URL.createObjectURL(blob);
+    const data = await generatePDFBlobAndImage();
+    if (!data) return;
+    const url = URL.createObjectURL(data.blob);
     const a = document.createElement('a');
     a.href = url;
     a.download = `rancho-branco-reserva-${formData?.dateString || 'agenda'}.pdf`;
@@ -211,42 +224,43 @@ export default function AgendaInterna() {
   const handleWhatsAppShare = async () => {
     if (!formData || !selectedDate) return;
     
-    const blob = await generatePDFBlob();
-    if (!blob) return;
-    
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    const fileName = `reserva-${formData.dateString}.pdf`;
-    const file = new File([blob], fileName, { type: 'application/pdf' });
-    
-    try {
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-         await navigator.share({
-           title: 'Reserva Rancho Branco',
-           text: `Aqui está o orçamento/reserva para o evento especial em ${format(selectedDate, "dd/MM/yyyy")}.`,
-           files: [file]
-         });
-      } else {
-         // Fallback: download the file and prompt text
-         handlePrintPDF(); // Trigger download
-         
-         const textMsg = `Olá! Segue o resumo do evento:\nData: ${format(selectedDate, "dd/MM/yyyy")}\nEvento: ${formData.title}\nValor: R$ ${formData.agreedValue || 'A combinar'}`;
-         const waUrl = isMobile 
-           ? `whatsapp://send?text=${encodeURIComponent(textMsg)}` 
-           : `https://web.whatsapp.com/send?text=${encodeURIComponent(textMsg)}`;
-           
-         if (!isMobile) {
-            // timeout to allow download dialogue
-            setTimeout(() => {
-                alert("O PDF foi baixado. Você pode anexá-lo agora no WhatsApp Web.");
-                window.open(waUrl, '_blank');
-            }, 500);
-         } else {
-             window.open(waUrl, '_blank');
+    // Attempt native share if available (great for sending actual files on mobile)
+    if (navigator.share) {
+       const data = await generatePDFBlobAndImage();
+       if (data && data.blob) {
+         const fileName = `reserva-${formData.dateString}.pdf`;
+         const file = new File([data.blob], fileName, { type: 'application/pdf' });
+         if (navigator.canShare && navigator.canShare({ files: [file] })) {
+             try {
+               await navigator.share({
+                 title: 'Orçamento Rancho Branco',
+                 text: `Orçamento para o evento em ${format(selectedDate, "dd/MM/yyyy")}.`,
+                 files: [file]
+               });
+               return; // successfully shared
+             } catch (err) {
+               console.log("Share canceled or failed", err);
+             }
          }
-      }
-    } catch (shareErr) {
-      console.error("Erro ao compartilhar", shareErr);
+       }
     }
+    
+    // Fallback: standard link
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    const textMsg = `Olá! Segue o resumo do evento:\nData: ${format(selectedDate, "dd/MM/yyyy")}\nEvento: ${formData.title}\nValor: R$ ${formData.agreedValue || 'A combinar'}`;
+    const waUrl = isMobile 
+      ? `whatsapp://send?text=${encodeURIComponent(textMsg)}` 
+      : `https://api.whatsapp.com/send?text=${encodeURIComponent(textMsg)}`;
+      
+    window.open(waUrl, '_blank');
+  };
+
+  const handleEmailShare = () => {
+    if (!formData || !selectedDate) return;
+    const subject = `Orçamento / Reserva - Rancho Branco`;
+    const body = `Olá!\n\nSegue o resumo do evento:\nData: ${format(selectedDate, "dd/MM/yyyy")}\nEvento: ${formData.title}\nValor: R$ ${formData.agreedValue || 'A combinar'}\n\nPor favor, informe seu endereço de e-mail e nos envie uma confirmação quando puder. Estamos anexando o orçamento em breve.`;
+    const mailtoUrl = `mailto:${formData?.clientEmail || ''}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.open(mailtoUrl, '_blank');
   };
 
   return (
@@ -344,21 +358,57 @@ export default function AgendaInterna() {
       </div>
 
       {/* Modal / Slide-over for event editing */}
-      {selectedDate && formData && (
+      {previewData && (
+        <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm hide-on-print">
+          <div className="bg-white w-full max-w-3xl max-h-[90vh] rounded-3xl shadow-2xl flex flex-col overflow-hidden animate-slide-up">
+            <div className="flex items-center justify-between p-4 border-b bg-surface">
+              <h2 className="text-xl font-serif text-primary flex items-center gap-2">
+                <FileText size={20} /> Orçamento: {previewData.clientName}
+              </h2>
+              <button onClick={() => setPreviewData(null)} className="p-2 text-gray-500 hover:bg-gray-200 rounded-full transition-colors">
+                <X size={24} />
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto p-4 bg-gray-100 flex justify-center items-start">
+               <img src={previewData.imgData} alt="Pré-visualização do Orçamento" className="max-w-full h-auto shadow-md border border-gray-200" />
+            </div>
+            <div className="p-4 border-t flex flex-wrap sm:flex-nowrap gap-3 bg-surface-container-lowest">
+               <button 
+                  onClick={handleWhatsAppShare} 
+                  className="flex-1 flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white p-3 rounded-xl font-medium transition-colors"
+               >
+                  <MessageCircle size={18} /> WhatsApp
+               </button>
+               <button 
+                  onClick={handleEmailShare} 
+                  className="flex-1 flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-xl font-medium transition-colors"
+               >
+                  <Mail size={18} /> E-mail
+               </button>
+               <button 
+                  onClick={handlePrintPDF} 
+                  className="flex-1 flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-900 text-white p-3 rounded-xl font-medium transition-colors"
+               >
+                  <Download size={18} /> Baixar PDF
+               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal / Slide-over for event editing */}
+      {selectedDate && formData && !previewData && (
         <div className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm hide-on-print">
           <div 
              className="bg-white w-full sm:max-w-2xl max-h-[90vh] rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col animate-slide-up"
           >
-            <div className="flex items-center justify-between p-4 border-b">
+              <div className="flex items-center justify-between p-4 border-b">
               <h2 className="text-xl font-serif text-primary">
                 {format(selectedDate, "dd 'de' MMMM, yyyy", { locale: ptBR })}
               </h2>
               <div className="flex gap-2">
-                  <button onClick={handleWhatsAppShare} disabled={isGeneratingImage} className="p-2 text-green-600 hover:text-green-700 hover:bg-green-50 rounded-full transition-colors hidden sm:block disabled:opacity-50" title="Compartilhar WhatsApp">
-                      <MessageCircle size={20} />
-                  </button>
-                  <button onClick={handlePrintPDF} className="p-2 text-gray-500 hover:text-primary hover:bg-primary/10 rounded-full transition-colors hidden sm:block" title="Imprimir Orçamento">
-                      <Printer size={20} />
+                  <button onClick={handlePreviewBudget} disabled={isGeneratingImage} className="p-2 text-primary hover:text-white hover:bg-primary/90 rounded-full transition-colors hidden sm:flex items-center gap-2 px-4 shadow-sm border border-primary/20 disabled:opacity-50" title="Ver Orçamento">
+                      <FileText size={18} /> {isGeneratingImage ? 'Gerando...' : 'Ver Orçamento'}
                   </button>
                   <button onClick={closeModal} className="p-2 text-gray-500 hover:bg-gray-100 rounded-full transition-colors">
                     <X size={24} />
@@ -477,17 +527,11 @@ export default function AgendaInterna() {
             <div className="p-4 border-t flex flex-col sm:flex-row gap-3 bg-surface-container-lowest sm:items-center">
               <div className="flex gap-2 sm:hidden w-full">
                 <button 
-                    onClick={handleWhatsAppShare} 
+                    onClick={handlePreviewBudget} 
                     disabled={isGeneratingImage}
-                    className="flex-1 flex items-center justify-center gap-2 bg-green-50 border border-green-200 text-green-700 p-3 rounded-xl font-medium disabled:opacity-50"
+                    className="flex-1 flex items-center justify-center gap-2 bg-primary/10 border border-primary/20 text-primary p-3 rounded-xl font-medium disabled:opacity-50"
                 >
-                    <MessageCircle size={18} /> {isGeneratingImage ? 'Gerando...' : 'WhatsApp'}
-                </button>
-                <button 
-                    onClick={handlePrintPDF} 
-                    className="flex-1 flex items-center justify-center gap-2 bg-white border border-gray-200 text-gray-700 p-3 rounded-xl font-medium"
-                >
-                    <Printer size={18} /> Imprimir
+                    <FileText size={18} /> {isGeneratingImage ? 'Gerando...' : 'Ver Orçamento'}
                 </button>
               </div>
               
