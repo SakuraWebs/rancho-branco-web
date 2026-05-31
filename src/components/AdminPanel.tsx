@@ -34,16 +34,30 @@ export default function AdminPanel() {
   const [showLoginTrigger, setShowLoginTrigger] = useState(false);
 
   React.useEffect(() => {
+    // Check initial standalone and saved state
+    const isAppStandalone = window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone;
+    setIsStandalone(isAppStandalone);
+    
+    if (localStorage.getItem('showAdminTrigger') === 'true' || isAppStandalone) {
+      setShowLoginTrigger(true);
+    }
+    
     // Check for admin=true in URL
     const params = new URLSearchParams(window.location.search);
     if (params.get('admin') === 'true') {
       setShowLoginTrigger(true);
+      localStorage.setItem('showAdminTrigger', 'true');
     }
 
     // Keyboard shortcut: Ctrl + Shift + A
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.ctrlKey && e.shiftKey && e.key === 'A') {
-        setShowLoginTrigger(prev => !prev);
+        setShowLoginTrigger(prev => {
+          const val = !prev;
+          if (val) localStorage.setItem('showAdminTrigger', 'true');
+          else localStorage.removeItem('showAdminTrigger');
+          return val;
+        });
       }
     };
 
@@ -94,6 +108,7 @@ export default function AdminPanel() {
   const handleLogout = async () => {
     try {
       await signOut(auth);
+      setShowPanel(false);
     } catch (error) {
       console.error('Logout failed', error);
     }
