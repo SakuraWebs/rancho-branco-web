@@ -7,6 +7,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { auth, googleProvider, signInWithPopup } from '../firebase';
 import SEO from '../components/SEO';
 import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 
 interface InternaEvent {
   id: string; // usually same as date string
@@ -178,7 +179,6 @@ export default function AgendaInterna() {
       });
       
       const imgData = canvas.toDataURL('image/png');
-      const { jsPDF } = await import('jspdf');
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "mm",
@@ -191,8 +191,9 @@ export default function AgendaInterna() {
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
       const blob = pdf.output("blob");
       return { blob, imgData };
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
+      alert("Erro ao gerar PDF: " + (err.message || err.toString()));
       return null;
     } finally {
       setIsGeneratingImage(false);
@@ -621,7 +622,7 @@ export default function AgendaInterna() {
 
       {/* Hidden Receipt Layout for Canvas Generation */}
       {selectedDate && formData && (
-         <div style={{ position: 'absolute', top: '-9999px', left: '-9999px', width: '800px' }}>
+         <div style={{ position: 'fixed', top: 0, left: 0, width: '800px', opacity: 0.001, pointerEvents: 'none', zIndex: -100 }}>
            <div ref={receiptRef} className="bg-white p-12 text-black font-serif border border-gray-200 shadow-md">
              <div className="text-center mb-10 border-b pb-8">
                <h1 className="text-4xl font-bold tracking-tight mb-2 uppercase" style={{ fontFamily: '"Cinzel", serif', color: '#13214D' }}>Rancho Branco</h1>
