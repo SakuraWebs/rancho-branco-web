@@ -525,13 +525,13 @@ export default function AgendaInterna() {
             </div>
 
             <div className="p-4 border-t flex flex-col sm:flex-row gap-3 bg-surface-container-lowest sm:items-center">
-              <div className="flex gap-2 sm:hidden w-full">
+              <div className="flex gap-2 w-full sm:w-auto">
                 <button 
                     onClick={handlePreviewBudget} 
                     disabled={isGeneratingImage}
-                    className="flex-1 flex items-center justify-center gap-2 bg-primary/10 border border-primary/20 text-primary p-3 rounded-xl font-medium disabled:opacity-50"
+                    className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-primary/10 hover:bg-primary/20 border border-primary/20 text-primary p-3 px-6 rounded-xl font-medium transition disabled:opacity-50"
                 >
-                    <FileText size={18} /> {isGeneratingImage ? 'Gerando...' : 'Ver Orçamento'}
+                    <FileText size={18} /> {isGeneratingImage ? 'Gerando...' : 'Ver Orçamento / PDF'}
                 </button>
               </div>
               
