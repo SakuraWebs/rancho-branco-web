@@ -172,11 +172,17 @@ export default function AgendaInterna() {
     setIsGeneratingImage(true);
     try {
       await new Promise(r => setTimeout(r, 100)); // small delay to ensure rendering
-      const canvas = await html2canvas(receiptRef.current, {
+      const canvasPromise = html2canvas(receiptRef.current, {
         scale: 2,
         useCORS: true,
         backgroundColor: '#ffffff'
       });
+      
+      const timeoutPromise = new Promise<never>((_, reject) => 
+        setTimeout(() => reject(new Error("html2canvas timeout")), 15000)
+      );
+
+      const canvas = await Promise.race([canvasPromise, timeoutPromise]);
       
       const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF({
@@ -621,13 +627,17 @@ export default function AgendaInterna() {
       )}
 
       {/* Hidden Receipt Layout for Canvas Generation */}
-      {selectedDate && formData && (
-         <div style={{ position: 'fixed', top: 0, left: 0, width: '800px', opacity: 0.001, pointerEvents: 'none', zIndex: -100 }}>
-           <div ref={receiptRef} className="bg-white p-12 text-black font-serif border border-gray-200 shadow-md">
-             <div className="text-center mb-10 border-b pb-8">
+      <div 
+        className="fixed top-0 pointer-events-none" 
+        style={{ left: '-9999px', width: '800px', backgroundColor: 'white' }}
+      >
+        {selectedDate && formData && (
+           <div ref={receiptRef} className="bg-white p-12 text-black font-serif shadow-none">
+             <div className="text-center mb-10 border-b pb-8 border-gray-300">
                <h1 className="text-4xl font-bold tracking-tight mb-2 uppercase" style={{ fontFamily: '"Cinzel", serif', color: '#13214D' }}>Rancho Branco</h1>
                <p className="text-xl italic text-gray-600" style={{ fontFamily: '"Great Vibes", cursive' }}>Casa de Eventos</p>
              </div>
+
              
              <h2 className="text-2xl font-bold mb-8 text-center" style={{ color: '#13214D' }}>Resumo de Orçamento / Reserva</h2>
              
@@ -679,8 +689,8 @@ export default function AgendaInterna() {
                <p className="mt-2 font-bold uppercase text-xs tracking-widest text-[#13214D]">Rancho Branco Eventos</p>
              </div>
            </div>
-         </div>
-      )}
+        )}
+      </div>
 
       <style dangerouslySetInnerHTML={{__html: `
         @page {
