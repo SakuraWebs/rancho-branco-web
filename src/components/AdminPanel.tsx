@@ -193,7 +193,7 @@ export default function AdminPanel() {
   if (loading) return null;
 
   if (!user) {
-    if (!showLoginTrigger) return null;
+    if (!showLoginTrigger && !isStandalone) return null;
     return (
       <div className="fixed bottom-4 right-4 z-[100]">
         <button 
@@ -209,7 +209,7 @@ export default function AdminPanel() {
   }
 
   if (!isAdmin) {
-    if (!showLoginTrigger) return null;
+    if (!showLoginTrigger && !isStandalone) return null;
     return (
       <div className="fixed bottom-4 right-4 z-[100]">
         <div className="bg-white p-4 rounded-xl shadow-xl border border-red-100 flex flex-col items-center gap-3">
