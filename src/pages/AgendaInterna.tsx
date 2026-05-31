@@ -7,6 +7,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { auth, googleProvider, signInWithPopup } from '../firebase';
 import SEO from '../components/SEO';
 import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 
 interface InternaEvent {
   id: string; // usually same as date string
@@ -38,7 +39,7 @@ export default function AgendaInterna() {
   useEffect(() => {
     if (!isAdmin) return;
 
-    const q = query(collection(db, 'agenda_interna'), orderBy('dateString', 'asc'));
+    const q = query(collection(db, 'agenda'), orderBy('dateString', 'asc'));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const items: Record<string, InternaEvent> = {};
       snapshot.forEach((docSnap) => {
@@ -131,38 +132,29 @@ export default function AgendaInterna() {
     setIsSaving(true);
     try {
       const dateStr = format(selectedDate, 'yyyy-MM-dd');
-      const docRef = doc(db, 'agenda_interna', dateStr);
+      
+      const docIdToUse = formData.id || dateStr;
+      const docRef = doc(db, 'agenda', docIdToUse);
+      
+      // Clean up undefined values
+      const cleanData: any = {};
+      Object.keys(formData).forEach(k => {
+          const key = k as keyof typeof formData;
+          if (formData[key] !== undefined) cleanData[key] = formData[key];
+      });
+      cleanData.dateString = dateStr; // Ensure date string is correct
+      cleanData.updatedAt = serverTimestamp();
       
       if (formData.status === 'free') {
         // If they marked it free and there's not much other info, we might just delete it
-        // Or we can save it explicitly. Let's just delete the doc if status is free to save space
         if (!formData.clientName && !formData.agreedValue && !formData.observations) {
             await deleteDoc(docRef);
         } else {
-            await setDoc(docRef, {
-                ...formData,
-                updatedAt: serverTimestamp()
-            });
+            await setDoc(docRef, cleanData, { merge: true });
         }
       } else {
-        await setDoc(docRef, {
-            ...formData,
-            title: formData.title || (formData.clientName ? `Reserva: ${formData.clientName}` : 'Nova Reserva'),
-            updatedAt: serverTimestamp()
-        });
-        
-        // Opt: We could also update the public 'agenda' collection so the main site sees "occupied"
-        // That allows keeping the public Agenda in sync!
-        const publicDocRef = doc(db, 'agenda', dateStr);
-        if (formData.status === 'confirmed' || formData.status === 'reserved') {
-             await setDoc(publicDocRef, {
-                 dateString: formData.dateString,
-                 title: formData.title || (formData.clientName ? `Reserva: ${formData.clientName}` : 'Nova Reserva'),
-                 status: formData.status
-             });
-        } else {
-             await deleteDoc(publicDocRef);
-        }
+        cleanData.title = formData.title || (formData.clientName ? `Reserva: ${formData.clientName}` : 'Nova Reserva');
+        await setDoc(docRef, cleanData, { merge: true });
       }
       closeModal();
     } catch (error) {
@@ -173,68 +165,87 @@ export default function AgendaInterna() {
     }
   };
 
-  const handlePrintPDF = () => {
-    window.print();
-  };
-
-  const handleWhatsAppShare = async () => {
-    if (!receiptRef.current || !formData || !selectedDate) return;
-    
-    // Fallback: Send text message to WhatsApp
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    
+  const generatePDFBlob = async () => {
+    if (!receiptRef.current) return null;
     setIsGeneratingImage(true);
     try {
-      // Small delay to ensure rendering
-      await new Promise(r => setTimeout(r, 100));
-      
+      await new Promise(r => setTimeout(r, 100)); // small delay to ensure rendering
       const canvas = await html2canvas(receiptRef.current, {
         scale: 2,
         useCORS: true,
         backgroundColor: '#ffffff'
       });
       
-      canvas.toBlob(async (blob) => {
-        if (!blob) return;
-        
-        try {
-          const file = new File([blob], `reserva-${formData.dateString}.png`, { type: 'image/png' });
-          
-          if (navigator.canShare && navigator.canShare({ files: [file] })) {
-             await navigator.share({
-               title: 'Reserva Rancho Branco',
-               text: 'Aqui está o comprovante/orçamento da sua reserva.',
-               files: [file]
-             });
-          } else {
-             // Fallback: download the image and prompt text
-             const url = URL.createObjectURL(blob);
-             const a = document.createElement('a');
-             a.href = url;
-             a.download = `reserva-${formData.dateString}.png`;
-             a.click();
-             URL.revokeObjectURL(url);
-             
-             // Open whatsapp with text
-             const textMsg = `Olá! Segue o resumo do evento:\nData: ${format(selectedDate, "dd/MM/yyyy")}\nEvento: ${formData.title}\nValor: R$ ${formData.agreedValue || 'A combinar'}`;
-             const waUrl = isMobile 
-               ? `whatsapp://send?text=${encodeURIComponent(textMsg)}` 
-               : `https://web.whatsapp.com/send?text=${encodeURIComponent(textMsg)}`;
-             
-             if (!isMobile) {
-               alert("A imagem foi baixada. Você pode anexá-la no WhatsApp Web.");
-             }
-             window.open(waUrl, '_blank');
-          }
-        } catch (shareErr) {
-          console.error("Erro ao compartilhar", shareErr);
-        } finally {
-          setIsGeneratingImage(false);
-        }
-      }, 'image/png');
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4"
+      });
+      
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      
+      // If height is greater than A4 page height (approx 297mm), we can scale it down or let it overflow (usually fits)
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      return pdf.output("blob");
     } catch (err) {
       console.error(err);
+      return null;
+    } finally {
       setIsGeneratingImage(false);
+    }
+  };
+
+  const handlePrintPDF = async () => {
+    const blob = await generatePDFBlob();
+    if (!blob) return;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `rancho-branco-reserva-${formData?.dateString || 'agenda'}.pdf`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleWhatsAppShare = async () => {
+    if (!formData || !selectedDate) return;
+    
+    const blob = await generatePDFBlob();
+    if (!blob) return;
+    
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    const fileName = `reserva-${formData.dateString}.pdf`;
+    const file = new File([blob], fileName, { type: 'application/pdf' });
+    
+    try {
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+         await navigator.share({
+           title: 'Reserva Rancho Branco',
+           text: `Aqui está o orçamento/reserva para o evento especial em ${format(selectedDate, "dd/MM/yyyy")}.`,
+           files: [file]
+         });
+      } else {
+         // Fallback: download the file and prompt text
+         handlePrintPDF(); // Trigger download
+         
+         const textMsg = `Olá! Segue o resumo do evento:\nData: ${format(selectedDate, "dd/MM/yyyy")}\nEvento: ${formData.title}\nValor: R$ ${formData.agreedValue || 'A combinar'}`;
+         const waUrl = isMobile 
+           ? `whatsapp://send?text=${encodeURIComponent(textMsg)}` 
+           : `https://web.whatsapp.com/send?text=${encodeURIComponent(textMsg)}`;
+           
+         if (!isMobile) {
+            // timeout to allow download dialogue
+            setTimeout(() => {
+                alert("O PDF foi baixado. Você pode anexá-lo agora no WhatsApp Web.");
+                window.open(waUrl, '_blank');
+            }, 500);
+         } else {
+             window.open(waUrl, '_blank');
+         }
+      }
+    } catch (shareErr) {
+      console.error("Erro ao compartilhar", shareErr);
     }
   };
 
@@ -280,6 +291,7 @@ export default function AgendaInterna() {
                 const isCurrentMonth = isSameMonth(day, currentDate);
                 const dateStr = format(day, 'yyyy-MM-dd');
                 const event = events[dateStr];
+                const isPast = isBefore(day, startOfToday()) && !isSameDay(day, startOfToday());
                 
                 let bgClass = "bg-white border border-[#13214D]/20 text-[#13214D]";
                 
@@ -291,13 +303,19 @@ export default function AgendaInterna() {
                     }
                 }
 
+                if (isPast && (!event || event.status !== 'confirmed')) {
+                    bgClass = "opacity-30 cursor-not-allowed bg-transparent border-gray-200 text-gray-400";
+                }
+
+                const isClickable = !isPast || (event && event.status === 'confirmed');
+
                 return (
                   <button 
                     key={i}
-                    onClick={() => handleDateClick(day)}
+                    onClick={() => isClickable ? handleDateClick(day) : undefined}
                     className={`
                       aspect-square rounded-xl flex flex-col items-center justify-center p-1 md:p-2 relative
-                      transition-all hover:ring-2 hover:ring-primary/40
+                      transition-all ${isClickable ? 'hover:ring-2 hover:ring-primary/40' : ''}
                       ${!isCurrentMonth ? 'opacity-30' : ''}
                       ${bgClass}
                     `}
@@ -619,9 +637,16 @@ export default function AgendaInterna() {
          </div>
       )}
 
-      {/* Printer CSS Section - We inject a clean print layout */}
       <style dangerouslySetInnerHTML={{__html: `
+        @page {
+          size: A4;
+          margin: 0;
+        }
         @media print {
+          body {
+            background-color: white !important;
+            -webkit-print-color-adjust: exact;
+          }
           body * {
             visibility: hidden;
           }
@@ -630,6 +655,10 @@ export default function AgendaInterna() {
           }
           .print\\:block {
             display: block !important;
+            width: 210mm !important;
+            min-height: 297mm !important;
+            margin: 0 auto;
+            padding: 20mm !important;
           }
           .print\\:absolute {
             position: absolute !important;

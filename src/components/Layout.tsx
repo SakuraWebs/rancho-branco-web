@@ -3,6 +3,7 @@ import { Link, Outlet, useLocation } from 'react-router-dom';
 import { Menu, X, Instagram, Facebook, Youtube, Mail, ArrowUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import logoImage from '../assets/logo.webp';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function Layout() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -10,6 +11,7 @@ export default function Layout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showCookieBanner, setShowCookieBanner] = useState(false);
   const location = useLocation();
+  const { isAdmin } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -52,7 +54,7 @@ export default function Layout() {
     { name: 'Sobre Nós', path: '/sobre-nos' },
     { name: 'Casamentos', path: '/casamentos' },
     { name: 'Eventos', path: '/eventos' },
-    { name: 'Agenda', path: '/agenda' },
+    ...(isAdmin ? [{ name: 'Agenda', path: '/agenda' }] : []),
     { name: 'Contato', path: '/contato' },
   ];
 

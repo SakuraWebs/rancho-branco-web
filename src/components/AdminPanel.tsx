@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { format, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Link } from 'react-router-dom';
@@ -23,6 +23,11 @@ export default function AdminPanel() {
   const [newAgendaItem, setNewAgendaItem] = useState({ dateString: '', title: '', status: 'confirmed' });
   const [agendaItems, setAgendaItems] = useState<any[]>([]);
   const [isAddingAgenda, setIsAddingAgenda] = useState(false);
+  const [isStandalone, setIsStandalone] = useState(false);
+
+  React.useEffect(() => {
+    setIsStandalone(window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone);
+  }, []);
 
   // Global state
   const [showPanel, setShowPanel] = useState(false);
@@ -383,28 +388,30 @@ export default function AdminPanel() {
                 ) : (
                   <>
                     {/* Instalação do PWA (Instalar no Celular) banner */}
-                    <div className="bg-amber-50/50 p-4 rounded-2xl border border-amber-200/50 flex flex-col sm:flex-row items-center justify-between gap-3 mb-6">
-                      <div className="flex items-center gap-2.5 w-full sm:w-auto">
-                        <span className="text-xl">📱</span>
-                        <div className="text-left">
-                          <h4 className="font-bold text-amber-950 text-xs">Instalar Aplicativo no Celular</h4>
-                          <p className="text-[10px] text-amber-700">Adicione o Rancho Branco à tela inicial do seu celular para testar como um aplicativo nativo.</p>
+                    {!isStandalone && (
+                      <div className="bg-amber-50/50 p-4 rounded-2xl border border-amber-200/50 flex flex-col sm:flex-row items-center justify-between gap-3 mb-6">
+                        <div className="flex items-center gap-2.5 w-full sm:w-auto">
+                          <span className="text-xl">📱</span>
+                          <div className="text-left">
+                            <h4 className="font-bold text-amber-950 text-xs">Instalar Aplicativo no Celular</h4>
+                            <p className="text-[10px] text-amber-700">Adicione o Rancho Branco à tela inicial do seu celular para testar como um aplicativo nativo.</p>
+                          </div>
                         </div>
+                        <button 
+                          onClick={() => {
+                            const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera;
+                            if (/iPad|iPhone|iPod/.test(userAgent) && !(window?.navigator as any)?.standalone) {
+                              alert("No seu iPhone (iOS Safari):\n1. Toque no botão 'Compartilhar' (ícone de quadrado com seta para cima na barra inferior).\n2. Role para baixo e selecione 'Adicionar à Tela de Início'.\n3. Pronto! O app será instalado.");
+                            } else {
+                              alert("No seu Android ou Chrome:\n1. Clique nos três pontinhos no canto superior do navegador.\n2. Selecione 'Instalar aplicativo' ou 'Adicionar à tela inicial'.");
+                            }
+                          }}
+                          className="w-full sm:w-auto bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition-all shadow-sm shrink-0"
+                        >
+                          Ver Como Instalar
+                        </button>
                       </div>
-                      <button 
-                        onClick={() => {
-                          const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera;
-                          if (/iPad|iPhone|iPod/.test(userAgent) && !(window?.navigator as any)?.standalone) {
-                            alert("No seu iPhone (iOS Safari):\n1. Toque no botão 'Compartilhar' (ícone de quadrado com seta para cima na barra inferior).\n2. Role para baixo e selecione 'Adicionar à Tela de Início'.\n3. Pronto! O app será instalado.");
-                          } else {
-                            alert("No seu Android ou Chrome:\n1. Clique nos três pontinhos no canto superior do navegador.\n2. Selecione 'Instalar aplicativo' ou 'Adicionar à tela inicial'.");
-                          }
-                        }}
-                        className="w-full sm:w-auto bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition-all shadow-sm shrink-0"
-                      >
-                        Ver Como Instalar
-                      </button>
-                    </div>
+                    )}
 
                     {/* Access Advanced Internal Agenda Banner */}
                     <div className="bg-primary/5 p-5 rounded-2xl border border-primary/10 flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
