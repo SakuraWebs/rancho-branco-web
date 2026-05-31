@@ -380,21 +380,72 @@ export default function AdminPanel() {
                   </>
                 ) : (
                   <>
-                    {/* Upload Form (Agenda) */}
-                    <section className="bg-surface-container-low p-6 rounded-2xl border border-surface-container-high text-center">
-                      <h3 className="text-sm font-bold uppercase tracking-wider text-gray-400 mb-4 flex items-center justify-center gap-2">
-                        <CalendarDays size={16} /> Nova Agenda Interna
-                      </h3>
-                      <p className="text-gray-600 text-sm mb-6">
-                        A gestão de datas, orçamentos e contratos agora possui um painel exclusivo mais avançado e completo.
-                      </p>
+                    {/* Access Advanced Internal Agenda Banner */}
+                    <div className="bg-primary/5 p-5 rounded-2xl border border-primary/10 flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
+                      <div className="flex items-center gap-3 w-full md:w-auto">
+                        <div className="bg-primary/10 p-2.5 rounded-xl text-primary">
+                          <CalendarDays size={20} />
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-gray-900 text-sm text-left">Painel Completo de Orçamentos & Contratos</h4>
+                          <p className="text-xs text-gray-600 text-left">Acesse o painel avançado para preencher dados do cliente, gerar comprovantes e imprimir o PDF.</p>
+                        </div>
+                      </div>
                       <Link 
                         to="/agenda-interna"
                         onClick={() => setShowPanel(false)}
-                        className="inline-flex items-center justify-center gap-2 bg-primary text-white py-3 px-6 rounded-xl font-medium hover:bg-primary/90 transition-all shadow-md"
+                        className="w-full md:w-auto whitespace-nowrap inline-flex items-center justify-center gap-2 bg-primary text-white py-2.5 px-5 rounded-xl font-medium hover:bg-primary/90 transition-all text-xs shadow-sm hover:shadow-md"
                       >
                         Acessar Nova Agenda Interna
                       </Link>
+                    </div>
+
+                    {/* Original Quick Block Form (Agenda) */}
+                    <section className="bg-surface-container-low p-6 rounded-2xl border border-surface-container-high">
+                      <h3 className="text-sm font-bold uppercase tracking-wider text-gray-400 mb-4 flex items-center gap-2">
+                        <Plus size={16} /> Bloquear Nova Data (Rápido)
+                      </h3>
+                      <form onSubmit={handleAddAgenda} className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div className="md:col-span-1">
+                          <label className="block text-xs font-medium text-gray-500 mb-1">Data</label>
+                          <input 
+                            type="date"
+                            value={newAgendaItem.dateString}
+                            onChange={e => setNewAgendaItem({...newAgendaItem, dateString: e.target.value})}
+                            className="w-full p-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                          />
+                        </div>
+                        <div className="md:col-span-1">
+                          <label className="block text-xs font-medium text-gray-500 mb-1">Status</label>
+                          <select 
+                            value={newAgendaItem.status}
+                            onChange={e => setNewAgendaItem({...newAgendaItem, status: e.target.value})}
+                            className="w-full p-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                          >
+                            <option value="confirmed">Ocupada / Confirmada</option>
+                            <option value="reserved">Reservada (Sem Confirmação)</option>
+                          </select>
+                        </div>
+                        <div className="md:col-span-1">
+                          <label className="block text-xs font-medium text-gray-500 mb-1">Título/Nome</label>
+                          <input 
+                            type="text"
+                            placeholder="Ex: Casamento João e Maria"
+                            value={newAgendaItem.title}
+                            onChange={e => setNewAgendaItem({...newAgendaItem, title: e.target.value})}
+                            className="w-full p-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                          />
+                        </div>
+                        <div className="flex items-end">
+                          <button 
+                            type="submit"
+                            disabled={isAddingAgenda || !newAgendaItem.dateString || !newAgendaItem.title}
+                            className="w-full bg-primary text-white p-2.5 rounded-xl font-medium hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+                          >
+                            {isAddingAgenda ? 'Enviando...' : 'Adicionar Data'}
+                          </button>
+                        </div>
+                      </form>
                     </section>
 
                     {/* Items List (Agenda) */}
