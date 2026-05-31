@@ -17,6 +17,7 @@ import PoliticasPrivacidade from './pages/PoliticasPrivacidade';
 import TermosUso from './pages/TermosUso';
 import MaintenancePage from './pages/MaintenancePage';
 import NotFound from './pages/NotFound';
+import Agenda from './pages/Agenda';
 import AgendaInterna from './pages/AgendaInterna';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import AdminPanel from './components/AdminPanel';
@@ -41,6 +42,7 @@ function AppRoutes() {
           <Route path="casamentos" element={<Casamentos />} />
           <Route path="eventos" element={<Eventos />} />
           <Route path="galeria" element={<Galeria />} />
+          <Route path="agenda" element={<Agenda />} />
           <Route path="contato" element={<Contato />} />
           <Route path="orcamento" element={<Orcamento />} />
           <Route path="agenda-interna" element={<AgendaInterna />} />

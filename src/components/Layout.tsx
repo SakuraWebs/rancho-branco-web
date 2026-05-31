@@ -52,6 +52,7 @@ export default function Layout() {
     { name: 'Sobre Nós', path: '/sobre-nos' },
     { name: 'Casamentos', path: '/casamentos' },
     { name: 'Eventos', path: '/eventos' },
+    { name: 'Agenda', path: '/agenda' },
     { name: 'Contato', path: '/contato' },
   ];
 

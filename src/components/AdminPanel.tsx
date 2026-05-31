@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { format, parseISO } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 import { Link } from 'react-router-dom';
 import { auth, googleProvider, signInWithPopup, signOut } from '../firebase';
 import { useAuth } from '../contexts/AuthContext';
@@ -380,6 +382,30 @@ export default function AdminPanel() {
                   </>
                 ) : (
                   <>
+                    {/* Instalação do PWA (Instalar no Celular) banner */}
+                    <div className="bg-amber-50/50 p-4 rounded-2xl border border-amber-200/50 flex flex-col sm:flex-row items-center justify-between gap-3 mb-6">
+                      <div className="flex items-center gap-2.5 w-full sm:w-auto">
+                        <span className="text-xl">📱</span>
+                        <div className="text-left">
+                          <h4 className="font-bold text-amber-950 text-xs">Instalar Aplicativo no Celular</h4>
+                          <p className="text-[10px] text-amber-700">Adicione o Rancho Branco à tela inicial do seu celular para testar como um aplicativo nativo.</p>
+                        </div>
+                      </div>
+                      <button 
+                        onClick={() => {
+                          const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera;
+                          if (/iPad|iPhone|iPod/.test(userAgent) && !(window?.navigator as any)?.standalone) {
+                            alert("No seu iPhone (iOS Safari):\n1. Toque no botão 'Compartilhar' (ícone de quadrado com seta para cima na barra inferior).\n2. Role para baixo e selecione 'Adicionar à Tela de Início'.\n3. Pronto! O app será instalado.");
+                          } else {
+                            alert("No seu Android ou Chrome:\n1. Clique nos três pontinhos no canto superior do navegador.\n2. Selecione 'Instalar aplicativo' ou 'Adicionar à tela inicial'.");
+                          }
+                        }}
+                        className="w-full sm:w-auto bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition-all shadow-sm shrink-0"
+                      >
+                        Ver Como Instalar
+                      </button>
+                    </div>
+
                     {/* Access Advanced Internal Agenda Banner */}
                     <div className="bg-primary/5 p-5 rounded-2xl border border-primary/10 flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
                       <div className="flex items-center gap-3 w-full md:w-auto">
@@ -448,45 +474,112 @@ export default function AdminPanel() {
                       </form>
                     </section>
 
-                    {/* Items List (Agenda) */}
-                    <section>
+                    {/* Items List (Agenda) - Displayed in the authentic "Datas Ocupadas" beige vintage card layout */}
+                    <section className="mt-8">
                       <h3 className="text-sm font-bold uppercase tracking-wider text-gray-400 mb-4 flex items-center gap-2">
-                        <LayoutGrid size={16} /> Datas Registradas ({agendaItems.length})
+                        <LayoutGrid size={16} /> Painel de Datas Atuais ({agendaItems.length})
                       </h3>
-                      <div className="flex flex-col gap-2">
-                        {agendaItems.map((item) => {
-                          const dateObj = new Date(item.dateString + 'T00:00:00');
-                          const formattedDate = !isNaN(dateObj.getTime()) ? new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' }).format(dateObj) : item.dateString;
+                      
+                      <div className="flex flex-col items-center">
+                        <div 
+                          className="w-full max-w-2xl rounded-3xl overflow-hidden p-6 sm:p-10 shadow-lg relative flex flex-col items-center"
+                          style={{ backgroundColor: '#FCF3EA', color: '#13214D' }}
+                        >
+                          {/* Decorative borders */}
+                          <div className="absolute inset-2 border-[2px] border-[#13214D] rounded-2xl pointer-events-none" />
+                          <div className="absolute inset-3 border-[1px] border-[#13214D] rounded-2xl pointer-events-none opacity-50" />
                           
-                          return (
-                            <div key={item.id} className="flex items-center justify-between bg-gray-50 border border-gray-200 p-4 rounded-xl hover:bg-gray-100 transition-colors">
-                              <div className="flex items-center gap-4">
-                                <div className="bg-white p-2 rounded-lg border border-gray-200 font-bold text-primary w-24 text-center">
-                                  {formattedDate}
-                                </div>
-                                <div>
-                                  <h4 className="font-bold text-gray-800">{item.title}</h4>
-                                  <span className={`text-xs font-medium px-2 py-1 rounded-full ${item.status === 'confirmed' ? 'bg-[#1A2D6C]/10 text-[#1A2D6C]' : 'bg-orange-100 text-orange-700'}`}>
-                                    {item.status === 'confirmed' ? 'Ocupada/Confirmada' : 'Reservada (Não Confirmada)'}
-                                  </span>
-                                </div>
+                          {/* Vintage Corner Accents */}
+                          <div className="absolute top-2 left-2 w-8 h-8 border-t-[3px] border-l-[3px] border-[#13214D] rounded-tl-md" />
+                          <div className="absolute top-2 right-2 w-8 h-8 border-t-[3px] border-r-[3px] border-[#13214D] rounded-tr-md" />
+                          <div className="absolute bottom-2 left-2 w-8 h-8 border-b-[3px] border-l-[3px] border-[#13214D] rounded-bl-md" />
+                          <div className="absolute bottom-2 right-2 w-8 h-8 border-b-[3px] border-r-[3px] border-[#13214D] rounded-br-md" />
+
+                          <div className="relative z-10 w-full flex flex-col items-center">
+                            <div className="mb-6 text-center pt-2">
+                              <h2 className="text-3xl font-bold tracking-tight mb-0 leading-none" style={{ fontFamily: '"Cinzel", serif' }}>
+                                RANCHO BRANCO
+                              </h2>
+                              <div className="flex items-center justify-center relative mt-1.5">
+                                 <div className="h-[1px] w-8 bg-[#13214D] absolute left-0" />
+                                 <span className="font-light text-xl mx-8 px-2" style={{ fontFamily: '"Great Vibes", cursive' }}>
+                                   Casa de Eventos
+                                 </span>
+                                 <div className="h-[1px] w-8 bg-[#13214D] absolute right-0" />
                               </div>
-                              <button 
-                                onClick={() => handleDeleteAgenda(item.id)}
-                                className="text-gray-400 hover:text-red-500 transition-colors p-2"
-                                title="Excluir data"
-                              >
-                                <Trash2 size={20} />
-                              </button>
                             </div>
-                          );
-                        })}
-                      </div>
-                      {agendaItems.length === 0 && (
-                        <div className="text-center py-12 text-gray-400 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
-                          Nenhuma data registrada ainda.
+                            
+                            <h3 className="text-3xl font-normal mb-6 text-[#BA8D49] text-center" style={{ fontFamily: '"Great Vibes", cursive' }}>
+                              Datas Ocupadas
+                            </h3>
+
+                            <div className="w-full text-left space-y-6 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                              {agendaItems.length === 0 ? (
+                                <p className="text-center text-sm opacity-70 py-6" style={{ fontFamily: '"Playfair Display", serif' }}>
+                                  Nenhuma data registrada no momento.
+                                </p>
+                              ) : (
+                                (() => {
+                                  // Group events by month for the card listing in admin
+                                  const grouped: Record<string, any[]> = {};
+                                  [...agendaItems].sort((a, b) => a.dateString.localeCompare(b.dateString)).forEach(item => {
+                                    const dateObj = new Date(item.dateString + 'T00:00:00');
+                                    const monthYear = !isNaN(dateObj.getTime())
+                                      ? format(dateObj, 'MMMM yyyy', { locale: ptBR }).toUpperCase()
+                                      : 'OUTRAS DATAS';
+                                    if (!grouped[monthYear]) {
+                                      grouped[monthYear] = [];
+                                    }
+                                    grouped[monthYear].push(item);
+                                  });
+
+                                  return Object.keys(grouped).map(monthYearStr => (
+                                    <div key={monthYearStr} className="w-full flex flex-col py-1 text-center items-center">
+                                      <div className="flex items-center justify-center w-full mb-2">
+                                        <div className="h-[1px] bg-[#CAB28E] flex-grow" />
+                                        <h4 className="px-3 tracking-widest text-[#13214D] text-xs font-bold" style={{ fontFamily: '"Cinzel", serif' }}>
+                                          {monthYearStr}
+                                        </h4>
+                                        <div className="h-[1px] bg-[#CAB28E] flex-grow" />
+                                      </div>
+                                      <ul className="space-y-2 w-full flex flex-col items-center">
+                                        {grouped[monthYearStr].map(item => {
+                                          const dateObj = new Date(item.dateString + 'T00:00:00');
+                                          const formattedDay = !isNaN(dateObj.getTime()) ? format(dateObj, 'dd/MM') : item.dateString;
+                                          return (
+                                            <li key={item.id} className="flex items-center justify-between text-[#13214D] w-full max-w-[400px] bg-[#13214D]/5 px-3 py-1.5 rounded-xl border border-[#13214D]/10">
+                                              <div className="flex items-center min-w-0 pr-2">
+                                                <span className="text-[#BA8D49] text-base mr-1.5 leading-none">⚜</span>
+                                                <span className="font-bold text-base w-12 text-right shrink-0" style={{ fontFamily: '"Playfair Display", serif' }}>
+                                                  {formattedDay}
+                                                </span>
+                                                <span className="mx-2 text-[#CAB28E] font-light">|</span>
+                                                <span className="font-medium text-xs truncate" style={{ fontFamily: '"Playfair Display", serif' }} title={item.title}>
+                                                  {item.title}
+                                                </span>
+                                                <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ml-2 shrink-0 ${item.status === 'confirmed' ? 'bg-[#1A2D6C]/10 text-[#1A2D6C]' : 'bg-orange-100 text-orange-700'}`}>
+                                                  {item.status === 'confirmed' ? 'Ocupada' : 'Reserva'}
+                                                </span>
+                                              </div>
+                                              <button 
+                                                onClick={() => handleDeleteAgenda(item.id)}
+                                                className="text-gray-400 hover:text-red-500 transition-colors p-1 shrink-0"
+                                                title="Excluir data"
+                                              >
+                                                <Trash2 size={16} />
+                                              </button>
+                                            </li>
+                                          );
+                                        })}
+                                      </ul>
+                                    </div>
+                                  ));
+                                })()
+                              )}
+                            </div>
+                          </div>
                         </div>
-                      )}
+                      </div>
                     </section>
                   </>
                 )}

@@ -78,5 +78,9 @@ service cloud.firestore {
       allow read: if true; // Publicly visible agenda
       allow write: if isAdmin();
     }
+
+    match /agenda_interna/{eventId} {
+      allow read, write: if isAdmin();
+    }
   }
 }
