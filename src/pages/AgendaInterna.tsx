@@ -7,7 +7,6 @@ import { useAuth } from '../contexts/AuthContext';
 import { auth, googleProvider, signInWithPopup } from '../firebase';
 import SEO from '../components/SEO';
 import html2canvas from 'html2canvas';
-import { jsPDF } from 'jspdf';
 
 interface InternaEvent {
   id: string; // usually same as date string
@@ -177,6 +176,7 @@ export default function AgendaInterna() {
       });
       
       const imgData = canvas.toDataURL('image/png');
+      const { jsPDF } = await import('jspdf');
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "mm",
