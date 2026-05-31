@@ -21,5 +21,11 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   // Pass-through fetch for regular online execution while keeping the PWA installable
-  // We do not cache anything to ensure updates propagate immediately.
+  // We force cache-busting to ensure updates propagate immediately.
+  event.respondWith(
+    fetch(event.request, { cache: 'no-store' }).catch(() => {
+      // In case of offline, fallback to normal fetch (which will likely fail if no cache)
+      return fetch(event.request);
+    })
+  );
 });
