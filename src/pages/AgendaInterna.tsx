@@ -6,7 +6,7 @@ import { db, collection, onSnapshot, query, orderBy, setDoc, doc, deleteDoc, ser
 import { useAuth } from '../contexts/AuthContext';
 import { auth, googleProvider, signInWithPopup } from '../firebase';
 import SEO from '../components/SEO';
-import html2canvas from 'html2canvas';
+import { toPng } from 'html-to-image';
 import { jsPDF } from 'jspdf';
 
 interface InternaEvent {
@@ -172,27 +172,29 @@ export default function AgendaInterna() {
     setIsGeneratingImage(true);
     try {
       await new Promise(r => setTimeout(r, 100)); // small delay to ensure rendering
-      const canvasPromise = html2canvas(receiptRef.current, {
-        scale: 2,
-        useCORS: true,
+      
+      const toPngPromise = toPng(receiptRef.current, {
+        pixelRatio: 2,
         backgroundColor: '#ffffff'
       });
       
       const timeoutPromise = new Promise<never>((_, reject) => 
-        setTimeout(() => reject(new Error("html2canvas timeout")), 15000)
+        setTimeout(() => reject(new Error("html-to-image timeout")), 15000)
       );
 
-      const canvas = await Promise.race([canvasPromise, timeoutPromise]);
+      const imgData = await Promise.race([toPngPromise, timeoutPromise]);
       
-      const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "mm",
         format: "a4"
       });
       
+      const rectWidth = receiptRef.current.offsetWidth;
+      const rectHeight = receiptRef.current.offsetHeight;
+      
       const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      const pdfHeight = (rectHeight * pdfWidth) / rectWidth;
       
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
       const blob = pdf.output("blob");
