@@ -634,44 +634,44 @@ export default function AgendaInterna() {
         style={{ left: '-9999px', width: '800px', backgroundColor: 'white' }}
       >
         {selectedDate && formData && (
-           <div ref={receiptRef} className="bg-white p-12 text-black font-serif shadow-none">
-             <div className="text-center mb-10 border-b pb-8 border-gray-300">
+           <div ref={receiptRef} className="p-12 font-serif shadow-none" style={{ backgroundColor: '#ffffff', color: '#000000' }}>
+             <div className="text-center mb-10 border-b pb-8" style={{ borderColor: '#d1d5db' }}>
                <h1 className="text-4xl font-bold tracking-tight mb-2 uppercase" style={{ fontFamily: '"Cinzel", serif', color: '#13214D' }}>Rancho Branco</h1>
-               <p className="text-xl italic text-gray-600" style={{ fontFamily: '"Great Vibes", cursive' }}>Casa de Eventos</p>
+               <p className="text-xl italic" style={{ fontFamily: '"Great Vibes", cursive', color: '#4b5563' }}>Casa de Eventos</p>
              </div>
 
              
              <h2 className="text-2xl font-bold mb-8 text-center" style={{ color: '#13214D' }}>Resumo de Orçamento / Reserva</h2>
              
              <div className="space-y-6 text-lg">
-               <div className="flex justify-between border-b border-gray-200 pb-2">
-                 <span className="font-bold text-gray-600">Data do Evento:</span>
+               <div className="flex justify-between border-b pb-2" style={{ borderColor: '#e5e7eb' }}>
+                 <span className="font-bold" style={{ color: '#4b5563' }}>Data do Evento:</span>
                  <span>{format(selectedDate, "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}</span>
                </div>
                
                {formData.title && (
-                 <div className="flex justify-between border-b border-gray-200 pb-2">
-                   <span className="font-bold text-gray-600">Evento:</span>
+                 <div className="flex justify-between border-b pb-2" style={{ borderColor: '#e5e7eb' }}>
+                   <span className="font-bold" style={{ color: '#4b5563' }}>Evento:</span>
                    <span>{formData.title}</span>
                  </div>
                )}
 
-               <div className="flex justify-between border-b border-gray-200 pb-2">
-                 <span className="font-bold text-gray-600">Cliente:</span>
+               <div className="flex justify-between border-b pb-2" style={{ borderColor: '#e5e7eb' }}>
+                 <span className="font-bold" style={{ color: '#4b5563' }}>Cliente:</span>
                  <span>{formData.clientName || 'Não informado'}</span>
                </div>
 
-               <div className="flex justify-between border-b border-gray-200 pb-2">
-                 <span className="font-bold text-gray-600">Telefone / WhatsApp:</span>
+               <div className="flex justify-between border-b pb-2" style={{ borderColor: '#e5e7eb' }}>
+                 <span className="font-bold" style={{ color: '#4b5563' }}>Telefone / WhatsApp:</span>
                  <span>{formData.clientPhone || 'Não informado'}</span>
                </div>
 
-               <div className="flex justify-between border-b border-gray-200 pb-2">
-                 <span className="font-bold text-gray-600">E-mail:</span>
+               <div className="flex justify-between border-b pb-2" style={{ borderColor: '#e5e7eb' }}>
+                 <span className="font-bold" style={{ color: '#4b5563' }}>E-mail:</span>
                  <span>{formData.clientEmail || 'Não informado'}</span>
                </div>
 
-               <div className="mt-12 pt-10 border-t-2 border-[#13214D]">
+               <div className="mt-12 pt-10 border-t-2" style={{ borderColor: '#13214D' }}>
                  <div className="flex justify-between text-2xl font-bold">
                    <span style={{ color: '#13214D' }}>Valor Combinado:</span>
                    <span style={{ color: '#13214D' }}>R$ {formData.agreedValue || 'A combinar'}</span>
@@ -680,13 +680,13 @@ export default function AgendaInterna() {
 
                {formData.observations && (
                  <div className="mt-10 pt-6">
-                   <h3 className="font-bold text-[#13214D] mb-4 uppercase text-sm tracking-wider">Observações / Detalhes:</h3>
-                   <p className="whitespace-pre-wrap text-gray-800 bg-gray-50 p-6 border border-gray-200 rounded-lg">{formData.observations}</p>
+                   <h3 className="font-bold mb-4 uppercase text-sm tracking-wider" style={{ color: '#13214D' }}>Observações / Detalhes:</h3>
+                   <p className="whitespace-pre-wrap p-6 border rounded-lg" style={{ color: '#1f2937', backgroundColor: '#f9fafb', borderColor: '#e5e7eb' }}>{formData.observations}</p>
                  </div>
                )}
              </div>
 
-             <div className="mt-16 pt-8 text-center text-sm text-gray-500 border-t border-gray-100">
+             <div className="mt-16 pt-8 text-center text-sm border-t" style={{ color: '#6b7280', borderColor: '#f3f4f6' }}>
                <p>Este documento é apenas um resumo de orçamento e não garante a reserva sem a assinatura do contrato.</p>
                <p className="mt-2 font-bold uppercase text-xs tracking-widest text-[#13214D]">Rancho Branco Eventos</p>
              </div>
