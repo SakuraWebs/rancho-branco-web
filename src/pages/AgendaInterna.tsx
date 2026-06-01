@@ -252,13 +252,16 @@ export default function AgendaInterna() {
          if (navigator.canShare && navigator.canShare({ files: [file] })) {
              try {
                await navigator.share({
-                 title: 'Orçamento Rancho Branco',
-                 text: `Orçamento para o evento em ${format(selectedDate, "dd/MM/yyyy")}.`,
+                 // explicitly ONLY passing files. If 'text' is provided, WhatsApp on Android often drops the file and only sends the text.
                  files: [file]
                });
                return; // successfully shared
-             } catch (err) {
+             } catch (err: any) {
                console.log("Share canceled or failed", err);
+               // If the user simply cancelled the share sheet, do not fallback to text message
+               if (err.name === 'AbortError' || err.message?.includes('canceled') || err.message?.includes('cancelled')) {
+                   return;
+               }
              }
          }
        }
