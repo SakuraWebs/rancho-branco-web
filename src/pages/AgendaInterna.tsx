@@ -35,7 +35,7 @@ export default function AgendaInterna() {
   const [isSaving, setIsSaving] = useState(false);
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
   const receiptRef = useRef<HTMLDivElement>(null);
-  const [previewData, setPreviewData] = useState<{ blobUrl: string, imgData: string, clientName: string } | null>(null);
+  const [previewData, setPreviewData] = useState<{ blobUrl: string, imgData: string, clientName: string, blob?: Blob } | null>(null);
 
   useEffect(() => {
     if (!isAdmin) return;
@@ -215,14 +215,19 @@ export default function AgendaInterna() {
     setPreviewData({
       blobUrl: url,
       imgData: data.imgData,
+      blob: data.blob,
       clientName: formData?.clientName || 'Cliente'
     });
   };
 
   const handlePrintPDF = async () => {
-    const data = await generatePDFBlobAndImage();
-    if (!data) return;
-    const url = URL.createObjectURL(data.blob);
+    let blob = previewData?.blob;
+    if (!blob) {
+      const data = await generatePDFBlobAndImage();
+      if (!data) return;
+      blob = data.blob;
+    }
+    const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
     a.download = `rancho-branco-reserva-${formData?.dateString || 'agenda'}.pdf`;
@@ -235,10 +240,15 @@ export default function AgendaInterna() {
     
     // Attempt native share if available (great for sending actual files on mobile)
     if (navigator.share) {
-       const data = await generatePDFBlobAndImage();
-       if (data && data.blob) {
+       let blob = previewData?.blob;
+       if (!blob) {
+         const data = await generatePDFBlobAndImage();
+         if (data) blob = data.blob;
+       }
+       
+       if (blob) {
          const fileName = `reserva-${formData.dateString}.pdf`;
-         const file = new File([data.blob], fileName, { type: 'application/pdf' });
+         const file = new File([blob], fileName, { type: 'application/pdf' });
          if (navigator.canShare && navigator.canShare({ files: [file] })) {
              try {
                await navigator.share({
