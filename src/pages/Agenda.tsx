@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isBefore, startOfToday, parseISO, isSameDay, addMonths, subMonths, getDay } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Download } from 'lucide-react';
 import SEO from '../components/SEO';
 import { db, collection, onSnapshot, query, orderBy } from '../firebase';
+import { toPng } from 'html-to-image';
+import jsPDF from 'jspdf';
 
 interface AgendaEvent {
   id: string;
@@ -15,6 +17,61 @@ interface AgendaEvent {
 export default function Agenda() {
   const [currentDate, setCurrentDate] = useState(startOfToday());
   const [events, setEvents] = useState<AgendaEvent[]>([]);
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+  const printCardRef = useRef<HTMLDivElement>(null);
+
+  const handleDownloadCardPDF = async () => {
+    if (!printCardRef.current) return;
+    setIsGeneratingPdf(true);
+    try {
+      // Small timeout to ensure rendering
+      await new Promise(r => setTimeout(r, 100));
+      
+      const toPngPromise = toPng(printCardRef.current, {
+        pixelRatio: 2,
+        backgroundColor: '#FCF3EA',
+        style: {
+          maxHeight: 'none',
+          height: 'auto',
+          transform: 'none',
+          position: 'static'
+        }
+      });
+      
+      const timeoutPromise = new Promise<never>((_, reject) => 
+        setTimeout(() => reject(new Error("html-to-image timeout")), 15000)
+      );
+
+      const imgData = await Promise.race([toPngPromise, timeoutPromise]);
+      
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4"
+      });
+      
+      const rectWidth = printCardRef.current.offsetWidth;
+      const rectHeight = printCardRef.current.scrollHeight;
+      
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (rectHeight * pdfWidth) / rectWidth;
+      
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      const blob = pdf.output("blob");
+      
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `datas-ocupadas-${format(new Date(), 'yyyy-MM')}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (err: any) {
+      console.error(err);
+      alert("Erro ao gerar PDF: " + (err.message || err.toString()));
+    } finally {
+      setIsGeneratingPdf(false);
+    }
+  };
 
   useEffect(() => {
     const q = query(collection(db, 'agenda'), orderBy('dateString', 'asc'));
@@ -100,9 +157,9 @@ export default function Agenda() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
             
             {/* Aesthetic Sidebar (Datas Ocupadas based on image reference) */}
-            <div className="lg:col-span-5 md:block">
+            <div className="lg:col-span-5 md:block flex flex-col">
               <div 
-                className="rounded-xl overflow-hidden p-8 sm:p-12 shadow-ambient relative flex flex-col items-center"
+                className="rounded-xl overflow-hidden p-8 sm:p-12 shadow-ambient relative flex flex-col items-center flex-grow"
                 style={{ backgroundColor: '#FCF3EA', color: '#13214D' }}
               >
                 {/* Decorative border approximations since we don't have SVGs yet */}
@@ -174,6 +231,15 @@ export default function Agenda() {
                   </div>
                 </div>
               </div>
+              
+              <button
+                onClick={handleDownloadCardPDF}
+                disabled={isGeneratingPdf}
+                className="mt-6 w-full py-4 rounded-xl border border-[#13214D] text-[#13214D] font-bold tracking-widest uppercase hover:bg-[#13214D] hover:text-[#FCF3EA] transition-colors flex items-center justify-center gap-2"
+              >
+                <Download size={20} />
+                {isGeneratingPdf ? 'Gerando...' : 'IMPRIMIR'}
+              </button>
             </div>
 
             {/* Calendar Widget */}
@@ -280,6 +346,83 @@ export default function Agenda() {
               </div>
             </div>
 
+          </div>
+        </div>
+      </div>
+
+      {/* Hidden Layout for Canvas Generation */}
+      <div 
+        className="fixed top-0 pointer-events-none" 
+        style={{ left: '-9999px', width: '600px', backgroundColor: '#FCF3EA' }}
+      >
+        <div 
+          ref={printCardRef}
+          className="p-16 shadow-none relative flex flex-col items-center border-[20px] border-white"
+          style={{ backgroundColor: '#FCF3EA', color: '#13214D' }}
+        >
+          {/* Decorative borders for the PDF */}
+          <div className="absolute inset-4 border-[2px] border-[#13214D] pointer-events-none" />
+          <div className="absolute inset-5 border-[1px] border-[#13214D] pointer-events-none opacity-50" />
+          <div className="absolute top-4 left-4 w-8 h-8 border-t-[3px] border-l-[3px] border-[#13214D]" />
+          <div className="absolute top-4 right-4 w-8 h-8 border-t-[3px] border-r-[3px] border-[#13214D]" />
+          <div className="absolute bottom-4 left-4 w-8 h-8 border-b-[3px] border-l-[3px] border-[#13214D]" />
+          <div className="absolute bottom-4 right-4 w-8 h-8 border-b-[3px] border-r-[3px] border-[#13214D]" />
+
+          <div className="relative z-10 w-full flex flex-col items-center mb-10 pt-4">
+            <h2 className="text-6xl font-bold tracking-tight mb-0 leading-none text-center" style={{ fontFamily: '"Cinzel", serif', color: '#13214D' }}>
+              RANCHO
+            </h2>
+            <h2 className="text-6xl font-bold tracking-tight leading-none mb-1 text-center" style={{ fontFamily: '"Cinzel", serif', color: '#13214D' }}>
+              &nbsp;BRANCO
+            </h2>
+            <div className="flex items-center justify-center relative mt-3 w-full max-w-[320px]">
+               <div className="h-[1.5px] bg-[#13214D] flex-grow" />
+               <span className="font-light text-3xl mx-6" style={{ fontFamily: '"Great Vibes", cursive', color: '#13214D' }}>
+                 Casa de Eventos
+               </span>
+               <div className="h-[1.5px] bg-[#13214D] flex-grow" />
+            </div>
+            
+            <h3 className="text-6xl font-normal mt-16 text-[#BA8D49] text-center" style={{ fontFamily: '"Great Vibes", cursive' }}>
+              Datas Ocupadas
+            </h3>
+          </div>
+
+          <div className="w-full text-left space-y-8 mb-4">
+            {Object.keys(groupedEvents).length === 0 ? (
+              <p className="text-center text-xl opacity-70" style={{ fontFamily: '"Playfair Display", serif' }}>
+                Nenhuma data registrada no momento.
+              </p>
+            ) : (
+              Object.keys(groupedEvents).map(monthYearStr => (
+                <div key={monthYearStr} className="w-full flex inset-0 flex-col pt-4">
+                  <div className="flex items-center justify-center mb-6">
+                    <div className="h-[1px] bg-[#CAB28E] flex-grow max-w-[120px]" />
+                    <h4 className="px-6 tracking-widest text-[#13214D] text-2xl font-bold" style={{ fontFamily: '"Cinzel", serif' }}>
+                      {monthYearStr}
+                    </h4>
+                    <div className="h-[1px] bg-[#CAB28E] flex-grow max-w-[120px]" />
+                  </div>
+                  <ul className="space-y-4 w-full flex flex-col items-center">
+                    {groupedEvents[monthYearStr].map(ev => {
+                      const evDate = parseISO(ev.dateString);
+                      return (
+                        <li key={ev.id} className="flex items-center text-[#13214D] w-full max-w-[400px]">
+                          <span className="text-[#BA8D49] text-3xl mr-4 flex-shrink-0">⚜</span>
+                          <span className="font-bold text-2xl w-24 text-right flex-shrink-0" style={{ fontFamily: '"Playfair Display", serif' }}>
+                            {format(evDate, 'dd/MM')}
+                          </span>
+                          <span className="mx-5 text-[#CAB28E] font-light flex-shrink-0">|</span>
+                          <span className="font-medium text-2xl whitespace-normal flex-1" style={{ fontFamily: '"Playfair Display", serif' }}>
+                            {ev.title}
+                          </span>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>
