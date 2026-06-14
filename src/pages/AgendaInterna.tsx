@@ -35,6 +35,7 @@ export default function AgendaInterna() {
   const [isSaving, setIsSaving] = useState(false);
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
   const receiptRef = useRef<HTMLDivElement>(null);
+  const printCardRef = useRef<HTMLDivElement>(null);
   const [previewData, setPreviewData] = useState<{ blobUrl: string, imgData: string, clientName: string, blob?: Blob } | null>(null);
 
   useEffect(() => {
@@ -235,6 +236,58 @@ export default function AgendaInterna() {
     URL.revokeObjectURL(url);
   };
 
+  const handleDownloadCardPDF = async () => {
+    if (!printCardRef.current || !formData) return;
+    setIsGeneratingImage(true);
+    try {
+      // Pequeno timeout para garantir renderização de elementos
+      await new Promise(r => setTimeout(r, 100));
+      
+      const toPngPromise = toPng(printCardRef.current, {
+        pixelRatio: 2,
+        backgroundColor: '#ffffff',
+        style: {
+          maxHeight: 'none',
+          height: 'auto',
+          transform: 'none'
+        }
+      });
+      
+      const timeoutPromise = new Promise<never>((_, reject) => 
+        setTimeout(() => reject(new Error("html-to-image timeout")), 15000)
+      );
+
+      const imgData = await Promise.race([toPngPromise, timeoutPromise]);
+      
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4"
+      });
+      
+      const rectWidth = printCardRef.current.offsetWidth;
+      const rectHeight = printCardRef.current.scrollHeight;
+      
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (rectHeight * pdfWidth) / rectWidth;
+      
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      const blob = pdf.output("blob");
+      
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ficha-reserva-${formData.dateString}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (err: any) {
+      console.error(err);
+      alert("Erro ao gerar PDF do card: " + (err.message || err.toString()));
+    } finally {
+      setIsGeneratingImage(false);
+    }
+  };
+
   const handleWhatsAppShare = async () => {
     if (!formData || !selectedDate) return;
     
@@ -422,6 +475,7 @@ export default function AgendaInterna() {
       {selectedDate && formData && !previewData && (
         <div className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-sm hide-on-print">
           <div 
+             ref={printCardRef}
              className="bg-white w-full sm:max-w-2xl max-h-[90vh] rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col animate-slide-up"
           >
               <div className="flex items-center justify-between p-4 border-b">
@@ -432,6 +486,11 @@ export default function AgendaInterna() {
                   <button onClick={handlePreviewBudget} disabled={isGeneratingImage} className="p-2 text-primary hover:text-white hover:bg-primary/90 rounded-full transition-colors hidden sm:flex items-center gap-2 px-4 shadow-sm border border-primary/20 disabled:opacity-50" title="Ver Orçamento">
                       <FileText size={18} /> {isGeneratingImage ? 'Gerando...' : 'Ver Orçamento'}
                   </button>
+                  {formData.status === 'confirmed' && (
+                     <button onClick={handleDownloadCardPDF} disabled={isGeneratingImage} className="p-2 text-primary hover:text-white hover:bg-primary/90 rounded-full transition-colors flex items-center gap-2 px-4 shadow-sm border border-primary/20 disabled:opacity-50" title="Baixar Ficha">
+                       <Download size={18} /> {isGeneratingImage ? 'Gerando...' : 'Baixar Ficha'}
+                     </button>
+                  )}
                   <button onClick={closeModal} className="p-2 text-gray-500 hover:bg-gray-100 rounded-full transition-colors">
                     <X size={24} />
                   </button>
