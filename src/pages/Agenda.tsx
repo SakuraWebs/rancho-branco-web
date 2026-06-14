@@ -27,34 +27,40 @@ export default function Agenda() {
       // Small timeout to ensure rendering
       await new Promise(r => setTimeout(r, 100));
       
-      const toPngPromise = toPng(printCardRef.current, {
+      const el = printCardRef.current;
+      const rectWidth = el.scrollWidth;
+      const rectHeight = el.scrollHeight;
+      
+      const toPngPromise = toPng(el, {
         pixelRatio: 2,
         backgroundColor: '#FCF3EA',
+        width: rectWidth,
+        height: rectHeight,
         style: {
           maxHeight: 'none',
-          height: 'auto',
+          height: `${rectHeight}px`,
+          width: `${rectWidth}px`,
           transform: 'none',
-          position: 'static'
+          position: 'static',
+          margin: '0',
+          padding: '4rem'
         }
       });
       
       const timeoutPromise = new Promise<never>((_, reject) => 
-        setTimeout(() => reject(new Error("html-to-image timeout")), 15000)
+        setTimeout(() => reject(new Error("html-to-image timeout")), 25000)
       );
 
       const imgData = await Promise.race([toPngPromise, timeoutPromise]);
       
+      const pdfWidth = 210;
+      const pdfHeight = (rectHeight * pdfWidth) / rectWidth;
+      
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "mm",
-        format: "a4"
+        format: [pdfWidth, pdfHeight]
       });
-      
-      const rectWidth = printCardRef.current.offsetWidth;
-      const rectHeight = printCardRef.current.scrollHeight;
-      
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (rectHeight * pdfWidth) / rectWidth;
       
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
       const blob = pdf.output("blob");
@@ -352,8 +358,8 @@ export default function Agenda() {
 
       {/* Hidden Layout for Canvas Generation */}
       <div 
-        className="fixed top-0 pointer-events-none" 
-        style={{ left: '-9999px', width: '600px', backgroundColor: '#FCF3EA' }}
+        className="absolute pointer-events-none" 
+        style={{ left: '-9999px', top: 0, width: '600px', backgroundColor: '#FCF3EA' }}
       >
         <div 
           ref={printCardRef}
