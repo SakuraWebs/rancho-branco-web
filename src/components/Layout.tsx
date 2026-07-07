@@ -127,7 +127,7 @@ export default function Layout() {
                     </Link>
                     
                     {/* Submenu Dropdown */}
-                    <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-56 bg-surface border border-outline-variant/10 rounded-2xl shadow-xl py-3 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-[100]">
+                    <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-56 bg-surface border border-outline-variant/10 rounded-2xl shadow-xl py-3 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-[100] before:absolute before:inset-x-0 before:-top-3 before:h-3 before:content-['']">
                       {link.submenu.map((sub) => {
                         const isSubActive = location.pathname === sub.path;
                         return (
