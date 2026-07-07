@@ -49,17 +49,38 @@ export default function Layout() {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
-  const navLinks = [
+  interface NavLinkItem {
+    name: string;
+    path: string;
+    submenu?: { name: string; path: string }[];
+  }
+
+  const navLinks: NavLinkItem[] = [
     { name: 'O Espaço', path: '/' },
     { name: 'Sobre Nós', path: '/sobre-nos' },
     { name: 'Casamentos', path: '/casamentos' },
-    { name: 'Eventos', path: '/eventos' },
+    { 
+      name: 'Eventos', 
+      path: '/eventos',
+      submenu: [
+        { name: 'Todos os Eventos', path: '/eventos' },
+        { name: '1º Terroir & Tradição', path: '/eventos/terroir-e-tradicao' }
+      ]
+    },
     ...(isAdmin ? [{ name: 'Agenda', path: '/agenda' }] : []),
     { name: 'Contato', path: '/contato' },
   ];
 
   // Pages that don't have a hero image at the top need a solid nav immediately
-  const needsSolidNav = ['/contato', '/orcamento', '/galeria', '/politicas-de-privacidade', '/termos-de-uso', '/agenda'].includes(location.pathname);
+  const needsSolidNav = [
+    '/contato', 
+    '/orcamento', 
+    '/galeria', 
+    '/politicas-de-privacidade', 
+    '/termos-de-uso', 
+    '/agenda',
+    '/eventos/terroir-e-tradicao'
+  ].includes(location.pathname);
   const isSolidNav = isScrolled || needsSolidNav;
 
   return (
@@ -81,7 +102,51 @@ export default function Layout() {
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => {
-              const isActive = location.pathname === link.path;
+              const isActive = location.pathname === link.path || (link.submenu && link.submenu.some(sub => location.pathname === sub.path));
+              
+              if (link.submenu) {
+                return (
+                  <div key={link.name} className="relative group py-1">
+                    <Link
+                      to={link.path}
+                      className={`relative font-serif tracking-tight transition-colors duration-300 flex items-center gap-1.5 ${
+                        isSolidNav
+                          ? isActive ? 'text-primary font-medium' : 'text-primary/70 hover:text-primary font-light'
+                          : isActive ? 'text-white font-medium' : 'text-white/80 hover:text-white font-light'
+                      }`}
+                    >
+                      {link.name}
+                      <span className="text-[9px] opacity-70 transform group-hover:rotate-180 transition-transform duration-300">▼</span>
+                      {isActive && (
+                        <motion.div
+                          layoutId="desktop-nav-indicator"
+                          className={`absolute -bottom-1 left-0 right-0 h-[2px] rounded-full ${isSolidNav ? 'bg-primary' : 'bg-white'}`}
+                          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                        />
+                      )}
+                    </Link>
+                    
+                    {/* Submenu Dropdown */}
+                    <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-56 bg-surface border border-outline-variant/10 rounded-2xl shadow-xl py-3 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 z-[100]">
+                      {link.submenu.map((sub) => {
+                        const isSubActive = location.pathname === sub.path;
+                        return (
+                          <Link
+                            key={sub.name}
+                            to={sub.path}
+                            className={`block px-5 py-2.5 text-sm font-serif transition-colors text-primary hover:bg-[#FCF3EA] ${
+                              isSubActive ? 'font-medium bg-[#FCF3EA]/50 border-l-[3px] border-primary' : 'font-light'
+                            }`}
+                          >
+                            {sub.name}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              }
+
               return (
                 <Link
                   key={link.name}
@@ -136,7 +201,42 @@ export default function Layout() {
             >
               <div className="py-6 px-6 flex flex-col gap-6">
                 {navLinks.map((link) => {
-                  const isActive = location.pathname === link.path;
+                  const isActive = location.pathname === link.path || (link.submenu && link.submenu.some(sub => location.pathname === sub.path));
+                  
+                  if (link.submenu) {
+                    return (
+                      <div key={link.name} className="flex flex-col gap-3">
+                        <Link
+                          to={link.path}
+                          className={`font-serif text-xl transition-all duration-300 flex items-center ${
+                            isActive 
+                              ? 'text-primary font-medium pl-4 border-l-[3px] border-primary' 
+                              : 'text-on-surface-variant font-light'
+                          }`}
+                        >
+                          {link.name}
+                        </Link>
+                        {/* Submenu links listed nicely with indentation */}
+                        <div className="pl-6 border-l border-outline-variant/30 flex flex-col gap-3">
+                          {link.submenu.map((sub) => {
+                            const isSubActive = location.pathname === sub.path;
+                            return (
+                              <Link
+                                key={sub.name}
+                                to={sub.path}
+                                className={`font-serif text-base transition-all duration-300 ${
+                                  isSubActive ? 'text-primary font-medium' : 'text-on-surface-variant/80 font-light'
+                                }`}
+                              >
+                                {sub.name}
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    );
+                  }
+
                   return (
                     <Link
                       key={link.name}

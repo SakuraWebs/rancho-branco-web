@@ -346,7 +346,7 @@ export default function AgendaInterna() {
   };
 
   const today = startOfToday();
-  const confirmedFutureEvents = Object.values(events).filter(e => {
+  const confirmedFutureEvents = (Object.values(events) as InternaEvent[]).filter(e => {
     const eDate = parseISO(e.dateString);
     return e.status === 'confirmed' && !isBefore(eDate, today);
   }).sort((a, b) => a.dateString.localeCompare(b.dateString));

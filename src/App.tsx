@@ -9,6 +9,7 @@ import Layout from './components/Layout';
 import Home from './pages/Home';
 import Casamentos from './pages/Casamentos';
 import Eventos from './pages/Eventos';
+import TerroirTradicao from './pages/TerroirTradicao';
 import Galeria from './pages/Galeria';
 import SobreNos from './pages/SobreNos';
 import Contato from './pages/Contato';
@@ -41,6 +42,7 @@ function AppRoutes() {
           <Route path="sobre-nos" element={<SobreNos />} />
           <Route path="casamentos" element={<Casamentos />} />
           <Route path="eventos" element={<Eventos />} />
+          <Route path="eventos/terroir-e-tradicao" element={<TerroirTradicao />} />
           <Route path="galeria" element={<Galeria />} />
           <Route path="agenda" element={<Agenda />} />
           <Route path="contato" element={<Contato />} />
