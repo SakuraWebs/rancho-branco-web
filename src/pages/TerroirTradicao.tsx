@@ -73,7 +73,7 @@ export default function TerroirTradicao() {
       `}} />
 
       {/* Hero Section - Split Layout */}
-      <section className="relative pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden border-b border-[#13214D]/5">
+      <section className="relative pt-36 pb-16 lg:pt-48 lg:pb-24 overflow-hidden border-b border-[#13214D]/5">
         {/* Subtle background decoration */}
         <div className="absolute inset-0 bg-radial-gradient from-[#FCF3EA] via-[#FCF3EA] to-[#eaddd0]/40 opacity-70 z-0" />
         
