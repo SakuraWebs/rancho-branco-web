@@ -4,14 +4,15 @@ import { ptBR } from 'date-fns/locale';
 import { Link } from 'react-router-dom';
 import { auth, googleProvider, signInWithPopup, signOut } from '../firebase';
 import { useAuth } from '../contexts/AuthContext';
-import { LogIn, LogOut, Shield, Plus, Trash2, Image as ImageIcon, Video, X, LayoutGrid, CalendarDays } from 'lucide-react';
+import { LogIn, LogOut, Shield, Plus, Trash2, Image as ImageIcon, Video, X, LayoutGrid, CalendarDays, MessageSquareHeart, Star, Heart } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { db, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp, OperationType, handleFirestoreError, storage } from '../firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 
 export default function AdminPanel() {
   const { user, isAdmin, loading } = useAuth();
-  const [activeTab, setActiveTab] = useState<'galeria' | 'agenda'>('agenda');
+  const [activeTab, setActiveTab] = useState<'galeria' | 'agenda' | 'feedback'>('agenda');
   
   // Gallery state
   const [isUploading, setIsUploading] = useState(false);
@@ -24,6 +25,9 @@ export default function AdminPanel() {
   const [agendaItems, setAgendaItems] = useState<any[]>([]);
   const [isAddingAgenda, setIsAddingAgenda] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
+
+  // Feedback state
+  const [feedbackItems, setFeedbackItems] = useState<any[]>([]);
 
   React.useEffect(() => {
     setIsStandalone(window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone);
@@ -86,9 +90,19 @@ export default function AdminPanel() {
       handleFirestoreError(error, OperationType.LIST, 'agenda');
     });
 
+    // Fetch Feedback
+    const qFeedback = query(collection(db, 'terroir_feedback'), orderBy('createdAt', 'desc'));
+    const unsubscribeFeedback = onSnapshot(qFeedback, (snapshot) => {
+      const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setFeedbackItems(items);
+    }, (error) => {
+      console.error("Error fetching feedback", error);
+    });
+
     return () => {
       unsubscribeGallery();
       unsubscribeAgenda();
+      unsubscribeFeedback();
     };
   }, [isAdmin]);
 
@@ -279,18 +293,24 @@ export default function AdminPanel() {
               </div>
 
               {/* Tabs */}
-              <div className="flex border-b">
+              <div className="flex border-b overflow-x-auto custom-scrollbar">
                 <button
                   onClick={() => setActiveTab('agenda')}
-                  className={`flex-1 flex items-center justify-center gap-2 py-4 font-medium transition-colors ${activeTab === 'agenda' ? 'text-primary border-b-2 border-primary' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'}`}
+                  className={`min-w-[120px] flex-1 flex items-center justify-center gap-2 py-4 font-medium transition-colors ${activeTab === 'agenda' ? 'text-primary border-b-2 border-primary' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'}`}
                 >
                   <CalendarDays size={18} /> Agenda
                 </button>
                 <button
                   onClick={() => setActiveTab('galeria')}
-                  className={`flex-1 flex items-center justify-center gap-2 py-4 font-medium transition-colors ${activeTab === 'galeria' ? 'text-primary border-b-2 border-primary' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'}`}
+                  className={`min-w-[120px] flex-1 flex items-center justify-center gap-2 py-4 font-medium transition-colors ${activeTab === 'galeria' ? 'text-primary border-b-2 border-primary' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'}`}
                 >
                   <ImageIcon size={18} /> Galeria
+                </button>
+                <button
+                  onClick={() => setActiveTab('feedback')}
+                  className={`min-w-[120px] flex-1 flex items-center justify-center gap-2 py-4 font-medium transition-colors ${activeTab === 'feedback' ? 'text-primary border-b-2 border-primary' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'}`}
+                >
+                  <MessageSquareHeart size={18} /> Feedback
                 </button>
               </div>
 
@@ -400,7 +420,7 @@ export default function AdminPanel() {
                       )}
                     </section>
                   </>
-                ) : (
+                ) : activeTab === 'agenda' ? (
                   <>
                     {/* Instalação do PWA (Instalar no Celular) banner */}
                     {!isStandalone && (
@@ -604,7 +624,83 @@ export default function AdminPanel() {
                       </div>
                     </section>
                   </>
-                )}
+                ) : activeTab === 'feedback' ? (
+                  <section>
+                    <h3 className="text-sm font-bold uppercase tracking-wider text-gray-400 mb-4 flex items-center gap-2">
+                      <MessageSquareHeart size={16} /> Relatórios de Feedback ({feedbackItems.length})
+                    </h3>
+                    {feedbackItems.length === 0 ? (
+                      <div className="text-center py-12 text-gray-400 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
+                        Nenhum feedback recebido ainda.
+                      </div>
+                    ) : (
+                      <div className="space-y-8">
+                        <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                          <h4 className="text-sm font-bold text-gray-600 mb-6">Distribuição de Avaliações</h4>
+                          <div className="h-64 w-full">
+                            <ResponsiveContainer width="100%" height="100%">
+                              <BarChart
+                                data={[5, 4, 3, 2, 1].map(star => ({
+                                  name: `${star} Estrelas`,
+                                  count: feedbackItems.filter(f => f.rating === star).length
+                                }))}
+                                margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+                              >
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+                                <XAxis dataKey="name" tick={{ fontSize: 12, fill: '#888' }} axisLine={false} tickLine={false} />
+                                <YAxis allowDecimals={false} tick={{ fontSize: 12, fill: '#888' }} axisLine={false} tickLine={false} />
+                                <Tooltip 
+                                  cursor={{ fill: '#f9f9f9' }} 
+                                  contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                                />
+                                <Bar dataKey="count" fill="#BA8D49" radius={[4, 4, 0, 0]} maxBarSize={60} />
+                              </BarChart>
+                            </ResponsiveContainer>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {feedbackItems.map(fb => (
+                          <div key={fb.id} className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col gap-3">
+                            <div className="flex items-center justify-between">
+                              <span className="font-bold text-gray-800">{fb.name}</span>
+                              <div className="flex gap-1 text-amber-400">
+                                {Array.from({ length: 5 }).map((_, i) => (
+                                  <Star key={i} size={14} className={i < fb.rating ? 'fill-amber-400' : 'text-gray-200'} />
+                                ))}
+                              </div>
+                            </div>
+                            {fb.favorite && (
+                              <div className="flex items-center gap-2 text-xs text-rose-600 bg-rose-50 px-2 py-1 rounded-md self-start font-medium">
+                                <Heart size={12} /> Mais gostou: {fb.favorite}
+                              </div>
+                            )}
+                            {fb.comments && (
+                              <p className="text-sm text-gray-600 bg-gray-50 p-3 rounded-xl italic">
+                                "{fb.comments}"
+                              </p>
+                            )}
+                            <div className="flex items-center gap-2 text-xs mt-auto pt-3 border-t">
+                              <span className="text-gray-500 font-medium">Recomendaria:</span>
+                              {fb.recommend === true ? (
+                                <span className="text-green-600 font-bold bg-green-50 px-2 py-1 rounded">Sim</span>
+                              ) : fb.recommend === false ? (
+                                <span className="text-red-600 font-bold bg-red-50 px-2 py-1 rounded">Não</span>
+                              ) : (
+                                <span className="text-gray-400">Não informado</span>
+                              )}
+                              {fb.createdAt && (
+                                <span className="ml-auto text-gray-400 text-[10px]">
+                                  {new Date(fb.createdAt.seconds * 1000).toLocaleDateString('pt-BR')}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      </div>
+                    )}
+                  </section>
+                ) : null}
               </div>
             </div>
           </motion.div>

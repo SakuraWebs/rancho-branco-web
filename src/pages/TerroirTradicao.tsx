@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Calendar, MapPin, Wine, Utensils, Music, Phone, AlertCircle, ArrowRight, Award, GlassWater, Landmark, Sparkles } from 'lucide-react';
+import { Calendar, MapPin, Wine, Utensils, Music, Phone, AlertCircle, ArrowRight, Award, GlassWater, Landmark, Sparkles, Info, Share2, Star } from 'lucide-react';
 import SEO from '../components/SEO';
 
 export default function TerroirTradicao() {
@@ -53,7 +53,7 @@ export default function TerroirTradicao() {
     <div className="bg-[#FCF3EA] text-[#13214D] min-h-screen font-sans">
       <SEO 
         title="1º Terroir & Tradição - Evento de Enogastronomia | Rancho Branco" 
-        description="Venha vivenciar uma experiência enogastronômica inesquecível no dia 18 de Julho de 2026 no Rancho Branco. Menu em 5 passos harmonizado com vinhos finos das Caves do Pampa."
+        description="Venha vivenciar uma experiência enogastronômica inesquecível no dia 25 de Julho de 2026 no Rancho Branco. Menu em 5 passos harmonizado com vinhos finos das Caves do Pampa."
         canonical="https://ranchobranco.com.br/eventos/terroir-e-tradicao"
       />
 
@@ -83,6 +83,23 @@ export default function TerroirTradicao() {
             {/* Left Column: Elegant Copy & Details */}
             <div className="lg:col-span-7 space-y-8">
               <div className="space-y-4">
+                <motion.div
+                  initial={{ opacity: 0, height: 0, marginBottom: 0 }}
+                  animate={{ opacity: 1, height: 'auto', marginBottom: 16 }}
+                  transition={{ duration: 0.8, delay: 0.5, type: 'spring' }}
+                  className="overflow-hidden"
+                >
+                  <div className="bg-[#a33845]/10 border border-[#a33845]/30 rounded-2xl p-4 flex gap-3 items-start sm:items-center text-[#13214D]">
+                    <div className="p-2 bg-[#a33845] rounded-full text-white shrink-0 mt-0.5 sm:mt-0">
+                      <Info size={16} />
+                    </div>
+                    <div className="font-playfair text-sm leading-snug">
+                      <strong className="font-cinzel text-[#a33845] block sm:inline mr-1">Nova Data!</strong> 
+                      Devido a advertências meteorológicas de tormentas severas, o evento foi <strong>adiado para o sábado, 25 de Julho</strong>, garantindo o máximo conforto e a segurança de todos.
+                    </div>
+                  </div>
+                </motion.div>
+
                 <motion.div 
                   initial={{ opacity: 0, y: -15 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -131,7 +148,7 @@ export default function TerroirTradicao() {
                   </div>
                   <div>
                     <span className="text-[10px] uppercase tracking-wider font-cinzel font-bold text-[#13214D]/55 block">Data &amp; Horário</span>
-                    <span className="font-playfair text-base font-bold text-[#13214D]">18 de Julho de 2026</span>
+                    <span className="font-playfair text-base font-bold text-[#13214D]">25 de Julho de 2026</span>
                     <span className="text-xs text-[#13214D]/70 block">Sábado, às 11h30</span>
                   </div>
                 </div>
@@ -206,7 +223,7 @@ export default function TerroirTradicao() {
                 <div className="absolute inset-2 border border-[#BA8D49]/20 rounded-2xl pointer-events-none" />
                 
                 <img
-                  src="/cartaz-evento-terroir-tradicao-rancho-branco.jpeg"
+                  src="/1%20Terroir%201.jpeg"
                   alt="Cartaz Oficial 1º Terroir e Tradição - Rancho Branco"
                   className="w-full h-auto rounded-xl object-contain shadow-inner relative z-10 hover:scale-[1.01] transition-transform duration-500"
                 />
@@ -401,7 +418,7 @@ export default function TerroirTradicao() {
                 {/* Decorative border details inside */}
                 <div className="absolute inset-2 border border-[#BA8D49]/20 rounded-2xl pointer-events-none" />
                 <img
-                  src="/cardapio-almoco-harmonizado-vinhos-campanha-gaucha.jpeg"
+                  src="/1%20Terroir%202.jpeg"
                   alt="Menu Impresso Oficial - 1º Terroir e Tradição no Rancho Branco"
                   className="w-full h-auto rounded-xl object-contain shadow-inner relative z-10"
                 />
@@ -554,6 +571,34 @@ export default function TerroirTradicao() {
             </motion.div>
           </div>
 
+        </div>
+      </section>
+
+      {/* Feedback Section */}
+      <section className="py-16 px-6 md:px-12 bg-[#13214D] text-[#FCF3EA] relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('/1.1.jpeg')] bg-cover bg-center opacity-10" />
+        <div className="max-w-3xl mx-auto relative z-10 text-center space-y-6">
+          <h2 className="text-3xl font-cinzel font-bold mb-4">Como foi sua experiência?</h2>
+          <p className="font-playfair text-lg opacity-80 mb-8 max-w-xl mx-auto">
+            Gostaríamos muito de saber o que você achou do 1º Terroir e Tradição. O seu feedback nos ajuda a criar experiências cada vez mais incríveis.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a 
+              href="/eventos/terroir-e-tradicao/feedback"
+              className="w-full sm:w-auto bg-[#BA8D49] text-white px-8 py-4 rounded-full font-cinzel font-bold text-xs tracking-widest uppercase transition-all shadow-lg hover:bg-[#a07638] flex items-center justify-center gap-2"
+            >
+              <Star size={16} /> Deixar Meu Feedback
+            </a>
+            <a 
+              href={`https://wa.me/?text=${encodeURIComponent('Olá! Gostaríamos de saber como foi sua experiência no 1º Terroir e Tradição. Por favor, deixe seu feedback neste link: https://ranchobranco.com.br/eventos/terroir-e-tradicao/feedback')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto bg-transparent border border-[#BA8D49]/50 text-[#BA8D49] hover:bg-[#BA8D49]/10 px-8 py-4 rounded-full font-cinzel font-bold text-xs tracking-widest uppercase transition-all flex items-center justify-center gap-2"
+              title="Compartilhar link de feedback no WhatsApp"
+            >
+              <Share2 size={16} /> Enviar via WhatsApp
+            </a>
+          </div>
         </div>
       </section>
     </div>

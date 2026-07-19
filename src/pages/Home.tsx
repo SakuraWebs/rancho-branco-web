@@ -5,6 +5,8 @@ import EssenceSection from '../components/EssenceSection';
 import PhotoSubmissionForm from '../components/PhotoSubmissionForm';
 import bgImage from '../assets/gramado-eventos-campo-livramento.webp';
 
+import VirtualTour from '../components/VirtualTour';
+
 export default function Home() {
   const structuredData = {
     "@context": "https://schema.org",
@@ -71,9 +73,14 @@ export default function Home() {
           <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-serif text-white tracking-tighter mb-8 md:mb-10 leading-[1.1] drop-shadow-xl">
             Um refúgio atemporal em meio à natureza
           </h1>
-          <Link to="/orcamento" className="bg-surface-container-lowest text-primary px-8 py-4 md:px-10 md:py-5 rounded-full font-label text-base md:text-lg font-semibold shadow-ambient hover:scale-105 transition-transform inline-block">
-            Comece sua história aqui
-          </Link>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link to="/orcamento" className="bg-surface-container-lowest text-primary px-8 py-4 md:px-10 md:py-5 rounded-full font-label text-base md:text-lg font-semibold shadow-ambient hover:scale-105 transition-transform inline-block w-full sm:w-auto text-center">
+                Comece sua história aqui
+              </Link>
+              <div className="w-full sm:w-auto">
+                <VirtualTour />
+              </div>
+            </div>
         </div>
       </header>
 
