@@ -43,7 +43,7 @@ export default function TerroirFeedback() {
 
   if (isSuccess) {
     return (
-      <div className="min-h-screen bg-[#FCF3EA] flex items-center justify-center p-6 font-sans">
+      <div className="min-h-screen bg-[#FCF3EA] flex items-center justify-center p-6 pt-32 md:pt-48 font-sans">
         <SEO title="Obrigado pelo seu Feedback | Rancho Branco" description="Agradecemos seu feedback sobre o evento 1º Terroir e Tradição." />
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}
@@ -66,7 +66,7 @@ export default function TerroirFeedback() {
   }
 
   return (
-    <div className="bg-[#FCF3EA] text-[#13214D] min-h-screen font-sans pt-24 pb-12 px-4 sm:px-6">
+    <div className="bg-[#FCF3EA] text-[#13214D] min-h-screen font-sans pt-32 md:pt-48 pb-12 px-4 sm:px-6">
       <SEO 
         title="Feedback - 1º Terroir & Tradição | Rancho Branco" 
         description="Deixe seu feedback sobre a experiência enogastronômica 1º Terroir & Tradição no Rancho Branco."

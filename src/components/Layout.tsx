@@ -79,7 +79,8 @@ export default function Layout() {
     '/politicas-de-privacidade', 
     '/termos-de-uso', 
     '/agenda',
-    '/eventos/terroir-e-tradicao'
+    '/eventos/terroir-e-tradicao',
+    '/eventos/terroir-e-tradicao/feedback'
   ].includes(location.pathname);
   const isSolidNav = isScrolled || needsSolidNav;
 
