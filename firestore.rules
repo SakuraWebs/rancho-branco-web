@@ -82,5 +82,10 @@ service cloud.firestore {
     match /agenda_interna/{eventId} {
       allow read, write: if isAdmin();
     }
+    
+    match /terroir_feedback/{feedbackId} {
+      allow create: if true; // Publicly submitted
+      allow read, update, delete: if isAdmin();
+    }
   }
 }
