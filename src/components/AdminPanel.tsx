@@ -626,9 +626,25 @@ export default function AdminPanel() {
                   </>
                 ) : activeTab === 'feedback' ? (
                   <section>
-                    <h3 className="text-sm font-bold uppercase tracking-wider text-gray-400 mb-4 flex items-center gap-2">
-                      <MessageSquareHeart size={16} /> Relatórios de Feedback ({feedbackItems.length})
-                    </h3>
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-sm font-bold uppercase tracking-wider text-gray-400 flex items-center gap-2">
+                        <MessageSquareHeart size={16} /> Relatórios de Feedback ({feedbackItems.length})
+                      </h3>
+                      <button
+                        onClick={() => {
+                          const link = `${window.location.origin}/eventos/terroir-e-tradicao/relatorio`;
+                          navigator.clipboard.writeText(link).then(() => {
+                            alert('Link do relatório copiado! Você pode compartilhar com os parceiros.');
+                          }).catch(err => {
+                            console.error('Falha ao copiar:', err);
+                            prompt('Copie o link abaixo:', link);
+                          });
+                        }}
+                        className="text-xs font-bold bg-primary text-white px-4 py-2 rounded-xl shadow-sm hover:bg-primary/90 transition"
+                      >
+                        Gerar Link Compartilhável
+                      </button>
+                    </div>
                     {feedbackItems.length === 0 ? (
                       <div className="text-center py-12 text-gray-400 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
                         Nenhum feedback recebido ainda.

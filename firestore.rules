@@ -85,7 +85,8 @@ service cloud.firestore {
     
     match /terroir_feedback/{feedbackId} {
       allow create: if true; // Publicly submitted
-      allow read, update, delete: if isAdmin();
+      allow read: if true; // Public for shared reports
+      allow update, delete: if isAdmin();
     }
   }
 }

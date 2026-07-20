@@ -80,7 +80,8 @@ export default function Layout() {
     '/termos-de-uso', 
     '/agenda',
     '/eventos/terroir-e-tradicao',
-    '/eventos/terroir-e-tradicao/feedback'
+    '/eventos/terroir-e-tradicao/feedback',
+    '/eventos/terroir-e-tradicao/relatorio'
   ].includes(location.pathname);
   const isSolidNav = isScrolled || needsSolidNav;
 

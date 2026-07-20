@@ -11,6 +11,7 @@ import Casamentos from './pages/Casamentos';
 import Eventos from './pages/Eventos';
 import TerroirTradicao from './pages/TerroirTradicao';
 import TerroirFeedback from './pages/TerroirFeedback';
+import TerroirReport from './pages/TerroirReport';
 import Galeria from './pages/Galeria';
 import SobreNos from './pages/SobreNos';
 import Contato from './pages/Contato';
@@ -45,6 +46,7 @@ function AppRoutes() {
           <Route path="eventos" element={<Eventos />} />
           <Route path="eventos/terroir-e-tradicao" element={<TerroirTradicao />} />
           <Route path="eventos/terroir-e-tradicao/feedback" element={<TerroirFeedback />} />
+          <Route path="eventos/terroir-e-tradicao/relatorio" element={<TerroirReport />} />
           <Route path="galeria" element={<Galeria />} />
           <Route path="agenda" element={<Agenda />} />
           <Route path="contato" element={<Contato />} />
