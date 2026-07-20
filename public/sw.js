@@ -20,6 +20,11 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+  // Bypass non-GET requests or Firebase API requests (googleapis.com)
+  if (event.request.method !== 'GET' || event.request.url.includes('googleapis.com')) {
+    return;
+  }
+
   // Pass-through fetch for regular online execution while keeping the PWA installable
   // We force cache-busting to ensure updates propagate immediately.
   event.respondWith(
