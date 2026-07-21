@@ -6,7 +6,6 @@
 // atualização forçada.
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
-import GoogleAnalytics from './components/GoogleAnalytics';
 import Home from './pages/Home';
 import Casamentos from './pages/Casamentos';
 import Eventos from './pages/Eventos';
@@ -67,7 +66,6 @@ export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <GoogleAnalytics />
         <AppRoutes />
       </BrowserRouter>
     </AuthProvider>
