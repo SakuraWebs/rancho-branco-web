@@ -328,6 +328,19 @@ export default function Layout() {
             </div>
           </div>
 
+          {/* Cadastur Section */}
+          <div className="pt-8 mb-8 border-t border-white/20 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <a href="https://cadastur.turismo.gov.br/" target="_blank" rel="noopener noreferrer" aria-label="Consulta Cadastur">
+                <img src="/CERTIFICADO_CADASTUR_page-0001.jpg" alt="Selo Cadastur - Ministério do Turismo" className="h-16 w-auto rounded object-cover shadow-sm grayscale hover:grayscale-0 transition-all duration-300" />
+              </a>
+              <div className="text-white/80 text-[10px] sm:text-xs">
+                <p className="font-bold text-white mb-0.5">Rancho Branco | Empresa registrada no Ministério do Turismo</p>
+                <p>Atividade: Organizadora de Eventos | Cadastur: <a href="https://cadastur.turismo.gov.br/" target="_blank" rel="noopener noreferrer" className="hover:text-white underline decoration-white/30 underline-offset-2">57.349.734/0001-06</a></p>
+              </div>
+            </div>
+          </div>
+
           {/* Bottom Section: Copyright & Developer */}
           <div className="pt-8 border-t border-white/20 flex flex-col items-center justify-center gap-1.5 text-[10px] md:text-xs text-white/80 font-light text-center w-full">
             <p className="text-center">

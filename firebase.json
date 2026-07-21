@@ -5,10 +5,12 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
     ]
-  },
-  "firestore": {
-    "database": "ai-studio-93e8a7a2-21da-418e-ae13-3c7146567398",
-    "rules": "firestore.rules"
   }
 }

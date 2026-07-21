@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://ranchobranco.com.br/sitemap.xml

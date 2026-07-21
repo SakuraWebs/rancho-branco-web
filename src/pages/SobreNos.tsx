@@ -66,6 +66,16 @@ export default function SobreNos() {
                   Decidimos que uma energia tão única — uma energia que acolhe e abraça cada visitante — merecia ser compartilhada. Abrimos as portas do Rancho Branco para que ele se torne o cenário dos seus novos inícios. Seja em uma cerimônia grandiosa no campo aberto ou em um jantar íntimo sob a copa das árvores do nosso bosque, o Rancho Branco é a "tela em branco" sofisticada para quem busca celebrar a vida com privacidade e alma.
                 </p>
               </div>
+
+              <div className="bg-primary/5 p-6 md:p-8 rounded-2xl border border-primary/10 mt-12">
+                <h4 className="text-primary font-serif text-2xl mb-3 flex items-center gap-3">
+                  <img src="/CERTIFICADO_CADASTUR_page-0001.jpg" alt="Selo Cadastur" className="h-10 w-auto rounded mix-blend-multiply" />
+                  Garantia de Excelência e Legalidade
+                </h4>
+                <p className="text-primary/80">
+                  O Rancho Branco é uma empresa totalmente regularizada e reconhecida pelo Ministério do Turismo através do selo Cadastur. Isso garante aos nossos clientes, parceiros e fornecedores a certeza de estarem contratando uma organizadora de eventos que cumpre rigorosamente todas as exigências legais, fiscais e de segurança do setor de turismo e eventos no Brasil.
+                </p>
+              </div>
             </div>
           </div>
 

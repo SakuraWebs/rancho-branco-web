@@ -97,9 +97,27 @@ export default function Eventos() {
           <h2 className="text-3xl md:text-5xl font-serif text-primary mb-8 leading-tight">
             A arte de receber bem.
           </h2>
-          <p className="text-lg text-on-surface-variant font-light leading-relaxed">
+          <p className="text-lg text-on-surface-variant font-light leading-relaxed mb-12">
             Seja um aniversário, bodas, formaturas ou confraternizações familiares, o Rancho Branco oferece espaços versáteis que se adaptam ao tamanho e ao estilo da sua celebração. Nossa arquitetura clássica serve como uma tela em branco para a sua criatividade.
           </p>
+
+          <div className="bg-surface p-8 md:p-10 rounded-3xl border border-outline-variant/20 shadow-sm text-left relative overflow-hidden max-w-3xl mx-auto">
+            <div className="absolute -top-10 -right-10 opacity-[0.03] pointer-events-none">
+              <img src="/CERTIFICADO_CADASTUR_page-0001.jpg" alt="Cadastur Background" className="h-64 w-auto mix-blend-multiply grayscale" />
+            </div>
+            <div className="relative z-10">
+              <h3 className="text-2xl font-serif text-primary mb-4">
+                Eventos Corporativos e Institucionais
+              </h3>
+              <p className="text-on-surface-variant font-light leading-relaxed mb-6">
+                <strong>Pronto para Contratos Corporativos e Públicos:</strong> Contamos com registro ativo no Cadastur do Ministério do Turismo como Organizadora de Eventos. Estamos plenamente habilitados para faturamento corporativo, emissão de notas fiscais e participação em processos de concorrência e licitações públicas.
+              </p>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 bg-primary/5 p-4 rounded-xl border border-primary/10 inline-flex">
+                <img src="/CERTIFICADO_CADASTUR_page-0001.jpg" alt="Selo Cadastur" className="h-12 w-auto rounded object-cover shadow-sm mix-blend-multiply" />
+                <span className="text-xs sm:text-sm font-bold text-primary uppercase tracking-wider">Regularidade e Credibilidade Garantidas</span>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Interactive Carousel */}
