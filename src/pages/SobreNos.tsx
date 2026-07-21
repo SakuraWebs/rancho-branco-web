@@ -6,8 +6,9 @@ export default function SobreNos() {
     <>
       <SEO 
         title="Nossa História | Rancho Branco - Espaço de Memórias em Livramento" 
-        description="O Rancho Branco une a solidez histórica de Sant'Ana do Livramento ao acolhimento de um refúgio exclusivo. Uma propriedade particular aberta para celebrações."
+        description="O Rancho Branco une a solidez histórica de Sant'Ana do Livramento ao acolhimento de um refúgio exclusivo. Propriedade certificada pelo CADASTUR aberta para celebrações."
         canonical="https://ranchobranco.com.br/sobre-nos"
+        keywords="história rancho branco, santana do livramento, cadastur, espaço certificado, eventos, história, turismo"
       />
       {/* Hero Section */}
       <header className="relative h-[60vh] flex items-center justify-center pt-24">

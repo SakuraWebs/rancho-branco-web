@@ -12,13 +12,14 @@ export default function Home() {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "name": "Rancho Branco",
+    "description": "O Rancho Branco é um espaço para eventos e casamentos em Santana do Livramento. Estabelecimento certificado pelo Ministério do Turismo (CADASTUR).",
     "image": "https://ranchobranco.com.br/logo.webp",
     "@id": "https://ranchobranco.com.br",
     "url": "https://ranchobranco.com.br",
     "telephone": "+5555999999999",
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "Zona Rural",
+      "streetAddress": "Estrada Robledo Braz, Km 10",
       "addressLocality": "Santana do Livramento",
       "addressRegion": "RS",
       "postalCode": "97570-000",
@@ -46,15 +47,17 @@ export default function Home() {
     "sameAs": [
       "https://www.facebook.com/ranchobranco",
       "https://www.instagram.com/ranchobranco"
-    ]
+    ],
+    "certifications": ["CADASTUR"]
   };
 
   return (
     <>
       <SEO 
         title="Local para Casamentos em Santana do Livramento | Rancho Branco" 
-        description="O Rancho Branco é o melhor local para casamentos em Santana do Livramento. Oferecemos um espaço para eventos corporativos em Santana do Livramento e somos o local ideal para festas e aniversário."
+        description="O Rancho Branco é o local ideal para casamentos e eventos corporativos em Santana do Livramento. Espaço certificado pelo CADASTUR."
         canonical="https://ranchobranco.com.br/"
+        keywords="casamentos, eventos corporativos, festas, santana do livramento, rio grande do sul, rancho branco, cadastur, turismo, certificado"
       />
       <script type="application/ld+json">
         {JSON.stringify(structuredData)}
