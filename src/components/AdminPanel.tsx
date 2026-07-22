@@ -4,9 +4,9 @@ import { ptBR } from 'date-fns/locale';
 import { Link } from 'react-router-dom';
 import { auth, googleProvider, signInWithPopup, signOut } from '../firebase';
 import { useAuth } from '../contexts/AuthContext';
-import { LogIn, LogOut, Shield, Plus, Trash2, Image as ImageIcon, Video, X, LayoutGrid, CalendarDays, MessageSquareHeart, Star, Heart, Download } from 'lucide-react';
+import { LogIn, LogOut, Shield, Plus, Trash2, Image as ImageIcon, Video, X, LayoutGrid, CalendarDays, MessageSquareHeart, Star, Heart } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { toJpeg } from 'html-to-image';
+
 import { db, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp, OperationType, handleFirestoreError, storage } from '../firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
@@ -631,49 +631,27 @@ export default function AdminPanel() {
                       <h3 className="text-sm font-bold uppercase tracking-wider text-gray-400 flex items-center gap-2">
                         <MessageSquareHeart size={16} /> Relatórios de Feedback ({feedbackItems.length})
                       </h3>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={async () => {
-                            const element = document.getElementById('feedback-report-capture');
-                            if (!element) return;
-                            try {
-                              const dataURL = await toJpeg(element, { quality: 0.95, backgroundColor: '#ffffff' });
-                              const link = document.createElement('a');
-                              link.href = dataURL;
-                              link.download = 'relatorio-feedback-rancho-branco.jpg';
-                              link.click();
-                            } catch (err) {
-                              console.error('Falha ao gerar imagem:', err);
-                              alert('Erro ao gerar a imagem do relatório.');
-                            }
-                          }}
-                          className="text-xs font-bold bg-[#BA8D49] text-white px-4 py-2 rounded-xl shadow-sm hover:bg-[#A37B3F] transition flex items-center gap-1"
-                        >
-                          <Download size={14} />
-                          Salvar Imagem (JPG)
-                        </button>
-                        <button
-                          onClick={() => {
-                            const link = `${window.location.origin}/eventos/terroir-e-tradicao/relatorio`;
-                            navigator.clipboard.writeText(link).then(() => {
-                              alert('Link do relatório copiado! Você pode compartilhar com os parceiros.');
-                            }).catch(err => {
-                              console.error('Falha ao copiar:', err);
-                              prompt('Copie o link abaixo:', link);
-                            });
-                          }}
-                          className="text-xs font-bold bg-primary text-white px-4 py-2 rounded-xl shadow-sm hover:bg-primary/90 transition"
-                        >
-                          Gerar Link Compartilhável
-                        </button>
-                      </div>
+                      <button
+                        onClick={() => {
+                          const link = `${window.location.origin}/eventos/terroir-e-tradicao/relatorio`;
+                          navigator.clipboard.writeText(link).then(() => {
+                            alert('Link do relatório copiado! Você pode compartilhar com os parceiros.');
+                          }).catch(err => {
+                            console.error('Falha ao copiar:', err);
+                            prompt('Copie o link abaixo:', link);
+                          });
+                        }}
+                        className="text-xs font-bold bg-primary text-white px-4 py-2 rounded-xl shadow-sm hover:bg-primary/90 transition"
+                      >
+                        Gerar Link Compartilhável
+                      </button>
                     </div>
                     {feedbackItems.length === 0 ? (
                       <div className="text-center py-12 text-gray-400 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
                         Nenhum feedback recebido ainda.
                       </div>
                     ) : (
-                      <div id="feedback-report-capture" className="space-y-8 bg-gray-50/50 p-2 rounded-2xl">
+                      <div className="space-y-8">
                         <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
                           <h4 className="text-sm font-bold text-gray-600 mb-6">Distribuição de Avaliações</h4>
                           <div className="h-64 w-full">

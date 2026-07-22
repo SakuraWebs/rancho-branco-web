@@ -6,8 +6,8 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell
 } from 'recharts';
-import { Star, MessageSquare, ThumbsUp, Heart, Users, Download } from 'lucide-react';
-import { toJpeg } from 'html-to-image';
+import { Star, MessageSquare, ThumbsUp, Heart, Users } from 'lucide-react';
+
 
 interface FeedbackItem {
   id: string;
@@ -89,38 +89,14 @@ export default function TerroirReport() {
       />
       
       <div className="max-w-6xl mx-auto">
-        <div className="flex justify-end mb-4">
-          <button
-            onClick={async () => {
-              const element = document.getElementById('report-capture-area');
-              if (!element) return;
-              try {
-                const dataURL = await toJpeg(element, { quality: 0.95, backgroundColor: '#FCF3EA' });
-                const link = document.createElement('a');
-                link.href = dataURL;
-                link.download = 'relatorio-terroir-tradicao.jpg';
-                link.click();
-              } catch (err) {
-                console.error('Falha ao gerar imagem:', err);
-                alert('Erro ao gerar a imagem do relatório.');
-              }
-            }}
-            className="text-sm font-bold bg-[#13214D] text-white px-5 py-2.5 rounded-full shadow-sm hover:bg-[#13214D]/90 transition flex items-center gap-2"
-          >
-            <Download size={16} />
-            Salvar Relatório (JPG)
-          </button>
-        </div>
-
-        <div id="report-capture-area" className="bg-[#FCF3EA] p-4 md:p-8 rounded-3xl">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center mb-12"
-          >
-            <h1 className="text-4xl md:text-5xl font-serif text-primary mb-4">Relatório de Resultados</h1>
-            <p className="text-lg text-primary/70">1º Terroir & Tradição - Rancho Branco</p>
-          </motion.div>
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-12"
+        >
+          <h1 className="text-4xl md:text-5xl font-serif text-primary mb-4">Relatório de Resultados</h1>
+          <p className="text-lg text-primary/70">1º Terroir & Tradição - Rancho Branco</p>
+        </motion.div>
 
           {totalResponses === 0 ? (
             <div className="text-center py-12 bg-white rounded-3xl shadow-sm">
@@ -251,7 +227,6 @@ export default function TerroirReport() {
             </div>
           </>
         )}
-        </div>
       </div>
     </div>
   );
