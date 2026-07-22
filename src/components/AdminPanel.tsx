@@ -6,7 +6,7 @@ import { auth, googleProvider, signInWithPopup, signOut } from '../firebase';
 import { useAuth } from '../contexts/AuthContext';
 import { LogIn, LogOut, Shield, Plus, Trash2, Image as ImageIcon, Video, X, LayoutGrid, CalendarDays, MessageSquareHeart, Star, Heart, Download } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import html2canvas from 'html2canvas';
+import { toJpeg } from 'html-to-image';
 import { db, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp, OperationType, handleFirestoreError, storage } from '../firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
@@ -637,8 +637,7 @@ export default function AdminPanel() {
                             const element = document.getElementById('feedback-report-capture');
                             if (!element) return;
                             try {
-                              const canvas = await html2canvas(element, { scale: 2, backgroundColor: '#ffffff' });
-                              const dataURL = canvas.toDataURL('image/jpeg', 0.9);
+                              const dataURL = await toJpeg(element, { quality: 0.95, backgroundColor: '#ffffff' });
                               const link = document.createElement('a');
                               link.href = dataURL;
                               link.download = 'relatorio-feedback-rancho-branco.jpg';

@@ -7,7 +7,7 @@ import {
   PieChart, Pie, Cell
 } from 'recharts';
 import { Star, MessageSquare, ThumbsUp, Heart, Users, Download } from 'lucide-react';
-import html2canvas from 'html2canvas';
+import { toJpeg } from 'html-to-image';
 
 interface FeedbackItem {
   id: string;
@@ -95,8 +95,7 @@ export default function TerroirReport() {
               const element = document.getElementById('report-capture-area');
               if (!element) return;
               try {
-                const canvas = await html2canvas(element, { scale: 2, backgroundColor: '#FCF3EA' });
-                const dataURL = canvas.toDataURL('image/jpeg', 0.9);
+                const dataURL = await toJpeg(element, { quality: 0.95, backgroundColor: '#FCF3EA' });
                 const link = document.createElement('a');
                 link.href = dataURL;
                 link.download = 'relatorio-terroir-tradicao.jpg';
