@@ -1,8 +1,15 @@
-node_modules/
-build/
-coverage/
-.DS_Store
+# Logs
+logs
 *.log
-.env*
-!.env.example
-firebase-applet-config.json
+npm-debug.log*
+
+# Pastas de dependências
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Firebase e Cloud Build
+.firebase/
+.firebaserc
+firebase-export.json
