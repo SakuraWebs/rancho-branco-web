@@ -31,7 +31,34 @@ export default function AdminPanel() {
 
   // Feedback state
   const [feedbackItems, setFeedbackItems] = useState<any[]>([]);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   const feedbackRef = React.useRef<HTMLDivElement>(null);
+
+  const filteredFeedbackItems = React.useMemo(() => {
+    return feedbackItems.filter(fb => {
+      if (!startDate && !endDate) return true;
+      if (!fb.createdAt) return false;
+      
+      const itemDate = new Date(fb.createdAt.seconds * 1000);
+      itemDate.setHours(0, 0, 0, 0);
+
+      let isAfterStart = true;
+      let isBeforeEnd = true;
+
+      if (startDate) {
+        const start = new Date(startDate + 'T00:00:00');
+        isAfterStart = itemDate >= start;
+      }
+
+      if (endDate) {
+        const end = new Date(endDate + 'T00:00:00');
+        isBeforeEnd = itemDate <= end;
+      }
+
+      return isAfterStart && isBeforeEnd;
+    });
+  }, [feedbackItems, startDate, endDate]);
 
   const handleExportPDF = async () => {
     if (!feedbackRef.current) return;
@@ -662,37 +689,69 @@ export default function AdminPanel() {
                   </>
                 ) : activeTab === 'feedback' ? (
                   <section>
-                    <div className="flex items-center justify-between mb-4">
+                    <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-6 gap-4">
                       <h3 className="text-sm font-bold uppercase tracking-wider text-gray-400 flex items-center gap-2">
-                        <MessageSquareHeart size={16} /> Relatórios de Feedback ({feedbackItems.length})
+                        <MessageSquareHeart size={16} /> Relatórios de Feedback ({filteredFeedbackItems.length})
                       </h3>
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={handleExportPDF}
-                          className="text-xs font-bold bg-[#BA8D49] text-white px-4 py-2 rounded-xl shadow-sm hover:bg-[#A37B3F] transition flex items-center gap-1"
-                        >
-                          <Download size={14} />
-                          Salvar Relatório (PDF)
-                        </button>
-                        <button
-                          onClick={() => {
-                            const link = `${window.location.origin}/eventos/terroir-e-tradicao/relatorio`;
-                            navigator.clipboard.writeText(link).then(() => {
-                              alert('Link do relatório copiado! Você pode compartilhar com os parceiros.');
-                            }).catch(err => {
-                              console.error('Falha ao copiar:', err);
-                              prompt('Copie o link abaixo:', link);
-                            });
-                          }}
-                          className="text-xs font-bold bg-primary text-white px-4 py-2 rounded-xl shadow-sm hover:bg-primary/90 transition"
-                        >
-                          Gerar Link Compartilhável
-                        </button>
+                      <div className="flex flex-wrap items-center gap-4">
+                        <div className="flex items-center gap-2 bg-white p-1 rounded-xl border border-gray-100 shadow-sm">
+                          <div className="flex items-center gap-2 px-2">
+                            <span className="text-xs text-gray-400 font-medium">Desde:</span>
+                            <input 
+                              type="date" 
+                              value={startDate}
+                              onChange={(e) => setStartDate(e.target.value)}
+                              className="text-xs text-gray-600 outline-none bg-transparent"
+                            />
+                          </div>
+                          <div className="w-px h-4 bg-gray-200"></div>
+                          <div className="flex items-center gap-2 px-2">
+                            <span className="text-xs text-gray-400 font-medium">Até:</span>
+                            <input 
+                              type="date" 
+                              value={endDate}
+                              onChange={(e) => setEndDate(e.target.value)}
+                              className="text-xs text-gray-600 outline-none bg-transparent"
+                            />
+                          </div>
+                          {(startDate || endDate) && (
+                            <button 
+                              onClick={() => { setStartDate(''); setEndDate(''); }}
+                              className="p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                              title="Limpar filtros"
+                            >
+                              <X size={14} />
+                            </button>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={handleExportPDF}
+                            className="text-xs font-bold bg-[#BA8D49] text-white px-4 py-2 rounded-xl shadow-sm hover:bg-[#A37B3F] transition flex items-center gap-1"
+                          >
+                            <Download size={14} />
+                            Salvar Relatório (PDF)
+                          </button>
+                          <button
+                            onClick={() => {
+                              const link = `${window.location.origin}/eventos/terroir-e-tradicao/relatorio`;
+                              navigator.clipboard.writeText(link).then(() => {
+                                alert('Link do relatório copiado! Você pode compartilhar com os parceiros.');
+                              }).catch(err => {
+                                console.error('Falha ao copiar:', err);
+                                prompt('Copie o link abaixo:', link);
+                              });
+                            }}
+                            className="text-xs font-bold bg-primary text-white px-4 py-2 rounded-xl shadow-sm hover:bg-primary/90 transition"
+                          >
+                            Gerar Link Compartilhável
+                          </button>
+                        </div>
                       </div>
                     </div>
-                    {feedbackItems.length === 0 ? (
+                    {filteredFeedbackItems.length === 0 ? (
                       <div className="text-center py-12 text-gray-400 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
-                        Nenhum feedback recebido ainda.
+                        Nenhum feedback encontrado para o período.
                       </div>
                     ) : (
                       <div ref={feedbackRef} className="space-y-8 bg-gray-50/50 p-2 rounded-2xl">
@@ -703,7 +762,7 @@ export default function AdminPanel() {
                               <BarChart
                                 data={[5, 4, 3, 2, 1].map(star => ({
                                   name: `${star} Estrelas`,
-                                  count: feedbackItems.filter(f => f.rating === star).length
+                                  count: filteredFeedbackItems.filter(f => f.rating === star).length
                                 }))}
                                 margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
                               >
@@ -720,7 +779,7 @@ export default function AdminPanel() {
                           </div>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {feedbackItems.map(fb => (
+                          {filteredFeedbackItems.map(fb => (
                           <div key={fb.id} className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col gap-3">
                             <div className="flex items-center justify-between">
                               <span className="font-bold text-gray-800">{fb.name}</span>
