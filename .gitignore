@@ -1,15 +1,8 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-
-# Pastas de dependências
 node_modules/
-dist/
-dist-ssr/
-*.local
-
-# Firebase e Cloud Build
-.firebase/
-.firebaserc
-firebase-export.json
+build/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
+firebase-applet-config.json

@@ -4,7 +4,9 @@ import { ptBR } from 'date-fns/locale';
 import { Link } from 'react-router-dom';
 import { auth, googleProvider, signInWithPopup, signOut } from '../firebase';
 import { useAuth } from '../contexts/AuthContext';
-import { LogIn, LogOut, Shield, Plus, Trash2, Image as ImageIcon, Video, X, LayoutGrid, CalendarDays, MessageSquareHeart, Star, Heart } from 'lucide-react';
+import { LogIn, LogOut, Shield, Plus, Trash2, Image as ImageIcon, Video, X, LayoutGrid, CalendarDays, MessageSquareHeart, Star, Heart, Download } from 'lucide-react';
+import { toPng } from 'html-to-image';
+import jsPDF from 'jspdf';
 import { motion, AnimatePresence } from 'motion/react';
 
 import { db, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp, OperationType, handleFirestoreError, storage } from '../firebase';
@@ -29,6 +31,39 @@ export default function AdminPanel() {
 
   // Feedback state
   const [feedbackItems, setFeedbackItems] = useState<any[]>([]);
+  const feedbackRef = React.useRef<HTMLDivElement>(null);
+
+  const handleExportPDF = async () => {
+    if (!feedbackRef.current) return;
+    try {
+      const dataUrl = await toPng(feedbackRef.current, { quality: 0.95, backgroundColor: '#ffffff' });
+      const pdf = new jsPDF({
+        orientation: 'p',
+        unit: 'mm',
+        format: 'a4'
+      });
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      const margin = 10;
+      
+      const img = new Image();
+      img.src = dataUrl;
+      await new Promise((resolve) => { img.onload = () => resolve(true); });
+      
+      const imgWidth = img.width;
+      const imgHeight = img.height;
+      
+      const ratio = Math.min((pdfWidth - margin * 2) / imgWidth, (pdfHeight - margin * 2) / imgHeight);
+      const finalWidth = imgWidth * ratio;
+      const finalHeight = imgHeight * ratio;
+      
+      pdf.addImage(dataUrl, 'PNG', margin, margin, finalWidth, finalHeight);
+      pdf.save('relatorio-feedback.pdf');
+    } catch (error) {
+      console.error('Falha ao exportar PDF:', error);
+      alert('Erro ao exportar o PDF do relatório.');
+    }
+  };
 
   React.useEffect(() => {
     setIsStandalone(window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone);
@@ -631,27 +666,36 @@ export default function AdminPanel() {
                       <h3 className="text-sm font-bold uppercase tracking-wider text-gray-400 flex items-center gap-2">
                         <MessageSquareHeart size={16} /> Relatórios de Feedback ({feedbackItems.length})
                       </h3>
-                      <button
-                        onClick={() => {
-                          const link = `${window.location.origin}/eventos/terroir-e-tradicao/relatorio`;
-                          navigator.clipboard.writeText(link).then(() => {
-                            alert('Link do relatório copiado! Você pode compartilhar com os parceiros.');
-                          }).catch(err => {
-                            console.error('Falha ao copiar:', err);
-                            prompt('Copie o link abaixo:', link);
-                          });
-                        }}
-                        className="text-xs font-bold bg-primary text-white px-4 py-2 rounded-xl shadow-sm hover:bg-primary/90 transition"
-                      >
-                        Gerar Link Compartilhável
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={handleExportPDF}
+                          className="text-xs font-bold bg-[#BA8D49] text-white px-4 py-2 rounded-xl shadow-sm hover:bg-[#A37B3F] transition flex items-center gap-1"
+                        >
+                          <Download size={14} />
+                          Salvar Relatório (PDF)
+                        </button>
+                        <button
+                          onClick={() => {
+                            const link = `${window.location.origin}/eventos/terroir-e-tradicao/relatorio`;
+                            navigator.clipboard.writeText(link).then(() => {
+                              alert('Link do relatório copiado! Você pode compartilhar com os parceiros.');
+                            }).catch(err => {
+                              console.error('Falha ao copiar:', err);
+                              prompt('Copie o link abaixo:', link);
+                            });
+                          }}
+                          className="text-xs font-bold bg-primary text-white px-4 py-2 rounded-xl shadow-sm hover:bg-primary/90 transition"
+                        >
+                          Gerar Link Compartilhável
+                        </button>
+                      </div>
                     </div>
                     {feedbackItems.length === 0 ? (
                       <div className="text-center py-12 text-gray-400 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
                         Nenhum feedback recebido ainda.
                       </div>
                     ) : (
-                      <div className="space-y-8">
+                      <div ref={feedbackRef} className="space-y-8 bg-gray-50/50 p-2 rounded-2xl">
                         <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
                           <h4 className="text-sm font-bold text-gray-600 mb-6">Distribuição de Avaliações</h4>
                           <div className="h-64 w-full">
