@@ -1,10 +1,42 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Calendar, MapPin, Wine, Utensils, Music, Phone, AlertCircle, ArrowRight, Award, GlassWater, Landmark, Sparkles, Info, Share2, Star, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Calendar, MapPin, Wine, Utensils, Music, Phone, AlertCircle, ArrowRight, Award, GlassWater, Landmark, Sparkles, Info, Share2, Star, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import SEO from '../components/SEO';
 
 export default function TerroirTradicao() {
   const carouselRef = React.useRef<HTMLDivElement>(null);
+  const [lightboxOpen, setLightboxOpen] = React.useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
+
+  const galleryItems = [
+    { type: 'image', src: "/convidados-almoco-harmonizado-vinhos-rancho-branco.jpeg", alt: "Convidados almoço harmonizado vinhos rancho branco" },
+    { type: 'image', src: "/degustacao-azeite-viridi-recepcao-eventos.jpeg", alt: "Degustação azeite viridi recepção eventos" },
+    { type: 'image', src: "/chef-juliano-parrilla-fogo-de-chao-eventos.jpeg", alt: "Chef juliano parrilla fogo de chao eventos" },
+    { type: 'video', src: "/apresentacao-violino-eventos-rancho-branco.mp4", alt: "Apresentação violino" },
+    { type: 'image', src: "/selecao-vinhos-campanha-gaucha-caves-do-pampa.jpeg", alt: "Seleção vinhos campanha gaúcha caves do pampa" },
+    { type: 'image', src: "/decoracao-salao-rustico-casamentos-eventos.jpeg", alt: "Decoração salão rústico casamentos eventos" },
+    { type: 'image', src: "/musica-ao-vivo-eventos-acusticos-fronteira.jpeg", alt: "Música ao vivo eventos acústicos fronteira" },
+    { type: 'image', src: "/fachada-iluminada-salao-rustico-rancho-branco.jpeg", alt: "Fachada iluminada salão rústico rancho branco" }
+  ];
+
+  const openLightbox = (index: number) => {
+    setCurrentImageIndex(index);
+    setLightboxOpen(true);
+  };
+
+  const closeLightbox = () => {
+    setLightboxOpen(false);
+  };
+
+  const prevLightboxItem = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setCurrentImageIndex((prev) => (prev === 0 ? galleryItems.length - 1 : prev - 1));
+  };
+
+  const nextLightboxItem = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setCurrentImageIndex((prev) => (prev === galleryItems.length - 1 ? 0 : prev + 1));
+  };
 
   const scrollCarousel = (direction: 'left' | 'right') => {
     if (carouselRef.current) {
@@ -532,14 +564,24 @@ export default function TerroirTradicao() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-4 pb-8"
             >
-              <img src="/convidados-almoco-harmonizado-vinhos-rancho-branco.jpeg" alt="Convidados almoço harmonizado vinhos rancho branco" className="snap-center shrink-0 w-80 h-96 object-cover rounded-lg shadow-md" />
-              <img src="/degustacao-azeite-viridi-recepcao-eventos.jpeg" alt="Degustação azeite viridi recepção eventos" className="snap-center shrink-0 w-80 h-96 object-cover rounded-lg shadow-md" />
-              <img src="/chef-juliano-parrilla-fogo-de-chao-eventos.jpeg" alt="Chef juliano parrilla fogo de chao eventos" className="snap-center shrink-0 w-80 h-96 object-cover rounded-lg shadow-md" />
-              <video src="/apresentacao-violino-eventos-rancho-branco.mp4" autoPlay loop muted playsInline className="snap-center shrink-0 w-80 h-96 object-cover rounded-lg shadow-md" />
-              <img src="/selecao-vinhos-campanha-gaucha-caves-do-pampa.jpeg" alt="Seleção vinhos campanha gaúcha caves do pampa" className="snap-center shrink-0 w-80 h-96 object-cover rounded-lg shadow-md" />
-              <img src="/decoracao-salao-rustico-casamentos-eventos.jpeg" alt="Decoração salão rústico casamentos eventos" className="snap-center shrink-0 w-80 h-96 object-cover rounded-lg shadow-md" />
-              <img src="/musica-ao-vivo-eventos-acusticos-fronteira.jpeg" alt="Música ao vivo eventos acústicos fronteira" className="snap-center shrink-0 w-80 h-96 object-cover rounded-lg shadow-md" />
-              <img src="/fachada-iluminada-salao-rustico-rancho-branco.jpeg" alt="Fachada iluminada salão rústico rancho branco" className="snap-center shrink-0 w-80 h-96 object-cover rounded-lg shadow-md" />
+              {galleryItems.map((item, index) => (
+                <div 
+                  key={index} 
+                  className="snap-center shrink-0 w-80 h-96 relative cursor-pointer group rounded-lg overflow-hidden shadow-md"
+                  onClick={() => openLightbox(index)}
+                >
+                  <div className="absolute inset-0 bg-[#13214D]/0 group-hover:bg-[#13214D]/20 transition-colors z-10 flex items-center justify-center">
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 text-[#13214D] p-3 rounded-full backdrop-blur-sm shadow-lg">
+                      <Sparkles size={20} />
+                    </div>
+                  </div>
+                  {item.type === 'image' ? (
+                    <img src={item.src} alt={item.alt} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  ) : (
+                    <video src={item.src} autoPlay loop muted playsInline className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  )}
+                </div>
+              ))}
             </motion.div>
 
             <button 
@@ -625,6 +667,71 @@ export default function TerroirTradicao() {
           </div>
         </div>
       </section>
+
+      {/* Lightbox / Gallery Full Screen Modal */}
+      {lightboxOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-md" onClick={closeLightbox}>
+          {/* Close button */}
+          <button 
+            className="absolute top-6 right-6 z-50 text-white/70 hover:text-white bg-black/50 hover:bg-black/80 p-3 rounded-full backdrop-blur-sm transition-all"
+            onClick={closeLightbox}
+            aria-label="Sair"
+          >
+            <X size={24} />
+          </button>
+
+          {/* Previous button */}
+          <button 
+            className="absolute left-4 md:left-8 z-50 text-white/70 hover:text-white bg-black/50 hover:bg-black/80 p-4 rounded-full backdrop-blur-sm transition-all"
+            onClick={prevLightboxItem}
+            aria-label="Imagem Anterior"
+          >
+            <ChevronLeft size={32} />
+          </button>
+
+          {/* Current Media */}
+          <div className="w-full h-full p-4 md:p-12 flex flex-col items-center justify-center" onClick={(e) => e.stopPropagation()}>
+            <motion.div
+              key={currentImageIndex}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3 }}
+              className="relative w-full max-w-5xl max-h-[85vh] flex items-center justify-center"
+            >
+              {galleryItems[currentImageIndex].type === 'image' ? (
+                <img 
+                  src={galleryItems[currentImageIndex].src} 
+                  alt={galleryItems[currentImageIndex].alt} 
+                  className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
+                />
+              ) : (
+                <video 
+                  src={galleryItems[currentImageIndex].src} 
+                  autoPlay 
+                  controls
+                  playsInline 
+                  className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
+                />
+              )}
+            </motion.div>
+            
+            {/* Caption */}
+            <div className="text-white/80 font-playfair mt-6 text-center max-w-2xl px-4">
+              <p className="text-sm md:text-base">{galleryItems[currentImageIndex].alt}</p>
+              <p className="text-xs opacity-50 mt-2">{currentImageIndex + 1} / {galleryItems.length}</p>
+            </div>
+          </div>
+
+          {/* Next button */}
+          <button 
+            className="absolute right-4 md:right-8 z-50 text-white/70 hover:text-white bg-black/50 hover:bg-black/80 p-4 rounded-full backdrop-blur-sm transition-all"
+            onClick={nextLightboxItem}
+            aria-label="Próxima Imagem"
+          >
+            <ChevronRight size={32} />
+          </button>
+        </div>
+      )}
     </div>
   );
 }
