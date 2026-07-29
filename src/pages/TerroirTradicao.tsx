@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { Calendar, MapPin, Wine, Utensils, Music, Phone, AlertCircle, ArrowRight, Award, GlassWater, Landmark, Sparkles, Info, Share2, Star, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import SEO from '../components/SEO';
 
 export default function TerroirTradicao() {
+  const [searchParams] = useSearchParams();
   const carouselRef = React.useRef<HTMLDivElement>(null);
   const [lightboxOpen, setLightboxOpen] = React.useState(false);
   const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
@@ -18,6 +20,17 @@ export default function TerroirTradicao() {
     { type: 'image', src: "/musica-ao-vivo-eventos-acusticos-fronteira.jpeg", alt: "Música ao vivo eventos acústicos fronteira" },
     { type: 'image', src: "/fachada-iluminada-salao-rustico-rancho-branco.jpeg", alt: "Fachada iluminada salão rústico rancho branco" }
   ];
+
+  useEffect(() => {
+    const mediaParam = searchParams.get('media');
+    if (mediaParam) {
+      const index = galleryItems.findIndex(item => item.src === `/${mediaParam}`);
+      if (index !== -1) {
+        setCurrentImageIndex(index);
+        setLightboxOpen(true);
+      }
+    }
+  }, [searchParams]);
 
   const openLightbox = (index: number) => {
     setCurrentImageIndex(index);
@@ -716,9 +729,19 @@ export default function TerroirTradicao() {
             </motion.div>
             
             {/* Caption */}
-            <div className="text-white/80 font-playfair mt-6 text-center max-w-2xl px-4">
+            <div className="text-white/80 font-playfair mt-6 text-center max-w-2xl px-4 flex flex-col items-center">
               <p className="text-sm md:text-base">{galleryItems[currentImageIndex].alt}</p>
-              <p className="text-xs opacity-50 mt-2">{currentImageIndex + 1} / {galleryItems.length}</p>
+              <div className="flex items-center gap-4 mt-4">
+                <span className="text-xs opacity-50">{currentImageIndex + 1} / {galleryItems.length}</span>
+                <a 
+                  href={`https://wa.me/?text=${encodeURIComponent(`Olha que lindo o evento Terroir e Tradição no Rancho Branco: https://ranchobranco.com.br/eventos/terroir-e-tradicao?media=${galleryItems[currentImageIndex].src.replace('/', '')}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-[#25D366] hover:bg-[#128C7E] text-white px-4 py-2 rounded-full font-cinzel font-bold text-xs tracking-wider uppercase transition-all shadow-lg flex items-center gap-2"
+                >
+                  <Share2 size={14} /> WhatsApp
+                </a>
+              </div>
             </div>
           </div>
 
