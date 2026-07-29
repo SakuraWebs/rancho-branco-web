@@ -1,9 +1,21 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Calendar, MapPin, Wine, Utensils, Music, Phone, AlertCircle, ArrowRight, Award, GlassWater, Landmark, Sparkles, Info, Share2, Star } from 'lucide-react';
+import { Calendar, MapPin, Wine, Utensils, Music, Phone, AlertCircle, ArrowRight, Award, GlassWater, Landmark, Sparkles, Info, Share2, Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import SEO from '../components/SEO';
 
 export default function TerroirTradicao() {
+  const carouselRef = React.useRef<HTMLDivElement>(null);
+
+  const scrollCarousel = (direction: 'left' | 'right') => {
+    if (carouselRef.current) {
+      const scrollAmount = 336; // w-80 (320px) + gap-4 (16px)
+      carouselRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   const menuSteps = [
     {
       step: "1º Passo",
@@ -47,13 +59,13 @@ export default function TerroirTradicao() {
     }
   ];
 
-  const whatsappUrl = "https://wa.me/5555999195460?text=Ol%C3%A1!%20Gostaria%20de%20reservar%20uma%20vaga%20para%20o%201%C2%BA%20Terroir%20%26%20Tradi%C3%A7%C3%A3o%20no%20Rancho%20Branco.";
+  const whatsappUrl = "https://wa.me/5555999195460?text=Ol%C3%A1!%20Vi%20a%20galeria%20do%20evento%20Terroir%20e%20Tradi%C3%A7%C3%A3o%20e%20gostaria%20de%20solicitar%20um%20or%C3%A7amento.";
 
   return (
     <div className="bg-[#FCF3EA] text-[#13214D] min-h-screen font-sans">
       <SEO 
         title="1º Terroir & Tradição - Evento de Enogastronomia | Rancho Branco" 
-        description="Venha vivenciar uma experiência enogastronômica inesquecível no dia 25 de Julho de 2026 no Rancho Branco. Menu em 5 passos harmonizado com vinhos finos das Caves do Pampa."
+        description="O evento foi uma experiência enogastronômica inesquecível realizada no dia 25 de Julho de 2026 no Rancho Branco. Relembre o menu em 5 passos harmonizado com vinhos finos das Caves do Pampa."
         canonical="https://ranchobranco.com.br/eventos/terroir-e-tradicao"
       />
 
@@ -70,6 +82,13 @@ export default function TerroirTradicao() {
         .font-playfair {
           font-family: 'Playfair Display', serif;
         }
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
       `}} />
 
       {/* Hero Section - Split Layout */}
@@ -83,23 +102,6 @@ export default function TerroirTradicao() {
             {/* Left Column: Elegant Copy & Details */}
             <div className="lg:col-span-7 space-y-8">
               <div className="space-y-4">
-                <motion.div
-                  initial={{ opacity: 0, height: 0, marginBottom: 0 }}
-                  animate={{ opacity: 1, height: 'auto', marginBottom: 16 }}
-                  transition={{ duration: 0.8, delay: 0.5, type: 'spring' }}
-                  className="overflow-hidden"
-                >
-                  <div className="bg-[#a33845]/10 border border-[#a33845]/30 rounded-2xl p-4 flex gap-3 items-start sm:items-center text-[#13214D]">
-                    <div className="p-2 bg-[#a33845] rounded-full text-white shrink-0 mt-0.5 sm:mt-0">
-                      <Info size={16} />
-                    </div>
-                    <div className="font-playfair text-sm leading-snug">
-                      <strong className="font-cinzel text-[#a33845] block sm:inline mr-1">Nova Data!</strong> 
-                      Devido a advertências meteorológicas de tormentas severas, o evento foi <strong>adiado para o sábado, 25 de Julho</strong>, garantindo o máximo conforto e a segurança de todos.
-                    </div>
-                  </div>
-                </motion.div>
-
                 <motion.div 
                   initial={{ opacity: 0, y: -15 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -132,7 +134,7 @@ export default function TerroirTradicao() {
                 transition={{ duration: 0.8, delay: 0.2 }}
                 className="text-lg md:text-xl text-[#13214D]/80 font-playfair font-light leading-relaxed text-justify"
               >
-                Venha viver um almoço harmonizado único com vinhos selecionados da Campanha Gaúcha, azeites de oliva finos e cortes nobres do Pampa, em uma curadoria especial realizada pela equipe de sommeliers da <strong>Caves do Pampa</strong> e chefs residentes.
+                O 1º Terroir e Tradição foi uma experiência enogastronômica inesquecível, que reuniu vinhos selecionados da Campanha Gaúcha, azeites de oliva finos e cortes nobres do Pampa, em uma curadoria especial realizada pela equipe de sommeliers da <strong>Caves do Pampa</strong> e chefs residentes.
               </motion.p>
 
               {/* Event Metadata Cards */}
@@ -200,13 +202,13 @@ export default function TerroirTradicao() {
                   rel="noopener noreferrer"
                   className="bg-[#a33845] hover:bg-[#4a121a] text-white px-8 py-4 rounded-full font-cinzel font-bold text-xs tracking-widest uppercase transition-all shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center justify-center gap-2"
                 >
-                  <Phone size={16} /> Reservar via WhatsApp
+                  <Phone size={16} /> Realize seu evento no Rancho Branco
                 </a>
                 <a 
                   href="#cardapio"
                   className="bg-white hover:bg-[#f6e5d4] text-[#13214D] border border-[#13214D]/20 px-8 py-4 rounded-full font-cinzel font-bold text-xs tracking-widest uppercase transition-all flex items-center justify-center gap-2"
                 >
-                  Ver Cardápio <ArrowRight size={14} />
+                  Relembre o Cardápio <ArrowRight size={14} />
                 </a>
               </motion.div>
             </div>
@@ -400,7 +402,7 @@ export default function TerroirTradicao() {
             <h2 className="text-4xl md:text-6xl font-cinzel text-[#13214D] font-bold">O Almoço em 5 Passos</h2>
             <div className="w-24 h-[1.5px] bg-[#BA8D49] mx-auto mt-6" />
             <p className="font-playfair text-lg text-[#13214D]/70 max-w-2xl mx-auto">
-              Cada passo foi concebido para expressar a tipicidade do nosso terroir gaúcho, unindo os chefs à taça.
+              Cada passo foi concebido para expressar a tipicidade do nosso terroir gaúcho, unindo os chefs à taça. Relembre o cardápio exclusivo assinado por nossos chefs.
             </p>
           </div>
 
@@ -496,7 +498,62 @@ export default function TerroirTradicao() {
         </div>
       </section>
 
-      {/* Pricing & Reservation Block */}
+      {/* Como foi o 1º Terroir & Tradição */}
+      <section className="py-20 bg-white border-b border-[#13214D]/5">
+        <div className="max-w-7xl mx-auto space-y-12">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center space-y-4 px-6"
+          >
+            <span className="text-[#a33845] font-cinzel text-xs font-bold tracking-widest uppercase block">Galeria</span>
+            <h2 className="text-3xl md:text-5xl font-cinzel text-[#13214D] font-bold">Como foi o 1º Terroir & Tradição</h2>
+            <div className="w-16 h-[1.5px] bg-[#BA8D49] mx-auto" />
+            <p className="font-playfair text-[#13214D]/80 text-lg leading-relaxed max-w-2xl mx-auto">
+              Reviva os melhores momentos de um evento que celebrou a nossa terra, com gastronomia de excelência e harmonizações surpreendentes.
+            </p>
+          </motion.div>
+          
+          <div className="relative group px-2 sm:px-6">
+            <button 
+              onClick={() => scrollCarousel('left')}
+              className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white text-[#13214D] p-2 rounded-full shadow-lg opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity backdrop-blur-sm"
+              aria-label="Anterior"
+            >
+              <ChevronLeft size={24} />
+            </button>
+
+            <motion.div 
+              ref={carouselRef}
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-4 pb-8"
+            >
+              <img src="/convidados-almoco-harmonizado-vinhos-rancho-branco.jpeg" alt="Convidados almoço harmonizado vinhos rancho branco" className="snap-center shrink-0 w-80 h-96 object-cover rounded-lg shadow-md" />
+              <img src="/degustacao-azeite-viridi-recepcao-eventos.jpeg" alt="Degustação azeite viridi recepção eventos" className="snap-center shrink-0 w-80 h-96 object-cover rounded-lg shadow-md" />
+              <img src="/chef-juliano-parrilla-fogo-de-chao-eventos.jpeg" alt="Chef juliano parrilla fogo de chao eventos" className="snap-center shrink-0 w-80 h-96 object-cover rounded-lg shadow-md" />
+              <video src="/apresentacao-violino-eventos-rancho-branco.mp4" autoPlay loop muted playsInline className="snap-center shrink-0 w-80 h-96 object-cover rounded-lg shadow-md" />
+              <img src="/selecao-vinhos-campanha-gaucha-caves-do-pampa.jpeg" alt="Seleção vinhos campanha gaúcha caves do pampa" className="snap-center shrink-0 w-80 h-96 object-cover rounded-lg shadow-md" />
+              <img src="/decoracao-salao-rustico-casamentos-eventos.jpeg" alt="Decoração salão rústico casamentos eventos" className="snap-center shrink-0 w-80 h-96 object-cover rounded-lg shadow-md" />
+              <img src="/musica-ao-vivo-eventos-acusticos-fronteira.jpeg" alt="Música ao vivo eventos acústicos fronteira" className="snap-center shrink-0 w-80 h-96 object-cover rounded-lg shadow-md" />
+              <img src="/fachada-iluminada-salao-rustico-rancho-branco.jpeg" alt="Fachada iluminada salão rústico rancho branco" className="snap-center shrink-0 w-80 h-96 object-cover rounded-lg shadow-md" />
+            </motion.div>
+
+            <button 
+              onClick={() => scrollCarousel('right')}
+              className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white text-[#13214D] p-2 rounded-full shadow-lg opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity backdrop-blur-sm"
+              aria-label="Próximo"
+            >
+              <ChevronRight size={24} />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Event Realization Block */}
       <section className="py-24 px-6 md:px-12 lg:px-24 bg-gradient-to-b from-[#FCF3EA] to-[#dfd1c3]/30 relative overflow-hidden">
         <div className="max-w-4xl mx-auto bg-white rounded-3xl p-8 sm:p-16 shadow-2xl border border-white relative overflow-hidden">
           
@@ -507,55 +564,25 @@ export default function TerroirTradicao() {
           <div className="absolute bottom-4 right-4 w-12 h-12 border-b-2 border-r-2 border-[#BA8D49]/30 rounded-br-xl pointer-events-none" />
 
           <div className="text-center space-y-6">
-            <motion.div 
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="flex items-center justify-center gap-2 text-[#a33845]"
-            >
-              <AlertCircle size={18} />
-              <span className="font-cinzel text-xs font-bold tracking-widest uppercase">
-                Apenas 1º Lote - Vagas Limitadas
-              </span>
-            </motion.div>
-
             <motion.h2 
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className="text-3xl sm:text-5xl font-cinzel text-[#13214D] font-bold"
             >
-              Reserve Seu Lugar no Banquete
+              Realize Seu Evento no Rancho Branco
             </motion.h2>
 
             <p className="font-playfair text-lg text-[#13214D]/75 max-w-xl mx-auto">
-              As reservas estão sendo organizadas exclusivamente pela <strong>Agência Corticeiras</strong>. Garanta sua participação neste dia festivo de sabores e alta gastronomia.
+              Transforme a sua comemoração ou encontro corporativo em um momento inesquecível em nosso recanto de paz, emoldurado pela natureza.
             </p>
-
-            {/* Price Box */}
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="bg-[#FCF3EA] rounded-2xl p-6 sm:p-8 max-w-sm mx-auto border border-[#BA8D49]/20 shadow-sm"
-            >
-              <span className="text-[10px] uppercase font-cinzel tracking-wider font-bold text-[#13214D]/60 block mb-1">
-                Valor do Convite Individual
-              </span>
-              <span className="text-4xl sm:text-5xl font-cinzel font-bold text-[#13214D] block">
-                R$ 275,00
-              </span>
-              <span className="text-[11px] font-playfair italic text-[#a33845] mt-2 block font-medium">
-                Almoço em 5 passos com harmonização inclusa.
-              </span>
-            </motion.div>
 
             {/* Real WhatsApp Reservation Link */}
             <motion.div 
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="space-y-4 pt-4 flex flex-col items-center"
+              className="space-y-4 pt-8 flex flex-col items-center"
             >
               <a 
                 href={whatsappUrl}
@@ -563,11 +590,8 @@ export default function TerroirTradicao() {
                 rel="noopener noreferrer"
                 className="w-full sm:w-auto bg-[#a33845] hover:bg-[#4a121a] text-white px-10 py-5 rounded-full font-cinzel font-bold text-xs tracking-widest uppercase transition-all shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center justify-center gap-2"
               >
-                <Phone size={16} /> Chamar Agência Corticeiras no WhatsApp
+                <Phone size={16} /> Solicitar Orçamento
               </a>
-              <span className="text-xs font-playfair text-[#13214D]/50 block">
-                Dúvidas ou restrições alimentares? Fale com nosso atendimento no número: +55 (55) 99919-5460.
-              </span>
             </motion.div>
           </div>
 
