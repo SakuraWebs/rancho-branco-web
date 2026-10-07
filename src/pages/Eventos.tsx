@@ -91,6 +91,90 @@ export default function Eventos() {
         </div>
       </header>
 
+      {/* Eventos Especiais / Assinatura */}
+      <section className="py-16 md:py-24 px-6 md:px-12 lg:px-24 bg-white relative z-10 -mt-10 md:-mt-16 rounded-t-[2.5rem] md:rounded-t-[4rem]">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <span className="text-primary/60 font-bold tracking-[0.2em] text-xs uppercase mb-3 block">Experiências Rancho Branco</span>
+            <h2 className="text-3xl md:text-5xl font-serif text-primary">Nossos Eventos</h2>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Evento Atual - 2º Terroir */}
+            <Link to="/eventos/2-terroir-e-tradicao" className="group rounded-3xl overflow-hidden shadow-ambient hover:shadow-lg transition-all duration-300 border border-outline-variant/10 bg-[#FCF3EA] flex flex-col h-full relative">
+              <div className="absolute top-4 right-4 bg-[#a33845] text-white text-xs font-bold px-3 py-1.5 rounded-full z-10 shadow-md">
+                Próximo Evento
+              </div>
+              <div className="aspect-[16/10] overflow-hidden relative">
+                <img 
+                  src="/convite-2-terroir-tradicao-sunset-primavera.jpg" 
+                  alt="2º Terroir e Tradição - Sunset de Primavera" 
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                <div className="absolute bottom-4 left-4 text-white">
+                  <p className="font-serif text-2xl font-medium mb-1">2º Terroir & Tradição</p>
+                  <p className="text-sm font-light opacity-90">Sunset de Primavera</p>
+                </div>
+              </div>
+              <div className="p-6 md:p-8 flex flex-col flex-1">
+                <div className="flex flex-col gap-3 mb-6 flex-1">
+                  <div className="flex items-center gap-3 text-on-surface-variant text-sm">
+                    <span className="w-5 h-5 flex items-center justify-center bg-primary/5 rounded-full text-primary">📅</span>
+                    <span>17 de Outubro de 2026 às 11h30</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-on-surface-variant text-sm">
+                    <span className="w-5 h-5 flex items-center justify-center bg-primary/5 rounded-full text-primary">📍</span>
+                    <span>Rancho Branco, Santana do Livramento</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-on-surface-variant text-sm">
+                    <span className="w-5 h-5 flex items-center justify-center bg-[#a33845]/10 rounded-full text-[#a33845]">💳</span>
+                    <span className="font-medium text-[#a33845]">Convite: R$ 249,00</span>
+                  </div>
+                </div>
+                <div className="inline-flex items-center text-primary font-medium group-hover:gap-3 transition-all gap-2 text-sm uppercase tracking-wider">
+                  Garantir Lugar <ChevronRight size={16} />
+                </div>
+              </div>
+            </Link>
+
+            {/* Evento Passado - 1º Terroir */}
+            <Link to="/eventos/terroir-e-tradicao" className="group rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-outline-variant/20 bg-surface flex flex-col h-full relative opacity-90 hover:opacity-100">
+              <div className="absolute top-4 right-4 bg-surface-container-highest text-on-surface-variant text-xs font-bold px-3 py-1.5 rounded-full z-10 shadow-sm">
+                Realizado / Galeria
+              </div>
+              <div className="aspect-[16/10] overflow-hidden relative grayscale-[20%] group-hover:grayscale-0 transition-all duration-500">
+                <img 
+                  src="/1%20Terroir%201.jpeg" 
+                  alt="1º Terroir e Tradição" 
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                <div className="absolute bottom-4 left-4 text-white">
+                  <p className="font-serif text-2xl font-medium mb-1">1º Terroir & Tradição</p>
+                  <p className="text-sm font-light opacity-90">Almoço em 5 Passos</p>
+                </div>
+              </div>
+              <div className="p-6 md:p-8 flex flex-col flex-1">
+                <div className="flex flex-col gap-3 mb-6 flex-1">
+                  <div className="flex items-center gap-3 text-on-surface-variant text-sm">
+                    <span className="w-5 h-5 flex items-center justify-center bg-outline-variant/20 rounded-full text-on-surface-variant">📅</span>
+                    <span>Realizado em 25 de Julho de 2026</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-on-surface-variant text-sm">
+                    <span className="w-5 h-5 flex items-center justify-center bg-outline-variant/20 rounded-full text-on-surface-variant">📸</span>
+                    <span>Veja a galeria de fotos e o cardápio oficial</span>
+                  </div>
+                </div>
+                <div className="inline-flex items-center text-primary font-medium group-hover:gap-3 transition-all gap-2 text-sm uppercase tracking-wider">
+                  Ver como foi <ChevronRight size={16} />
+                </div>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Content Section */}
       <section className="py-24 md:py-32 px-6 md:px-12 lg:px-24 bg-surface-container-low overflow-hidden">
         <div className="max-w-4xl mx-auto text-center mb-16">

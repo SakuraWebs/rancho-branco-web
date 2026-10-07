@@ -64,6 +64,7 @@ export default function Layout() {
       path: '/eventos',
       submenu: [
         { name: 'Todos os Eventos', path: '/eventos' },
+        { name: '2º Terroir & Tradição', path: '/eventos/2-terroir-e-tradicao' },
         { name: '1º Terroir & Tradição', path: '/eventos/terroir-e-tradicao' }
       ]
     },
