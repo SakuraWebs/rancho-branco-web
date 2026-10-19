@@ -5,7 +5,7 @@ import EssenceSection from '../components/EssenceSection';
 import PhotoSubmissionForm from '../components/PhotoSubmissionForm';
 import bgImage from '../assets/gramado-eventos-campo-livramento.webp';
 
-import VirtualTour from '../components/VirtualTour';
+
 
 export default function Home() {
   const structuredData = {
@@ -81,7 +81,7 @@ export default function Home() {
                 Comece sua história aqui
               </Link>
               <div className="w-full sm:w-auto">
-                <VirtualTour />
+               
               </div>
             </div>
         </div>
