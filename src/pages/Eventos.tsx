@@ -100,10 +100,10 @@ export default function Eventos() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Evento Atual - 2º Terroir */}
+            {/* Evento - 2º Terroir */}
             <Link to="/eventos/2-terroir-e-tradicao" className="group rounded-3xl overflow-hidden shadow-ambient hover:shadow-lg transition-all duration-300 border border-outline-variant/10 bg-[#FCF3EA] flex flex-col h-full relative">
               <div className="absolute top-4 right-4 bg-[#a33845] text-white text-xs font-bold px-3 py-1.5 rounded-full z-10 shadow-md">
-                Próximo Evento
+                Realizado / Galeria
               </div>
               <div className="aspect-[16/10] overflow-hidden relative">
                 <img 
@@ -121,19 +121,19 @@ export default function Eventos() {
                 <div className="flex flex-col gap-3 mb-6 flex-1">
                   <div className="flex items-center gap-3 text-on-surface-variant text-sm">
                     <span className="w-5 h-5 flex items-center justify-center bg-primary/5 rounded-full text-primary">📅</span>
-                    <span>17 de Outubro de 2026 às 11h30</span>
+                    <span>Realizado em 17 de Outubro de 2026</span>
                   </div>
                   <div className="flex items-center gap-3 text-on-surface-variant text-sm">
                     <span className="w-5 h-5 flex items-center justify-center bg-primary/5 rounded-full text-primary">📍</span>
                     <span>Rancho Branco, Santana do Livramento</span>
                   </div>
                   <div className="flex items-center gap-3 text-on-surface-variant text-sm">
-                    <span className="w-5 h-5 flex items-center justify-center bg-[#a33845]/10 rounded-full text-[#a33845]">💳</span>
-                    <span className="font-medium text-[#a33845]">Convite: R$ 249,00</span>
+                    <span className="w-5 h-5 flex items-center justify-center bg-[#a33845]/10 rounded-full text-[#a33845]">📸</span>
+                    <span className="font-medium text-[#a33845]">Veja a galeria de fotos e vídeos</span>
                   </div>
                 </div>
                 <div className="inline-flex items-center text-primary font-medium group-hover:gap-3 transition-all gap-2 text-sm uppercase tracking-wider">
-                  Garantir Lugar <ChevronRight size={16} />
+                  Ver como foi <ChevronRight size={16} />
                 </div>
               </div>
             </Link>

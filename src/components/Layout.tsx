@@ -82,7 +82,10 @@ export default function Layout() {
     '/agenda',
     '/eventos/terroir-e-tradicao',
     '/eventos/terroir-e-tradicao/feedback',
-    '/eventos/terroir-e-tradicao/relatorio'
+    '/eventos/terroir-e-tradicao/relatorio',
+    '/eventos/2-terroir-e-tradicao',
+    '/eventos/2-terroir-e-tradicao/feedback',
+    '/eventos/2-terroir-e-tradicao/relatorio'
   ].includes(location.pathname);
   const isSolidNav = isScrolled || needsSolidNav;
 
@@ -114,7 +117,7 @@ export default function Layout() {
                       to={link.path}
                       className={`relative font-serif tracking-tight transition-colors duration-300 flex items-center gap-1.5 ${
                         isSolidNav
-                          ? isActive ? 'text-primary font-medium' : 'text-primary/70 hover:text-primary font-light'
+                          ? isActive ? 'text-[#13214D] font-medium' : 'text-[#13214D]/80 hover:text-[#a33845] font-light'
                           : isActive ? 'text-white font-medium' : 'text-white/80 hover:text-white font-light'
                       }`}
                     >
@@ -123,7 +126,7 @@ export default function Layout() {
                       {isActive && (
                         <motion.div
                           layoutId="desktop-nav-indicator"
-                          className={`absolute -bottom-1 left-0 right-0 h-[2px] rounded-full ${isSolidNav ? 'bg-primary' : 'bg-white'}`}
+                          className={`absolute -bottom-1 left-0 right-0 h-[2px] rounded-full ${isSolidNav ? 'bg-[#a33845]' : 'bg-white'}`}
                           transition={{ type: "spring", stiffness: 300, damping: 30 }}
                         />
                       )}
@@ -137,8 +140,8 @@ export default function Layout() {
                           <Link
                             key={sub.name}
                             to={sub.path}
-                            className={`block px-5 py-2.5 text-sm font-serif transition-colors text-primary hover:bg-[#FCF3EA] ${
-                              isSubActive ? 'font-medium bg-[#FCF3EA]/50 border-l-[3px] border-primary' : 'font-light'
+                            className={`block px-5 py-2.5 text-sm font-serif transition-colors text-[#13214D] hover:text-[#a33845] hover:bg-[#FCF3EA] ${
+                              isSubActive ? 'font-medium bg-[#FCF3EA]/50 border-l-[3px] border-[#a33845] text-[#a33845]' : 'font-light'
                             }`}
                           >
                             {sub.name}
@@ -156,7 +159,7 @@ export default function Layout() {
                   to={link.path}
                   className={`relative font-serif tracking-tight transition-colors duration-300 py-1 ${
                     isSolidNav
-                      ? isActive ? 'text-primary font-medium' : 'text-primary/70 hover:text-primary font-light'
+                      ? isActive ? 'text-[#13214D] font-medium' : 'text-[#13214D]/80 hover:text-[#a33845] font-light'
                       : isActive ? 'text-white font-medium' : 'text-white/80 hover:text-white font-light'
                   }`}
                 >
@@ -164,7 +167,7 @@ export default function Layout() {
                   {isActive && (
                     <motion.div
                       layoutId="desktop-nav-indicator"
-                      className={`absolute -bottom-1 left-0 right-0 h-[2px] rounded-full ${isSolidNav ? 'bg-primary' : 'bg-white'}`}
+                      className={`absolute -bottom-1 left-0 right-0 h-[2px] rounded-full ${isSolidNav ? 'bg-[#a33845]' : 'bg-white'}`}
                       transition={{ type: "spring", stiffness: 300, damping: 30 }}
                     />
                   )}
@@ -181,7 +184,7 @@ export default function Layout() {
 
           {/* Mobile Menu Toggle */}
           <button
-            className={`md:hidden ${isSolidNav ? 'text-primary' : 'text-white'}`}
+            className={`md:hidden ${isSolidNav ? 'text-[#13214D]' : 'text-white'}`}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-menu"
@@ -213,8 +216,8 @@ export default function Layout() {
                           to={link.path}
                           className={`font-serif text-xl transition-all duration-300 flex items-center ${
                             isActive 
-                              ? 'text-primary font-medium pl-4 border-l-[3px] border-primary' 
-                              : 'text-on-surface-variant font-light'
+                              ? 'text-[#13214D] font-medium pl-4 border-l-[3px] border-[#a33845]' 
+                              : 'text-on-surface-variant font-light hover:text-[#a33845]'
                           }`}
                         >
                           {link.name}
@@ -228,7 +231,7 @@ export default function Layout() {
                                 key={sub.name}
                                 to={sub.path}
                                 className={`font-serif text-base transition-all duration-300 ${
-                                  isSubActive ? 'text-primary font-medium' : 'text-on-surface-variant/80 font-light'
+                                  isSubActive ? 'text-[#a33845] font-medium' : 'text-on-surface-variant/80 font-light hover:text-[#a33845]'
                                 }`}
                               >
                                 {sub.name}
@@ -246,8 +249,8 @@ export default function Layout() {
                       to={link.path}
                       className={`font-serif text-xl transition-all duration-300 flex items-center ${
                         isActive 
-                          ? 'text-primary font-medium pl-4 border-l-[3px] border-primary' 
-                          : 'text-on-surface-variant font-light hover:pl-2'
+                          ? 'text-[#13214D] font-medium pl-4 border-l-[3px] border-[#a33845]' 
+                          : 'text-on-surface-variant font-light hover:text-[#a33845] hover:pl-2'
                       }`}
                     >
                       {link.name}

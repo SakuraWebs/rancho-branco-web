@@ -12,14 +12,13 @@ export default function SegundoTerroirTradicao() {
   const [lightboxSource, setLightboxSource] = React.useState<'gallery' | 'experiencia'>('gallery');
 
   const galleryItems = [
-    { type: 'image', src: "/convidados-almoco-harmonizado-vinhos-rancho-branco.jpeg", alt: "Convidados almoço harmonizado vinhos rancho branco" },
-    { type: 'image', src: "/degustacao-azeite-viridi-recepcao-eventos.jpeg", alt: "Degustação azeite viridi recepção eventos" },
-    { type: 'image', src: "/chef-juliano-parrilla-fogo-de-chao-eventos.jpeg", alt: "Chef juliano parrilla fogo de chao eventos" },
-    { type: 'video', src: "/apresentacao-violino-eventos-rancho-branco.mp4", alt: "Apresentação violino" },
-    { type: 'image', src: "/selecao-vinhos-campanha-gaucha-caves-do-pampa.jpeg", alt: "Seleção vinhos campanha gaúcha caves do pampa" },
-    { type: 'image', src: "/decoracao-salao-rustico-casamentos-eventos.jpeg", alt: "Decoração salão rústico casamentos eventos" },
-    { type: 'image', src: "/musica-ao-vivo-eventos-acusticos-fronteira.jpeg", alt: "Música ao vivo eventos acústicos fronteira" },
-    { type: 'image', src: "/fachada-iluminada-salao-rustico-rancho-branco.jpeg", alt: "Fachada iluminada salão rústico rancho branco" }
+    { type: 'video', src: '/apresentacao-lirica-ao-vivo-deck-rancho-branco.mp4', alt: 'Apresentação lírica de Getúlio Vares no deck do Rancho Branco' },
+    { type: 'image', src: '/carlos-lukes-sommelier-caves-do-pampa-rancho-branco.jpeg', alt: 'Carlos Lukes sommelier Caves do Pampa apresentando vinhos' },
+    { type: 'image', src: '/mesa-gastronomica-recepcao-terroir-e-tradicao-rancho-branco.jpeg', alt: 'Mesa gastronômica completa de recepção do 2º Terroir' },
+    { type: 'image', src: '/figos-com-roquefort-gastronomia-clenia-reis-rancho-branco.jpeg', alt: 'Figos recheados com roquefort pela Chef Clenia Reis' },
+    { type: 'image', src: '/mesa-antepastos-buffet-sunset-primavera-rancho-branco.jpeg', alt: 'Buffet de antepastos e flores no Sunset de Primavera' },
+    { type: 'image', src: '/tartaletes-presunto-parma-alta-gastronomia-livramento.jpeg', alt: 'Tartaletes de presunto cru e queijos finos' },
+    { type: 'image', src: '/mesa-degustacao-favo-mel-queijos-rancho-branco.jpeg', alt: 'Mesa de degustação com favo de mel puro e queijos selecionados' }
   ];
 
   const experienciaItems = [
@@ -72,7 +71,7 @@ export default function SegundoTerroirTradicao() {
     }
   };
 
-  const whatsappUrl = "https://wa.me/5555999195460?text=Ol%C3%A1!%20Vim%20pelo%20site%20do%20Rancho%20Branco%20e%20gostaria%20de%20reservar%20meu%20convite%20para%20o%202%C2%BA%20Terroir%20%26%20Tradi%C3%A7%C3%A3o%20(Sunset%20de%20Primavera).";
+  const whatsappUrl = "https://wa.me/5555999195460?text=Ol%C3%A1!%20Vi%20as%20fotos%20do%202%C2%BA%20Terroir%20e%20Tradi%C3%A7%C3%A3o%20e%20gostaria%20de%20solicitar%20um%20or%C3%A7amento.";
 
   const currentItems = lightboxSource === 'gallery' ? galleryItems : experienciaItems;
 
@@ -80,7 +79,7 @@ export default function SegundoTerroirTradicao() {
     <div className="bg-[#FCF3EA] text-[#13214D] min-h-screen font-sans">
       <SEO 
         title="2º Terroir & Tradição - Sunset de Primavera | Rancho Branco" 
-        description="Garanta seu lugar no Sunset de Primavera no Rancho Branco em 17 de Outubro de 2026. Alta gastronomia por Clenia Reis e vinhos da Campanha Gaúcha pela Caves do Pampa."
+        description="O 2º Terroir e Tradição (Sunset de Primavera) foi uma experiência enogastronômica inesquecível realizada em 17 de Outubro de 2026 no Rancho Branco. Relembre os melhores momentos com alta gastronomia por Clenia Reis e vinhos da Campanha Gaúcha pela Caves do Pampa."
         canonical="https://ranchobranco.com.br/eventos/2-terroir-e-tradicao"
       />
 
@@ -149,7 +148,7 @@ export default function SegundoTerroirTradicao() {
                 transition={{ duration: 0.8, delay: 0.2 }}
                 className="text-lg md:text-xl text-[#13214D]/80 font-playfair font-light leading-relaxed text-justify"
               >
-                Uma experiência exclusiva que celebra a alta gastronomia, os vinhos da Campanha Gaúcha e os grandes encontros da primavera. Sob a condução gastronômica de Clenia Reis, curadoria de rótulos da Caves do Pampa e acolhimento da Agência Corticeiras, viva uma tarde memorável no cenário único do Rancho Branco.
+                O 2º Terroir e Tradição (Sunset de Primavera) foi uma experiência enogastronômica inesquecível, que celebrou a alta gastronomia, os vinhos da Campanha Gaúcha e os grandes encontros da primavera. Sob a condução gastronômica de Clenia Reis, curadoria de rótulos da Caves do Pampa e acolhimento da Agência Corticeiras, vivemos uma tarde memorável no cenário do Rancho Branco.
               </motion.p>
 
               {/* Event Metadata Cards */}
@@ -186,7 +185,7 @@ export default function SegundoTerroirTradicao() {
                     <Sparkles size={20} />
                   </div>
                   <div>
-                    <span className="text-[10px] uppercase tracking-wider font-cinzel font-bold text-[#13214D]/55 block">Edição Especial</span>
+                    <span className="text-[10px] uppercase tracking-wider font-cinzel font-bold text-[#13214D]/55 block">Formato</span>
                     <span className="font-playfair text-base font-bold text-[#13214D]">Sunset de Primavera</span>
                     <span className="text-xs text-[#13214D]/70 block">Experiência ao ar livre e salão</span>
                   </div>
@@ -197,9 +196,9 @@ export default function SegundoTerroirTradicao() {
                     <Award size={20} />
                   </div>
                   <div>
-                    <span className="text-[10px] uppercase tracking-wider font-cinzel font-bold text-[#13214D]/55 block">Investimento</span>
-                    <span className="font-playfair text-base font-bold text-[#13214D]">Convite R$ 249,00</span>
-                    <span className="text-xs text-[#13214D]/70 block">Vagas estritamente limitadas</span>
+                    <span className="text-[10px] uppercase tracking-wider font-cinzel font-bold text-[#13214D]/55 block">Experiência</span>
+                    <span className="font-playfair text-base font-bold text-[#13214D]">Alta Gastronomia &amp; Vinhos</span>
+                    <span className="text-xs text-[#13214D]/70 block">Rótulos premiados e antepastos finos</span>
                   </div>
                 </div>
               </motion.div>
@@ -217,13 +216,13 @@ export default function SegundoTerroirTradicao() {
                   rel="noopener noreferrer"
                   className="bg-[#a33845] hover:bg-[#4a121a] text-white px-8 py-4 rounded-full font-cinzel font-bold text-xs tracking-widest uppercase transition-all shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center justify-center gap-2"
                 >
-                  <Phone size={16} /> Garantir Meu Lugar (R$ 249,00)
+                  <Phone size={16} /> Realize seu evento no Rancho Branco
                 </a>
                 <a 
-                  href="#experiencia"
+                  href="#galeria"
                   className="bg-white hover:bg-[#f6e5d4] text-[#13214D] border border-[#13214D]/20 px-8 py-4 rounded-full font-cinzel font-bold text-xs tracking-widest uppercase transition-all flex items-center justify-center gap-2"
                 >
-                  Conhecer a Experiência <ArrowRight size={14} />
+                  Ver Como Foi <ArrowRight size={14} />
                 </a>
               </motion.div>
             </div>
@@ -430,8 +429,8 @@ export default function SegundoTerroirTradicao() {
         </div>
       </section>
 
-      {/* Como foi o 1º Terroir & Tradição (Carousel) */}
-      <section className="py-20 bg-[#FCF3EA] border-b border-[#13214D]/5">
+      {/* Como foi o 2º Terroir & Tradição (Carousel) */}
+      <section id="galeria" className="py-20 bg-[#FCF3EA] border-b border-[#13214D]/5">
         <div className="max-w-7xl mx-auto space-y-12">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -440,10 +439,10 @@ export default function SegundoTerroirTradicao() {
             className="text-center space-y-4 px-6"
           >
             <span className="text-[#a33845] font-cinzel text-xs font-bold tracking-widest uppercase block">Galeria</span>
-            <h2 className="text-3xl md:text-5xl font-cinzel text-[#13214D] font-bold">Veja como foi a 1ª Edição no Rancho Branco</h2>
+            <h2 className="text-3xl md:text-5xl font-cinzel text-[#13214D] font-bold">Como foi o 2º Terroir &amp; Tradição</h2>
             <div className="w-16 h-[1.5px] bg-[#BA8D49] mx-auto" />
             <p className="font-playfair text-[#13214D]/80 text-lg leading-relaxed max-w-2xl mx-auto">
-              Reviva os melhores momentos de um evento que celebrou a nossa terra, com gastronomia de excelência e harmonizações surpreendentes.
+              Reviva os melhores momentos do Sunset de Primavera, com a alta gastronomia de Clenia Reis, a seleção da Caves do Pampa e a marcante apresentação lírica de Getúlio Vares ao entardecer.
             </p>
           </motion.div>
           
@@ -495,8 +494,8 @@ export default function SegundoTerroirTradicao() {
         </div>
       </section>
 
-      {/* Event Realization Block / Booking CTA */}
-      <section className="py-24 px-6 md:px-12 lg:px-24 bg-gradient-to-b from-white to-[#dfd1c3]/30 relative overflow-hidden">
+      {/* Event Realization Block */}
+      <section className="py-24 px-6 md:px-12 lg:px-24 bg-gradient-to-b from-[#FCF3EA] to-[#dfd1c3]/30 relative overflow-hidden">
         <div className="max-w-4xl mx-auto bg-white rounded-3xl p-8 sm:p-16 shadow-2xl border border-white relative overflow-hidden">
           
           {/* Elegant gold corner borders */}
@@ -506,20 +505,17 @@ export default function SegundoTerroirTradicao() {
           <div className="absolute bottom-4 right-4 w-12 h-12 border-b-2 border-r-2 border-[#BA8D49]/30 rounded-br-xl pointer-events-none" />
 
           <div className="text-center space-y-6">
-            <span className="text-[#a33845] font-cinzel text-sm font-bold tracking-widest uppercase block mb-4">
-              Convite Individual: R$ 249,00 • Vagas Limitadas
-            </span>
             <motion.h2 
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className="text-3xl sm:text-5xl font-cinzel text-[#13214D] font-bold"
             >
-              Garanta Seu Lugar no Sunset de Primavera
+              Realize Seu Evento no Rancho Branco
             </motion.h2>
 
-            <p className="font-playfair text-lg text-[#13214D]/75 max-w-2xl mx-auto">
-              As reservas estão sendo organizadas exclusivamente pela Agência Corticeiras (+55 55 99919-5460). Esperamos você no dia 17 de Outubro às 11h30 para brindar a primavera.
+            <p className="font-playfair text-lg text-[#13214D]/75 max-w-xl mx-auto">
+              Transforme a sua comemoração ou encontro corporativo em um momento inesquecível em nosso recanto de paz, emoldurado pela natureza.
             </p>
 
             {/* Real WhatsApp Reservation Link */}
@@ -535,7 +531,7 @@ export default function SegundoTerroirTradicao() {
                 rel="noopener noreferrer"
                 className="w-full sm:w-auto bg-[#a33845] hover:bg-[#4a121a] text-white px-10 py-5 rounded-full font-cinzel font-bold text-xs tracking-widest uppercase transition-all shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center justify-center gap-2"
               >
-                <Phone size={16} /> Reservar via WhatsApp
+                <Phone size={16} /> Solicitar Orçamento
               </a>
             </motion.div>
           </div>
@@ -624,7 +620,7 @@ export default function SegundoTerroirTradicao() {
               <div className="flex items-center gap-4 mt-4">
                 <span className="text-xs opacity-50">{currentImageIndex + 1} / {currentItems.length}</span>
                 <a 
-                  href={`https://wa.me/?text=${encodeURIComponent(`Olha que lindo o evento Terroir e Tradição no Rancho Branco: https://ranchobranco.com.br/eventos/2-terroir-e-tradicao?media=${currentItems[currentImageIndex].src.replace('/', '')}`)}`}
+                  href={`https://wa.me/?text=${encodeURIComponent(`Olha que lindo o 2º Terroir e Tradição no Rancho Branco: https://ranchobranco.com.br/eventos/2-terroir-e-tradicao?media=${currentItems[currentImageIndex].src.replace('/', '')}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-[#25D366] hover:bg-[#128C7E] text-white px-4 py-2 rounded-full font-cinzel font-bold text-xs tracking-wider uppercase transition-all shadow-lg flex items-center gap-2"
