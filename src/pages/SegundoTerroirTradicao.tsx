@@ -6,19 +6,31 @@ import SEO from '../components/SEO';
 
 export default function SegundoTerroirTradicao() {
   const [searchParams] = useSearchParams();
-  const carouselRef = React.useRef<HTMLDivElement>(null);
+  const carousel2Ref = React.useRef<HTMLDivElement>(null);
+  const carousel1Ref = React.useRef<HTMLDivElement>(null);
   const [lightboxOpen, setLightboxOpen] = React.useState(false);
   const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
-  const [lightboxSource, setLightboxSource] = React.useState<'gallery' | 'experiencia'>('gallery');
+  const [activeGallery, setActiveGallery] = React.useState<'2edicao' | '1edicao' | 'experiencia' | null>(null);
 
-  const galleryItems = [
-    { type: 'video', src: '/apresentacao-lirica-ao-vivo-deck-rancho-branco.mp4', alt: 'Apresentação lírica de Getúlio Vares no deck do Rancho Branco' },
-    { type: 'image', src: '/carlos-lukes-sommelier-caves-do-pampa-rancho-branco.jpeg', alt: 'Carlos Lukes sommelier Caves do Pampa apresentando vinhos' },
-    { type: 'image', src: '/mesa-gastronomica-recepcao-terroir-e-tradicao-rancho-branco.jpeg', alt: 'Mesa gastronômica completa de recepção do 2º Terroir' },
-    { type: 'image', src: '/figos-com-roquefort-gastronomia-clenia-reis-rancho-branco.jpeg', alt: 'Figos recheados com roquefort pela Chef Clenia Reis' },
-    { type: 'image', src: '/mesa-antepastos-buffet-sunset-primavera-rancho-branco.jpeg', alt: 'Buffet de antepastos e flores no Sunset de Primavera' },
-    { type: 'image', src: '/tartaletes-presunto-parma-alta-gastronomia-livramento.jpeg', alt: 'Tartaletes de presunto cru e queijos finos' },
-    { type: 'image', src: '/mesa-degustacao-favo-mel-queijos-rancho-branco.jpeg', alt: 'Mesa de degustação com favo de mel puro e queijos selecionados' }
+  const gallery2Edicao = [
+    { type: 'video', src: '/apresentacao-lirica-ao-vivo-deck-rancho-branco.mp4', alt: 'Apresentação lírica de Getúlio Vares no deck' },
+    { type: 'image', src: '/carlos-lukes-sommelier-caves-do-pampa-rancho-branco.jpeg', alt: 'Carlos Lukes sommelier Caves do Pampa' },
+    { type: 'image', src: '/mesa-gastronomica-recepcao-terroir-e-tradicao-rancho-branco.jpeg', alt: 'Mesa gastronômica completa' },
+    { type: 'image', src: '/figos-com-roquefort-gastronomia-clenia-reis-rancho-branco.jpeg', alt: 'Figos recheados com roquefort' },
+    { type: 'image', src: '/mesa-antepastos-buffet-sunset-primavera-rancho-branco.jpeg', alt: 'Buffet de antepastos e flores' },
+    { type: 'image', src: '/tartaletes-presunto-parma-alta-gastronomia-livramento.jpeg', alt: 'Tartaletes de presunto cru' },
+    { type: 'image', src: '/mesa-degustacao-favo-mel-queijos-rancho-branco.jpeg', alt: 'Mesa com favo de mel puro e queijos' }
+  ];
+
+  const gallery1Edicao = [
+    { type: 'image', src: '/convidados-almoco-harmonizado-vinhos-rancho-branco.jpeg', alt: 'Convidados no almoço harmonizado' },
+    { type: 'image', src: '/degustacao-azeite-viridi-recepcao-eventos.jpeg', alt: 'Degustação azeite Viridi' },
+    { type: 'image', src: '/chef-juliano-parrilla-fogo-de-chao-eventos.jpeg', alt: 'Chef Juliano na parrilla' },
+    { type: 'video', src: '/apresentacao-violino-eventos-rancho-branco.mp4', alt: 'Apresentação violino eventos' },
+    { type: 'image', src: '/selecao-vinhos-campanha-gaucha-caves-do-pampa.jpeg', alt: 'Seleção vinhos Campanha Gaúcha' },
+    { type: 'image', src: '/decoracao-salao-rustico-casamentos-eventos.jpeg', alt: 'Decoração salão rústico' },
+    { type: 'image', src: '/musica-ao-vivo-eventos-acusticos-fronteira.jpeg', alt: 'Música ao vivo acústico' },
+    { type: 'image', src: '/fachada-iluminada-salao-rustico-rancho-branco.jpeg', alt: 'Fachada iluminada' }
   ];
 
   const experienciaItems = [
@@ -27,44 +39,57 @@ export default function SegundoTerroirTradicao() {
     { src: "/agencia-corticeiras-receptivo-2-terroir-tradicao.jpg", alt: "Agência Corticeiras (Turismo Receptivo)" }
   ];
 
+  const currentGallery = activeGallery === '2edicao' 
+    ? gallery2Edicao 
+    : activeGallery === '1edicao' 
+    ? gallery1Edicao 
+    : experienciaItems;
+
   useEffect(() => {
     const mediaParam = searchParams.get('media');
     if (mediaParam) {
-      const index = galleryItems.findIndex(item => item.src === `/${mediaParam}`);
-      if (index !== -1) {
-        setLightboxSource('gallery');
-        setCurrentImageIndex(index);
+      const index2 = gallery2Edicao.findIndex(item => item.src === `/${mediaParam}`);
+      if (index2 !== -1) {
+        setActiveGallery('2edicao');
+        setCurrentImageIndex(index2);
         setLightboxOpen(true);
+        return;
+      }
+      const index1 = gallery1Edicao.findIndex(item => item.src === `/${mediaParam}`);
+      if (index1 !== -1) {
+        setActiveGallery('1edicao');
+        setCurrentImageIndex(index1);
+        setLightboxOpen(true);
+        return;
       }
     }
   }, [searchParams]);
 
-  const openLightbox = (index: number, source: 'gallery' | 'experiencia') => {
-    setLightboxSource(source);
+  const openLightbox = (index: number, gallery: '2edicao' | '1edicao' | 'experiencia') => {
+    setActiveGallery(gallery);
     setCurrentImageIndex(index);
     setLightboxOpen(true);
   };
 
   const closeLightbox = () => {
     setLightboxOpen(false);
+    setActiveGallery(null);
   };
 
   const prevLightboxItem = (e?: React.MouseEvent) => {
     e?.stopPropagation();
-    const items = lightboxSource === 'gallery' ? galleryItems : experienciaItems;
-    setCurrentImageIndex((prev) => (prev === 0 ? items.length - 1 : prev - 1));
+    setCurrentImageIndex((prev) => (prev === 0 ? currentGallery.length - 1 : prev - 1));
   };
 
   const nextLightboxItem = (e?: React.MouseEvent) => {
     e?.stopPropagation();
-    const items = lightboxSource === 'gallery' ? galleryItems : experienciaItems;
-    setCurrentImageIndex((prev) => (prev === items.length - 1 ? 0 : prev + 1));
+    setCurrentImageIndex((prev) => (prev === currentGallery.length - 1 ? 0 : prev + 1));
   };
 
-  const scrollCarousel = (direction: 'left' | 'right') => {
-    if (carouselRef.current) {
+  const scrollCarousel = (ref: React.RefObject<HTMLDivElement | null>, direction: 'left' | 'right') => {
+    if (ref.current) {
       const scrollAmount = 336; // w-80 (320px) + gap-4 (16px)
-      carouselRef.current.scrollBy({
+      ref.current.scrollBy({
         left: direction === 'left' ? -scrollAmount : scrollAmount,
         behavior: 'smooth'
       });
@@ -72,8 +97,6 @@ export default function SegundoTerroirTradicao() {
   };
 
   const whatsappUrl = "https://wa.me/5555999195460?text=Ol%C3%A1!%20Vi%20as%20fotos%20do%202%C2%BA%20Terroir%20e%20Tradi%C3%A7%C3%A3o%20e%20gostaria%20de%20solicitar%20um%20or%C3%A7amento.";
-
-  const currentItems = lightboxSource === 'gallery' ? galleryItems : experienciaItems;
 
   return (
     <div className="bg-[#FCF3EA] text-[#13214D] min-h-screen font-sans">
@@ -429,68 +452,136 @@ export default function SegundoTerroirTradicao() {
         </div>
       </section>
 
-      {/* Como foi o 2º Terroir & Tradição (Carousel) */}
+      {/* Sistema de Galerias Históricas Duplas */}
       <section id="galeria" className="py-20 bg-[#FCF3EA] border-b border-[#13214D]/5">
-        <div className="max-w-7xl mx-auto space-y-12">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center space-y-4 px-6"
-          >
-            <span className="text-[#a33845] font-cinzel text-xs font-bold tracking-widest uppercase block">Galeria</span>
-            <h2 className="text-3xl md:text-5xl font-cinzel text-[#13214D] font-bold">Como foi o 2º Terroir &amp; Tradição</h2>
-            <div className="w-16 h-[1.5px] bg-[#BA8D49] mx-auto" />
-            <p className="font-playfair text-[#13214D]/80 text-lg leading-relaxed max-w-2xl mx-auto">
-              Reviva os melhores momentos do Sunset de Primavera, com a alta gastronomia de Clenia Reis, a seleção da Caves do Pampa e a marcante apresentação lírica de Getúlio Vares ao entardecer.
-            </p>
-          </motion.div>
+        <div className="max-w-7xl mx-auto space-y-16 md:space-y-24">
           
-          <div className="relative group px-2 sm:px-6">
-            <button 
-              onClick={() => scrollCarousel('left')}
-              className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white text-[#13214D] p-2 rounded-full shadow-lg opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity backdrop-blur-sm"
-              aria-label="Anterior"
-            >
-              <ChevronLeft size={24} />
-            </button>
-
+          {/* Bloco 1: 2º Terroir & Tradição */}
+          <div className="space-y-12">
             <motion.div 
-              ref={carouselRef}
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-4 pb-8"
+              className="text-center space-y-4 px-6"
             >
-              {galleryItems.map((item, index) => (
-                <div 
-                  key={index} 
-                  className="snap-center shrink-0 w-80 h-96 relative cursor-pointer group rounded-lg overflow-hidden shadow-md"
-                  onClick={() => openLightbox(index, 'gallery')}
-                >
-                  <div className="absolute inset-0 bg-[#13214D]/0 group-hover:bg-[#13214D]/20 transition-colors z-10 flex items-center justify-center">
-                    <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 text-[#13214D] p-3 rounded-full backdrop-blur-sm shadow-lg">
-                      <Sparkles size={20} />
-                    </div>
-                  </div>
-                  {item.type === 'image' ? (
-                    <img src={item.src} alt={item.alt} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                  ) : (
-                    <video src={item.src} autoPlay loop muted playsInline className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                  )}
-                </div>
-              ))}
+              <span className="text-[#a33845] font-cinzel text-xs font-bold tracking-widest uppercase block">Galeria</span>
+              <h2 className="text-3xl md:text-5xl font-cinzel text-[#13214D] font-bold">Como foi o 2º Terroir &amp; Tradição</h2>
+              <div className="w-16 h-[1.5px] bg-[#BA8D49] mx-auto" />
+              <p className="font-playfair text-[#13214D]/80 text-lg leading-relaxed max-w-2xl mx-auto">
+                Reviva os melhores momentos do Sunset de Primavera, com a alta gastronomia de Clenia Reis, a seleção da Caves do Pampa e a marcante apresentação lírica de Getúlio Vares ao entardecer.
+              </p>
             </motion.div>
+            
+            <div className="relative group px-2 sm:px-6">
+              <button 
+                onClick={() => scrollCarousel(carousel2Ref, 'left')}
+                className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white text-[#13214D] p-2 rounded-full shadow-lg opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity backdrop-blur-sm"
+                aria-label="Anterior"
+              >
+                <ChevronLeft size={24} />
+              </button>
 
-            <button 
-              onClick={() => scrollCarousel('right')}
-              className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white text-[#13214D] p-2 rounded-full shadow-lg opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity backdrop-blur-sm"
-              aria-label="Próximo"
-            >
-              <ChevronRight size={24} />
-            </button>
+              <motion.div 
+                ref={carousel2Ref}
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-4 pb-6"
+              >
+                {gallery2Edicao.map((item, index) => (
+                  <div 
+                    key={index} 
+                    className="snap-center shrink-0 w-80 h-96 relative cursor-pointer group rounded-lg overflow-hidden shadow-md"
+                    onClick={() => openLightbox(index, '2edicao')}
+                  >
+                    <div className="absolute inset-0 bg-[#13214D]/0 group-hover:bg-[#13214D]/20 transition-colors z-10 flex items-center justify-center">
+                      <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 text-[#13214D] p-3 rounded-full backdrop-blur-sm shadow-lg">
+                        <Sparkles size={20} />
+                      </div>
+                    </div>
+                    {item.type === 'image' ? (
+                      <img src={item.src} alt={item.alt} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                    ) : (
+                      <video src={item.src} autoPlay loop muted playsInline className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                    )}
+                  </div>
+                ))}
+              </motion.div>
+
+              <button 
+                onClick={() => scrollCarousel(carousel2Ref, 'right')}
+                className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white text-[#13214D] p-2 rounded-full shadow-lg opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity backdrop-blur-sm"
+                aria-label="Próximo"
+              >
+                <ChevronRight size={24} />
+              </button>
+            </div>
           </div>
+
+          {/* Bloco 2: 1º Terroir & Tradição */}
+          <div className="space-y-12 mt-20 md:mt-24 pt-16 border-t border-[#13214D]/10">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center space-y-3 px-6"
+            >
+              <span className="text-[#BA8D49] font-cinzel text-xs font-bold tracking-widest uppercase block">Edição Histórica</span>
+              <h3 className="text-2xl md:text-3xl font-cinzel text-[#13214D] font-bold">Relembre o 1º Terroir &amp; Tradição</h3>
+              <div className="w-12 h-[1.5px] bg-[#BA8D49] mx-auto" />
+              <p className="font-playfair text-[#13214D]/80 text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
+                A edição de inverno que deu início à nossa jornada enogastronômica.
+              </p>
+            </motion.div>
+            
+            <div className="relative group px-2 sm:px-6">
+              <button 
+                onClick={() => scrollCarousel(carousel1Ref, 'left')}
+                className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white text-[#13214D] p-2 rounded-full shadow-lg opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity backdrop-blur-sm"
+                aria-label="Anterior"
+              >
+                <ChevronLeft size={24} />
+              </button>
+
+              <motion.div 
+                ref={carousel1Ref}
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="flex overflow-x-auto snap-x snap-mandatory hide-scrollbar gap-4 pb-6"
+              >
+                {gallery1Edicao.map((item, index) => (
+                  <div 
+                    key={index} 
+                    className="snap-center shrink-0 w-80 h-96 relative cursor-pointer group rounded-lg overflow-hidden shadow-md"
+                    onClick={() => openLightbox(index, '1edicao')}
+                  >
+                    <div className="absolute inset-0 bg-[#13214D]/0 group-hover:bg-[#13214D]/20 transition-colors z-10 flex items-center justify-center">
+                      <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 text-[#13214D] p-3 rounded-full backdrop-blur-sm shadow-lg">
+                        <Sparkles size={20} />
+                      </div>
+                    </div>
+                    {item.type === 'image' ? (
+                      <img src={item.src} alt={item.alt} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                    ) : (
+                      <video src={item.src} autoPlay loop muted playsInline className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                    )}
+                  </div>
+                ))}
+              </motion.div>
+
+              <button 
+                onClick={() => scrollCarousel(carousel1Ref, 'right')}
+                className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-white text-[#13214D] p-2 rounded-full shadow-lg opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity backdrop-blur-sm"
+                aria-label="Próximo"
+              >
+                <ChevronRight size={24} />
+              </button>
+            </div>
+          </div>
+
         </div>
       </section>
 
@@ -568,7 +659,7 @@ export default function SegundoTerroirTradicao() {
       </section>
 
       {/* Lightbox / Gallery Full Screen Modal */}
-      {lightboxOpen && (
+      {lightboxOpen && activeGallery && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-md" onClick={closeLightbox}>
           {/* Close button */}
           <button 
@@ -597,9 +688,9 @@ export default function SegundoTerroirTradicao() {
               transition={{ duration: 0.3 }}
               className="relative w-full max-w-5xl max-h-[85vh] flex items-center justify-center"
             >
-              {currentItems[currentImageIndex].type === 'video' ? (
+              {currentGallery[currentImageIndex]?.type === 'video' ? (
                 <video 
-                  src={currentItems[currentImageIndex].src} 
+                  src={currentGallery[currentImageIndex].src} 
                   autoPlay 
                   controls
                   playsInline 
@@ -607,8 +698,8 @@ export default function SegundoTerroirTradicao() {
                 />
               ) : (
                 <img 
-                  src={currentItems[currentImageIndex].src} 
-                  alt={currentItems[currentImageIndex].alt} 
+                  src={currentGallery[currentImageIndex]?.src} 
+                  alt={currentGallery[currentImageIndex]?.alt} 
                   className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
                 />
               )}
@@ -616,11 +707,11 @@ export default function SegundoTerroirTradicao() {
             
             {/* Caption */}
             <div className="text-white/80 font-playfair mt-6 text-center max-w-2xl px-4 flex flex-col items-center">
-              <p className="text-sm md:text-base">{currentItems[currentImageIndex].alt}</p>
+              <p className="text-sm md:text-base">{currentGallery[currentImageIndex]?.alt}</p>
               <div className="flex items-center gap-4 mt-4">
-                <span className="text-xs opacity-50">{currentImageIndex + 1} / {currentItems.length}</span>
+                <span className="text-xs opacity-50">{currentImageIndex + 1} / {currentGallery.length}</span>
                 <a 
-                  href={`https://wa.me/?text=${encodeURIComponent(`Olha que lindo o 2º Terroir e Tradição no Rancho Branco: https://ranchobranco.com.br/eventos/2-terroir-e-tradicao?media=${currentItems[currentImageIndex].src.replace('/', '')}`)}`}
+                  href={`https://wa.me/?text=${encodeURIComponent(`Olha que lindo o evento Terroir e Tradição no Rancho Branco: https://ranchobranco.com.br/eventos/2-terroir-e-tradicao?media=${currentGallery[currentImageIndex]?.src.replace('/', '')}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-[#25D366] hover:bg-[#128C7E] text-white px-4 py-2 rounded-full font-cinzel font-bold text-xs tracking-wider uppercase transition-all shadow-lg flex items-center gap-2"
