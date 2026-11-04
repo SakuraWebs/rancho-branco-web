@@ -366,26 +366,27 @@ export default function AgendaInterna() {
       <SEO title="Agenda Interna | Rancho Branco" description="Gestão interna de datas" />
       
       <div className="pt-24 pb-24 px-4 min-h-screen bg-surface md:px-12 lg:px-24">
-        <div className="max-w-4xl mx-auto hide-on-print">
-          <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-            <div className="flex flex-col sm:flex-row items-center gap-4">
+        <div className="max-w-6xl mx-auto hide-on-print">
+          <div className="flex flex-col lg:flex-row gap-8 items-start">
+            {/* COLUNA ESQUERDA: Cabeçalho e Ações */}
+            <div className="w-full lg:w-1/3 flex flex-col gap-6 lg:sticky lg:top-24">
               <div>
-                <h1 className="text-3xl font-serif text-primary">Agenda Interna</h1>
-                <p className="text-on-surface-variant font-medium">Toque em uma data para gerenciar.</p>
+                <h1 className="text-3xl lg:text-4xl font-serif text-primary mb-2">Agenda Interna</h1>
+                <p className="text-on-surface-variant font-medium">Toque em uma data para gerenciar as reservas do Rancho Branco.</p>
               </div>
+
               <button 
                 onClick={handleDownloadCardPDF}
                 disabled={isGeneratingPdf}
-                className="bg-white border border-[#13214D] text-[#13214D] hover:bg-[#13214D] hover:text-white px-6 py-3 rounded-xl font-bold uppercase tracking-widest transition-colors flex items-center gap-2 shadow-sm"
+                className="w-full bg-white border-2 border-[#13214D] text-[#13214D] hover:bg-[#13214D] hover:text-white py-4 rounded-xl font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-2 shadow-sm disabled:opacity-50"
               >
-                <Download size={18} />
+                <Download size={20} />
                 {isGeneratingPdf ? 'Gerando...' : 'Ficha de Datas'}
               </button>
             </div>
-            {/* Quick stats could go here */}
-          </div>
 
-          <div className="bg-white rounded-3xl p-4 md:p-8 shadow-ambient border border-outline-variant/10">
+            {/* COLUNA DIREITA: O Calendário e a Grelha */}
+            <div className="w-full lg:w-2/3 bg-white rounded-3xl p-5 md:p-8 shadow-ambient border border-outline-variant/10">
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-2xl font-serif text-primary capitalize">
                 {format(currentDate, 'MMMM yyyy', { locale: ptBR })}
@@ -460,6 +461,7 @@ export default function AgendaInterna() {
                <div className="flex items-center gap-1.5"><div className="w-3 h-3 border border-[#13214D]/40 rounded-sm"></div> Livre</div>
                <div className="flex items-center gap-1.5"><div className="w-3 h-3 bg-orange-100 border border-orange-300 rounded-sm"></div> Em Negociação</div>
                <div className="flex items-center gap-1.5"><div className="w-3 h-3 bg-[#1A2D6C] border border-[#1A2D6C] rounded-sm"></div> Ocupada</div>
+            </div>
             </div>
           </div>
         </div>
