@@ -365,11 +365,11 @@ export default function AgendaInterna() {
     <>
       <SEO title="Agenda Interna | Rancho Branco" description="Gestão interna de datas" />
       
-      <div className="pt-24 pb-24 px-4 min-h-screen bg-surface md:px-12 lg:px-24">
+      <div className="pt-36 pb-24 px-4 min-h-screen bg-surface md:px-12 lg:px-24">
         <div className="max-w-6xl mx-auto hide-on-print">
           <div className="flex flex-col lg:flex-row gap-8 items-start">
             {/* COLUNA ESQUERDA: Cabeçalho e Ações */}
-            <div className="w-full lg:w-1/3 flex flex-col gap-6 lg:sticky lg:top-24">
+            <div className="w-full lg:w-1/3 flex flex-col gap-6 lg:sticky lg:top-36">
               <div>
                 <h1 className="text-3xl lg:text-4xl font-serif text-primary mb-2">Agenda Interna</h1>
                 <p className="text-on-surface-variant font-medium">Toque em uma data para gerenciar as reservas do Rancho Branco.</p>
@@ -383,7 +383,36 @@ export default function AgendaInterna() {
                 <Download size={20} />
                 {isGeneratingPdf ? 'Gerando...' : 'Ficha de Datas'}
               </button>
-            </div>
+
+              {/* Lista Visível de Próximas Datas Ocupadas */}
+              <div className="bg-white rounded-3xl p-6 shadow-ambient border border-outline-variant/10 flex-1 overflow-y-auto max-h-[50vh] custom-scrollbar">
+                <h3 className="font-serif text-xl text-primary mb-4 border-b pb-3">Datas Ocupadas</h3>
+                {Object.keys(groupedEvents).length === 0 ? (
+                  <p className="text-sm text-on-surface-variant italic">Nenhuma reserva futura.</p>
+                ) : (
+                  <div className="space-y-6">
+                    {Object.keys(groupedEvents).map(monthStr => (
+                      <div key={monthStr}>
+                        <h4 className="text-xs font-bold uppercase tracking-widest text-[#BA8D49] mb-3">{monthStr}</h4>
+                        <ul className="space-y-4">
+                          {groupedEvents[monthStr].map(ev => {
+                            const evDate = parseISO(ev.dateString);
+                            return (
+                              <li key={ev.id} className="flex items-start gap-4">
+                                <span className="font-bold text-xl text-[#13214D] w-12 shrink-0 font-serif text-right">{format(evDate, 'dd/MM')}</span>
+                                <div className="flex flex-col pt-0.5">
+                                  <span className="text-sm font-bold text-gray-800 leading-tight">{ev.title}</span>
+                                  {ev.clientName && <span className="text-xs text-gray-500 mt-1 capitalize">{ev.clientName}</span>}
+                                </div>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>            </div>
 
             {/* COLUNA DIREITA: O Calendário e a Grelha */}
             <div className="w-full lg:w-2/3 bg-white rounded-3xl p-5 md:p-8 shadow-ambient border border-outline-variant/10">
