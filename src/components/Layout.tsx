@@ -68,7 +68,7 @@ export default function Layout() {
         { name: '1º Terroir & Tradição', path: '/eventos/terroir-e-tradicao' }
       ]
     },
-    ...(isAdmin ? [{ name: 'Agenda', path: '/agenda' }] : []),
+    ...(isAdmin ? [{ name: 'Agenda', path: '/agenda-interna' }] : []),
     { name: 'Contato', path: '/contato' },
   ];
 
@@ -79,7 +79,7 @@ export default function Layout() {
     '/galeria', 
     '/politicas-de-privacidade', 
     '/termos-de-uso', 
-    '/agenda',
+    '/agenda-interna',
     '/eventos/terroir-e-tradicao',
     '/eventos/terroir-e-tradicao/feedback',
     '/eventos/terroir-e-tradicao/relatorio',
