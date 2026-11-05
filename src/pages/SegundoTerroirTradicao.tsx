@@ -105,6 +105,20 @@ export default function SegundoTerroirTradicao() {
         description="O 2º Terroir e Tradição (Sunset de Primavera) foi uma experiência enogastronômica inesquecível realizada em 17 de Outubro de 2026 no Rancho Branco. Relembre os melhores momentos com alta gastronomia por Clenia Reis e vinhos da Campanha Gaúcha pela Caves do Pampa."
         canonical="https://ranchobranco.com.br/eventos/2-terroir-e-tradicao"
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "VideoObject",
+            "name": "Aftermovie 2º Terroir & Tradição - Sunset de Primavera",
+            "description": "Vídeo oficial do evento enogastronômico de primavera no Rancho Branco, em Santana do Livramento/RS. Apresentando alta gastronomia por Clenia Reis, vinhos da Caves do Pampa e apresentação musical lírica de Getúlio Vares.",
+            "uploadDate": "2026-10-18",
+            "contentUrl": "https://ranchobranco.com.br/aftermovie-sunset-primavera-eventos-rancho-branco.mp4",
+            "thumbnailUrl": "https://ranchobranco.com.br/convidados-almoco-harmonizado-vinhos-rancho-branco.jpeg"
+          })
+        }}
+      />
 
       {/* Font imports for extreme elegance */}
       <style dangerouslySetInnerHTML={{__html: `
@@ -449,6 +463,47 @@ export default function SegundoTerroirTradicao() {
             })}
           </div>
 
+        </div>
+      </section>
+
+      {/* Aftermovie Oficial */}
+      <section id="aftermovie" className="py-24 bg-white border-b border-[#13214D]/5">
+        <div className="max-w-7xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center space-y-4"
+          >
+            <span className="text-[#a33845] font-cinzel text-xs font-bold tracking-widest uppercase block">
+              O Filme do Evento
+            </span>
+            <h2 className="text-3xl md:text-4xl font-cinzel text-[#13214D] font-bold">
+              A Atmosfera do Sunset
+            </h2>
+            <div className="w-16 h-[1.5px] bg-[#BA8D49] mx-auto" />
+            <p className="font-playfair text-[#13214D]/80 text-lg leading-relaxed max-w-2xl mx-auto">
+              Dê o play e sinta a energia do nosso encontro de primavera.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="max-w-xs sm:max-w-sm mx-auto mt-12 overflow-hidden rounded-[2rem] shadow-2xl border-8 border-[#FCF3EA] bg-black"
+          >
+            <video
+              src="/aftermovie-sunset-primavera-eventos-rancho-branco.mp4"
+              controls
+              autoPlay
+              muted
+              playsInline
+              loop
+              className="w-full h-auto object-cover opacity-90 hover:opacity-100 transition-opacity"
+            />
+          </motion.div>
         </div>
       </section>
 
