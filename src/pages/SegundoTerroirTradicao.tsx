@@ -487,13 +487,13 @@ export default function SegundoTerroirTradicao() {
             </p>
           </motion.div>
 
-          <div className="max-w-xs sm:max-w-sm mx-auto mt-12 overflow-hidden rounded-[2rem] shadow-2xl border-8 border-[#FCF3EA] bg-black relative z-10">
+          <div className="max-w-xs sm:max-w-sm mx-auto mt-12 overflow-hidden rounded-[2rem] shadow-2xl border-8 border-[#FCF3EA] bg-black relative z-10 aspect-[9/16] flex items-center justify-center">
             <video 
               src="/aftermovie-sunset-primavera-eventos-rancho-branco.mp4" 
               controls 
               playsInline 
               preload="metadata"
-              className="w-full h-auto object-cover rounded-[1.5rem]" 
+              className="w-full h-full object-cover rounded-[1.5rem]" 
             />
           </div>
         </div>
