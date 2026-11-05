@@ -487,23 +487,15 @@ export default function SegundoTerroirTradicao() {
             </p>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="max-w-xs sm:max-w-sm mx-auto mt-12 overflow-hidden rounded-[2rem] shadow-2xl border-8 border-[#FCF3EA] bg-black"
-          >
-            <video
-              src="/aftermovie-sunset-primavera-eventos-rancho-branco.mp4"
-              controls
-              autoPlay
-              muted
-              playsInline
-              loop
-              className="w-full h-auto object-cover opacity-90 hover:opacity-100 transition-opacity"
+          <div className="max-w-xs sm:max-w-sm mx-auto mt-12 overflow-hidden rounded-[2rem] shadow-2xl border-8 border-[#FCF3EA] bg-black relative z-10">
+            <video 
+              src="/aftermovie-sunset-primavera-eventos-rancho-branco.mp4" 
+              controls 
+              playsInline 
+              preload="metadata"
+              className="w-full h-auto object-cover rounded-[1.5rem]" 
             />
-          </motion.div>
+          </div>
         </div>
       </section>
 
