@@ -114,7 +114,8 @@ export default function SegundoTerroirTradicao() {
             "name": "Aftermovie 2º Terroir & Tradição - Sunset de Primavera",
             "description": "Vídeo oficial do evento enogastronômico de primavera no Rancho Branco, em Santana do Livramento/RS. Apresentando alta gastronomia por Clenia Reis, vinhos da Caves do Pampa e apresentação musical lírica de Getúlio Vares.",
             "uploadDate": "2026-10-18",
-            "contentUrl": "https://ranchobranco.com.br/aftermovie-sunset-primavera-eventos-rancho-branco.mp4",
+            "contentUrl": "https://www.youtube.com/watch?v=X-2Ur20YTug",
+            "embedUrl": "https://www.youtube.com/embed/X-2Ur20YTug",
             "thumbnailUrl": "https://ranchobranco.com.br/convidados-almoco-harmonizado-vinhos-rancho-branco.jpeg"
           })
         }}
@@ -488,13 +489,13 @@ export default function SegundoTerroirTradicao() {
           </motion.div>
 
           <div className="max-w-xs sm:max-w-sm mx-auto mt-12 overflow-hidden rounded-[2rem] shadow-2xl border-8 border-[#FCF3EA] bg-black relative z-10 aspect-[9/16] flex items-center justify-center">
-            <video 
-              src="/aftermovie-sunset-primavera-eventos-rancho-branco.mp4" 
-              controls 
-              playsInline 
-              preload="metadata"
-              className="w-full h-full object-cover rounded-[1.5rem]" 
-            />
+            <iframe 
+              src="https://www.youtube.com/embed/X-2Ur20YTug" 
+              title="Aftermovie 2º Terroir & Tradição - Sunset de Primavera"
+              className="w-full h-full border-0 rounded-[1.5rem]"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            ></iframe>
           </div>
         </div>
       </section>
